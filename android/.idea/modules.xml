@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/SmartHome.iml" filepath="$PROJECT_DIR$/SmartHome.iml" group="SmartHome" />
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" group="SmartHome/app" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/@react-native-community/masked-view/android/react-native-community_masked-view.iml" filepath="$PROJECT_DIR$/../node_modules/@react-native-community/masked-view/android/react-native-community_masked-view.iml" group="SmartHome/react-native-community_masked-view" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/@react-native-community/slider/android/react-native-community_slider.iml" filepath="$PROJECT_DIR$/../node_modules/@react-native-community/slider/android/react-native-community_slider.iml" group="SmartHome/react-native-community_slider" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-config/android/react-native-config.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-config/android/react-native-config.iml" group="SmartHome/react-native-config" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-gesture-handler/android/react-native-gesture-handler.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-gesture-handler/android/react-native-gesture-handler.iml" group="SmartHome/react-native-gesture-handler" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-reanimated/android/react-native-reanimated.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-reanimated/android/react-native-reanimated.iml" group="SmartHome/react-native-reanimated" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-safe-area-context/android/react-native-safe-area-context.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-safe-area-context/android/react-native-safe-area-context.iml" group="SmartHome/react-native-safe-area-context" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-screens/android/react-native-screens.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-screens/android/react-native-screens.iml" group="SmartHome/react-native-screens" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-splash-screen/android/react-native-splash-screen.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-splash-screen/android/react-native-splash-screen.iml" group="SmartHome/react-native-splash-screen" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-sqlite-storage/platforms/android/react-native-sqlite-storage.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-sqlite-storage/platforms/android/react-native-sqlite-storage.iml" group="SmartHome/react-native-sqlite-storage" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-tts/android/react-native-tts.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-tts/android/react-native-tts.iml" group="SmartHome/react-native-tts" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/react-native-vector-icons/android/react-native-vector-icons.iml" filepath="$PROJECT_DIR$/../node_modules/react-native-vector-icons/android/react-native-vector-icons.iml" group="SmartHome/react-native-vector-icons" />
+      <module fileurl="file://$PROJECT_DIR$/../node_modules/sp-react-native-mqtt/android/sp-react-native-mqtt.iml" filepath="$PROJECT_DIR$/../node_modules/sp-react-native-mqtt/android/sp-react-native-mqtt.iml" group="SmartHome/sp-react-native-mqtt" />
+    </modules>
+  </component>
+</project>
