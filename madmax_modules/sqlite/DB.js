@@ -3,136 +3,205 @@ import { openDatabase } from 'react-native-sqlite-storage';
 const DB_NAME         = "smarthome.db";
 const DB_TABLE_GLOBAL = "smarthome";
 const DB_TABLE_MQTT   = "mqtt";
+const DB_TABLE_NAS    = "nas";
 const DB_TABLE_USER   = "user";
 
 export default class DB {
   constructor(class_) {
-    this.data   = null;
     this.class_ = class_;
     this.con    = openDatabase({ name: DB_NAME });
 
+    this.data = {
+      user: {},
+      mqtt: {},
+      nas: {}
+    }
+
     this.create();
-    this.select();
+
+    this.select_user();
+    this.select_mqtt();
+    this.select_nas();
+  }
+
+  set_data(option, data) {
+    this.data[option] = data
   }
 
   create() {
-    //user
-    var sqlUser = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_USER + "("
+    // user
+    var sql_user = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_USER + "("
       + "userid int,"
-      + "vorname char(255),"
-      + "nachname char(255),"
+      + "first_name char(255),"
+      + "surname char(255),"
       + "PRIMARY KEY(userid));";
 
-    //mqtt
-    var sqlMqtt = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_MQTT + "("
+    // mqtt
+    var sql_mqtt = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_MQTT + "("
       + "mqttid int,"
       + "typ char(10),"
-      + "ipadresse char(15),"
+      + "ipaddress char(15),"
       + "port int,"
       + "PRIMARY KEY(mqttid));";
 
-    //global
-    var sqlGlobal = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_GLOBAL + "("
-      + "userid int, "
-      + "mqttid int, "
-      + "PRIMARY KEY(userid, mqttid),"
-      + "FOREIGN KEY(userid) REFERENCES " + DB_TABLE_USER + "(userid),"
-      + "FOREIGN KEY(mqttid) REFERENCES " + DB_TABLE_MQTT + "(mqttid));";
+    // nas
+    var sql_nas = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_NAS + "("
+      + "nasid int,"
+      + "ipaddress char(15),"
+      + "macaddress char(12),"
+      + "username char(255),"
+      + "password char(255),"
+      + "PRIMARY KEY(nasid));";
 
     //sql
     this.con.transaction(tx => {
-      tx.executeSql(sqlUser, []);
-      tx.executeSql(sqlMqtt, []);
-      tx.executeSql(sqlGlobal, []);
+      tx.executeSql(sql_user, []);
+      tx.executeSql(sql_mqtt, []);
+      tx.executeSql(sql_nas, []);
     });
   }
 
-  insert(vorname, nachname, typ, ipAdresse, port) {
-    //user
-    var sqlUser     = "INSERT INTO " + DB_TABLE_USER + "(userid, vorname, nachname) VALUES(?, ?, ?);";
-    var valuesUser  = [1, vorname, nachname];
+// user
+  get_name() {
+    return this.get_first_name() + " " + this.get_surname()
+  }
 
-    //mqtt
-    var sqlMqtt     = "INSERT INTO " + DB_TABLE_MQTT + "(mqttid, typ, ipadresse, port) VALUES(?, ?, ?, ?);";
-    var valuesMqtt  = [1, typ, ipAdresse, parseInt(port)];
+  get_first_name() {
+    return (this.data == null || this.data.first_name == null) ? '' : this.data.first_name;
+  }
 
-    //global
-    var sqlGlobal     = "INSERT INTO " + DB_TABLE_GLOBAL + "(userid, mqttid) VALUES(?, ?);";
-    var valuesGlobal  = [1, 1];
+  get_surname() {
+    return (this.data == null || this.data.surname == null) ? '' : this.data.surname;
+  }
+
+  insert_user(values) {
+    var sql_user     = "INSERT INTO " + DB_TABLE_USER + "(userid, first_name, surname) VALUES(?, ?, ?);";
+
+    var values_user  = [1, values.first_name, values.surname];
+  }
+
+  update_user(values) {
+    var sql_user     = "UPDATE " + DB_TABLE_USER + " SET first_name = ?, surname = ? WHERE userid = ?;";
+    var values_user  = [values.first_name, values.surname, 1];
 
     this.con.transaction(tx => {
-      tx.executeSql(sqlUser, valuesUser);
-      tx.executeSql(sqlMqtt, valuesMqtt);
-      tx.executeSql(sqlGlobal, valuesGlobal);
+      tx.executeSql(sql_user, values_user);
     });
   }
 
-  update(vorname, nachname, typ, ipAdresse, port) {
-    //user
-    var sqlUser     = "UPDATE " + DB_TABLE_USER + " SET vorname = ?, nachname = ? WHERE userid = ?;";
-    var valuesUser  = [vorname, nachname, 1];
-
-    //mqtt
-    var sqlMqtt     = "UPDATE " + DB_TABLE_MQTT + " SET typ = ?, ipAdresse = ?, port = ? WHERE mqttid = ?;";
-    var valuesMqtt  = [typ, ipAdresse, parseInt(port), 1];
-
+  select_user() {
+    var sql_user = "SELECT first_name, surname FROM " + DB_TABLE_USER + ";"
     this.con.transaction(tx => {
-      tx.executeSql(sqlUser, valuesUser);
-      tx.executeSql(sqlMqtt, valuesMqtt);
-    });
-  }
-
-  select() {
-    var sql     = "SELECT u.vorname, u.nachname, m.typ, m.ipAdresse, m.port FROM (" + DB_TABLE_GLOBAL + " s INNER JOIN " + DB_TABLE_USER + " u ON u.userid=s.userid) INNER JOIN " + DB_TABLE_MQTT + " m ON m.mqttid=s.mqttid;"
-    this.con.transaction(tx => {
-      tx.executeSql(sql, [], (tx, res) => {
+      tx.executeSql(sql_user, [], (tx, res) => {
         var length = res.rows.length;
         if(length > 0) {
           var data = res.rows.item(0);
-          this.class_.setDataFromSQLite(data);
+          this.class_.set_data_from_sqlite("user", data);
         } else {
-          this.class_.setDataFromSQLite(null);
+          this.insert_user({first_name: "", surname: ""})
+          this.class_.set_data_from_sqlite("user", null);
         }
       });
     });
   }
 
-// global
-  setData(data) {
-    this.data = data;
+// mqtt
+  get_mqtt_uri() {
+    return this.get_mqtt_type() + "://" + this.get_mqtt_ipaddress() + ":" + this.get_mqtt_port();
   }
 
-  checkIfDataNull() {
-    return (this.getUser() == '' || this.getMqttUri() == '') ? true : false;
+  get_mqtt_type() {
+    return (this.data == null || this.data.mqtt_type == null) ? 'mqtt' : this.data.mqtt_type;
   }
 
-//user
-  getVorname() {
-    return (this.data == null || this.data.vorname == null) ? '' : this.data.vorname;
+  get_mqtt_port() {
+    return (this.data == null || this.data.mqtt_port == null) ? '' : this.data.mqtt_port.toString();
   }
 
-  getNachname() {
-    return (this.data == null || this.data.nachname == null) ? '' : this.data.nachname;
+  get_mqtt_ipaddress() {
+    return (this.data == null || this.data.mqtt_ipaddress == null) ? '' : this.data.mqtt_ipaddress;
   }
 
-  getUser() {
-    return (this.getVorname() == '' || this.getNachname() == '') ? '' : this.getVorname() + " " + this.getNachname();
+  insert_mqtt(values) {
+    var sql_mqtt     = "INSERT INTO " + DB_TABLE_MQTT + "(mqttid, typ, ipaddress, port) VALUES(?, ?, ?, ?);";
+
+    var values_mqtt  = [1, values.mqtt_typ, values.mqtt_ipaddress, parseInt(values.mqtt_port)];
   }
 
-//mqtt
-  getType() {
-    return (this.data == null || this.data.typ == null) ? '' : this.data.typ;
+  update_mqtt(values) {
+    var sql_mqtt     = "UPDATE " + DB_TABLE_MQTT + " SET typ = ?, ipaddress = ?, port = ? WHERE mqttid = ?;";
+    var values_mqtt  = [values.typ, values.ipaddress, parseInt(values.port), 1];
+
+    this.con.transaction(tx => {
+      tx.executeSql(sql_mqtt, values_mqtt);
+    });
   }
 
-  getPort() {
-    return (this.data == null || this.data.port == null) ? '' : this.data.port.toString();
+  select_mqtt() {
+    var sql_mqtt = "SELECT typ, ipaddress, port FROM " + DB_TABLE_MQTT + ";"
+    this.con.transaction(tx => {
+      tx.executeSql(sql_mqtt, [], (tx, res) => {
+        var length = res.rows.length;
+        if(length > 0) {
+          var data = res.rows.item(0);
+          this.class_.set_data_from_sqlite("mqtt", data);
+        } else {
+          this.insert_user({typ: "mqtt", ipaddress: "", port: ""})
+          this.class_.set_data_from_sqlite("mqtt", null);
+        }
+      });
+    });
   }
 
-  getIpAddress() {
-    return (this.data == null || this.data.ipadresse == null) ? '' : this.data.ipadresse;
+// nas
+  get_nas_data() {
+    return this.data.nas
   }
 
-  getMqttUri() {
-    return (this.getType() == '' || this.getIpAddress() == '' || this.getPort() == '') ? '' : this.getType() + "://" + this.getIpAddress() + ":" + this.getPort();
+  get_nas_ipaddress() {
+    return (this.data == null || this.data.nas.ipaddress == null) ? '' : this.data.nas_ipaddress;
+  }
+
+  get_nas_macaddress() {
+    return (this.data == null || this.data.nas.macaddress == null) ? '' : this.data.nas_macaddress;
+  }
+
+  get_nas_user() {
+    return (this.data == null || this.data.nas.username == null) ? '' : this.data.nas_username;
+  }
+
+  get_nas_password() {
+    return (this.data == null || this.data.nas.password == null) ? '' : this.data.nas_password;
+  }
+
+  insert_nas(values) {
+    var sql_nas      = "INSERT INTO " + DB_TABLE_NAS + "(nasid, ipaddress, macaddress, username, password) VALUES(?, ?, ?, ?, ?);";
+
+    var values_nas   = [1, values.nas_ipaddress, values.nas_macaddress, values.nas_user, values.nas_password];
+  }
+
+  update_nas(values) {
+    var sql_nas     = "UPDATE " + DB_TABLE_NAS + " SET ipaddress = ?, macaddress = ?, username = ?, password = ? WHERE nasid = ?;";
+    var values_nas  = [values.ipaddress, values.macaddress, values.username, values.password, 1];
+
+    this.con.transaction(tx => {
+      tx.executeSql(sql_nas, values_nas);
+    });
+  }
+
+  select_nas() {
+    var sql_nas = "SELECT ipaddress, macaddress, username, password FROM " + DB_TABLE_NAS + ";"
+    this.con.transaction(tx => {
+      tx.executeSql(sql_nas, [], (tx, res) => {
+        var length = res.rows.length;
+        if(length > 0) {
+          var data = res.rows.item(0);
+          this.class_.set_data_from_sqlite("nas", data);
+        } else {
+          this.insert_user({ipaddress: "", macaddress: "", username: "", password: ""})
+          this.class_.set_data_from_sqlite("nas", null);
+        }
+      });
+    });
   }
 }
