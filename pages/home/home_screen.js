@@ -23,9 +23,16 @@ export default class HomeScreen extends Component  {
           </View>
           <View style={STYLE.SCREEN.btn}>
             <Button
-              title="Verbinden"
+              title="Smart Home Steuerung"
               color="#000000"
-              onPress={() => this.props.navigation.navigate("Connect")}
+              onPress={() => this.props.navigation.navigate("SmartHomeControlConnect")}
+            />
+          </View>
+          <View style={STYLE.SCREEN.btn}>
+            <Button
+              title="NAS Steuerung"
+              color="#000000"
+              onPress={() => this.props.navigation.navigate("NasControlConnect")}
             />
           </View>
         </View>
