@@ -7,7 +7,7 @@ import STYLE from '../../../data/config/style.js'
 export default class SettingsScreen extends Component  {
   constructor(props) {
     super(props);
-    
+
     this.style = this.props.style
     this.state = {
       values: this.props.values
@@ -26,7 +26,7 @@ export default class SettingsScreen extends Component  {
               style={this.style.input}
               keyboardType="number-pad"
               placeholder="192.168.178.1"
-              onChangeText={(value) => {this.onChangeText("mqtt", "ipaddress", value)}}
+              onChangeText={(value) => {this.props.onChangeText("mqtt", "ipaddress", value)}}
               value={this.state.values.ipaddress}
             />
             </View>
@@ -40,7 +40,7 @@ export default class SettingsScreen extends Component  {
               style={this.style.input}
               keyboardType="number-pad"
               placeholder="1883"
-              onChangeText={(value) => {this.onChangeText("mqtt", "port", value)}}
+              onChangeText={(value) => {this.props.onChangeText("mqtt", "port", value)}}
               value={this.state.values.port}
             />
           </View>
