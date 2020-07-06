@@ -24,9 +24,21 @@ export default class SettingsScreen extends Component  {
     this.newTupel = true;
     this.state = {
       values: {
-        user: {},
-        mqtt: {},
-        nas: {}
+        user: {
+          first_name: null,
+          surname: null
+        },
+        mqtt: {
+          typ: "mqtt",
+          ipaddress: null,
+          port: null,
+        },
+        nas: {
+          ipaddress: null,
+          macaddress: null,
+          username: null,
+          password: null,
+        }
       },
       data_is_loaded_from_sqlite: {
         user: false,
@@ -36,28 +48,45 @@ export default class SettingsScreen extends Component  {
     }
   }
 
-  set_data_from_sqlite(option, data) {
-    this.db.set_data(option, data)
-    let values      = this.state.values;
-    values[option]  = data
+  set_data_from_sqlite(category, data) {
+    this.db.set_data(category, data)
+
+    let values = this.state.values
+    if(data != null) {
+      values[category] = data
+    }
 
     let data_is_loaded_from_sqlite      = this.state.data_is_loaded_from_sqlite
-    data_is_loaded_from_sqlite[option]  = true
+    data_is_loaded_from_sqlite[category]  = true
 
     this.setState({
-        values: values,
-        data_is_loaded_from_sqlite: data_is_loaded_from_sqlite,
+      values: values,
+      data_is_loaded_from_sqlite: data_is_loaded_from_sqlite,
     });
   }
 
-  set_data_from_screen(option, data) {
-    this.state.values[option] = data
+  set_data() {
+    let values = this.state.values
+
+    // user
+    values.user.first_name  = this.db.get_first_name()
+    values.user.surname     = this.db.get_surname()
+
+    // mqtt
+    values.mqtt.ipaddress = this.db.get_mqtt_ipaddress()
+    values.mqtt.port      = this.db.get_mqtt_port()
+
+    // nas
+    values.nas.ipaddress  = this.db.get_nas_ipaddress()
+    values.nas.macaddress = this.db.get_nas_macaddress()
+    values.nas.username   = this.db.get_nas_username()
+    values.nas.password   = this.db.get_nas_password()
+
+    this.state.values = values
   }
 
   onChangeText(category, elem, value) {
-    var values = this.state.values;
-    values[category][elem] = value;
-    this.setState({values: values});
+    this.state.values[category][elem] = value
   }
 
   save_data() {
@@ -94,6 +123,8 @@ export default class SettingsScreen extends Component  {
         </View>
       );
     } else {
+      //this.set_data()
+
       return (
         <Tab.Navigator
           tabBarOptions={{
@@ -103,18 +134,45 @@ export default class SettingsScreen extends Component  {
         >
           <Tab.Screen
             name="Benutzer"
-            component={User_tab}
+            children={() => <User_tab values={this.state.values.user} style={style_tab_input} onChangeText={(category, elem, value) => this.onChangeText(category, elem, value)}/>}
           />
           <Tab.Screen
             name="MQTT-Brocker"
-            component={Mqtt_tab}
+            children={() => <Mqtt_tab values={this.state.values.mqtt} style={style_tab_input} onChangeText={(category, elem, value) => this.onChangeText(category, elem, value)}/>}
           />
           <Tab.Screen
             name="NAS"
-            component={Nas_tab}
+            children={() => <Nas_tab values={this.state.values.nas} style={style_tab_input} onChangeText={(category, elem, value) => this.onChangeText(category, elem, value)}/>}
           />
         </Tab.Navigator>
       );
     }
   }
 };
+
+const style_tab_input = StyleSheet.create({
+  inputPanel: {
+    flexDirection: 'row',
+    marginTop: 5,
+    marginBottom: 5,
+  },
+  label: {
+    justifyContent: 'center',
+    width: "30%",
+    marginLeft: "10%",
+  },
+  inputContent: {
+    justifyContent: 'center',
+    width: "50%",
+    marginRight: "10%",
+    padding: 5,
+  },
+  input: {
+    height: 25,
+    padding: 0,
+    paddingLeft: 5,
+
+    borderColor: '#000000',
+    borderBottomWidth: 1,
+  },
+});

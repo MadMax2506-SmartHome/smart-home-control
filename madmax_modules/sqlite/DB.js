@@ -24,8 +24,10 @@ export default class DB {
     this.select_nas();
   }
 
-  set_data(option, data) {
-    this.data[option] = data
+  set_data(category, data) {
+    if(data != null) {
+      this.data[category] = data
+    }
   }
 
   create() {
@@ -166,7 +168,7 @@ export default class DB {
     return (this.data == null || this.data.nas.macaddress == null) ? '' : this.data.nas_macaddress;
   }
 
-  get_nas_user() {
+  get_nas_username() {
     return (this.data == null || this.data.nas.username == null) ? '' : this.data.nas_username;
   }
 

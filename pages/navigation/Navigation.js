@@ -10,7 +10,6 @@ const Stack = createStackNavigator();
 // Header
 import Header_control_right from './header/control_right.js';
 import Header_control_right_home from './header/control_right_home.js';
-import Header_control_right_settings from './header/control_right_settings.js';
 
 // Home
 import Home from '../home/home_screen.js'
@@ -62,7 +61,6 @@ export default class Navigation extends Component {
             component={Settings}
             options={({ navigation }) => ({
               title: 'Einstellungen',
-              headerRight: () => (<Header_control_right_settings navigation={navigation}/>),
             })}
           />
 
