@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, Image, TouchableOpacity} from 'react-native';
+import { StyleSheet, View, TouchableOpacity} from 'react-native';
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default class ControlRight extends Component  {
   render() {
@@ -8,12 +9,9 @@ export default class ControlRight extends Component  {
         <View style={styles.elem}>
           <TouchableOpacity
             activeOpacity={0.5}
-            onPress={() => this.props.navigation.navigate('Settings')}
+            onPress={() => this.props.onPress()}
           >
-            <Image
-              source={require('../../../data/pictures/settings.png')}
-              style={styles.ImageIconStyle}
-            />
+            <Ionicons name="save" size={40} color="black"/>
           </TouchableOpacity>
         </View>
       </View>
