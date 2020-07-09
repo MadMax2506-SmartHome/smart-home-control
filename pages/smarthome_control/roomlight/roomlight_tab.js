@@ -1,17 +1,24 @@
 import React, {Component} from 'react';
 import { StyleSheet, ScrollView, View, Text, Button } from 'react-native';
 
+// Menu
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+const Tab = createMaterialTopTabNavigator();
+
+// Tab
+import Keyboard_light_tab from "./lights/keyboard_tab.js"
+import Bed_wall_light_tab from "./lights/bed_wall_tab.js"
+import Bed_side_light_tab from "./lights/bed_side_tab.js"
+
 import LoadData from "../../../madmax_modules/loadData/LoadData.js"
 
+// Global
 import STYLE from '../../../data/config/style.js'
 import MQTT from './mqtt/mqtt_roomlight.js'
 
-export default class RoomlightScreen extends Component {
+export default class RoomlightTab extends Component {
   constructor(props) {
     super(props);
-
-    const { params }  = this.props.route;
-    const { mqtt }    = params;
 
     this.contentData  = {
       lights: {
@@ -41,7 +48,7 @@ export default class RoomlightScreen extends Component {
     };
     this.mqtt   = {
       connection: null,
-      uri: mqtt.uri,
+      uri: this.props.mqtt.uri,
       topic: {
         devices: "devices",
         globalConf: "",
@@ -49,8 +56,8 @@ export default class RoomlightScreen extends Component {
         globalStatus: "",
         lightStatus: "",
       },
-      qos: mqtt.qos,
-      retained: mqtt.retained,
+      qos: this.props.mqtt.qos,
+      retained: this.props.mqtt.retained,
     };
 
     this.state = {
@@ -88,13 +95,15 @@ export default class RoomlightScreen extends Component {
     }
   }
 
+  // called by mqtt
   setDeviceInfo(device) {
     this.device = device;
     this.checkConfigInfo();
   }
 
+  // called by mqtt
   setConfigInfo(data) {
-  if(data == "end") {
+    if(data == "end") {
       this.setState({
         dataIsLoadedFromMqttBrocker: true,
         isLoadingData: false,
@@ -112,60 +121,57 @@ export default class RoomlightScreen extends Component {
   }
 
   render() {
-    var content;
     if(this.state.dataIsLoadedFromMqttBrocker) {
-      content = (
-        <View>
-          <View style={STYLE.SCREEN.centerPanel}>
-            <View style={STYLE.SCREEN.btn}>
-              <Button
-                title="Tastaturbeleuchtung"
-                onPress={() => {
-                  const value = this.contentData.lights.values[0];
-                  this.props.navigation.navigate('KeyboardLight', {value: value, contentData: this.contentData, data: this.data[value], mqtt: this.mqtt})
-                }}
-                color="#000000"
+      return (
+        <Tab.Navigator
+          tabBarOptions={{
+            showLabel: true,
+            labelStyle: { fontSize: 12 },
+            indicatorStyle : {backgroundColor: "black"}
+          }}
+        >
+          <Tab.Screen
+            name="Tastatur"
+            children={() =>
+              <Keyboard_light_tab
+                value       = {this.contentData.lights.values[0]}
+                contentData = {this.contentData}
+                data        = {this.data[this.contentData.lights.values[0]]}
+                mqtt        = {this.mqtt}
               />
-            </View>
-          </View>
-          <View style={STYLE.SCREEN.centerPanel}>
-            <View style={STYLE.SCREEN.btn}>
-              <Button
-                title="Bettbeleuchtung - Wand"
-                onPress={() => {
-                  const value = this.contentData.lights.values[1];
-                  this.props.navigation.navigate('BedWallLight', {value: value, contentData: this.contentData, data: this.data[value], mqtt: this.mqtt})
-                }}
-                color="#000000"
+            }
+          />
+          <Tab.Screen
+            name="Bett-Wand"
+            children={() =>
+              <Bed_wall_light_tab
+                value       = {this.contentData.lights.values[1]}
+                contentData = {this.contentData}
+                data        = {this.data[this.contentData.lights.values[1]]}
+                mqtt        = {this.mqtt}
               />
-            </View>
-          </View>
-          <View style={STYLE.SCREEN.centerPanel}>
-            <View style={STYLE.SCREEN.btn}>
-              <Button
-                title="Bettbeleuchtung - Seitlich"
-                onPress={() => {
-                  const value = this.contentData.lights.values[2];
-                  this.props.navigation.navigate('BedSideLight', {value: value, contentData: this.contentData, data: this.data[value], mqtt: this.mqtt})
-                }}
-                color="#000000"
+            }
+          />
+          <Tab.Screen
+            name="Bett-seitlich"
+            children={() =>
+              <Bed_side_light_tab
+                value       = {this.contentData.lights.values[2]}
+                contentData = {this.contentData}
+                data        = {this.data[this.contentData.lights.values[2]]}
+                mqtt        = {this.mqtt}
               />
-            </View>
-          </View>
-        </View>
+            }
+          />
+        </Tab.Navigator>
       );
     } else {
-      content = (
+      this.checkDeviceInfo();
+      return (
         <View>
           <LoadData text="Daten werden geladen" navigation={this.props.navigation} />
-        </View>);
-      this.checkDeviceInfo();
+        </View>
+      );
     }
-
-    return (
-      <View>
-        {content}
-      </View>
-    );
   }
 };

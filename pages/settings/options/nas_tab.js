@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, TextInput } from 'react-native';
+import { View, Text, TextInput } from 'react-native';
 
 // Globales
 import STYLE from '../../../data/config/style.js'
@@ -26,7 +26,9 @@ export default class SettingsScreen extends Component  {
               style={this.style.input}
               keyboardType="number-pad"
               placeholder="192.168.178.1"
-              onChangeText={(value) => {this.props.onChangeText("nas", "ipaddress", value)}}
+              onChangeText={(value) => {
+                this.props.onChangeText("nas", "ipaddress", value)
+              }}
               value={this.state.values.ipaddress}
             />
           </View>
@@ -40,7 +42,9 @@ export default class SettingsScreen extends Component  {
             <TextInput
               style={this.style.input}
               placeholder="0123456789AB"
-              onChangeText={(value) => {this.props.onChangeText("nas", "macaddress", value)}}
+              onChangeText={(value) => {
+                this.props.onChangeText("nas", "macaddress", value)
+              }}
               value={this.state.values.macaddress}
             />
           </View>
@@ -54,7 +58,9 @@ export default class SettingsScreen extends Component  {
             <TextInput
               style={this.style.input}
               placeholder="Benutzername"
-              onChangeText={(value) => {this.props.onChangeText("nas", "username", value)}}
+              onChangeText={(value) => {
+                this.props.onChangeText("nas", "username", value)
+              }}
               value={this.state.values.username}
             />
           </View>
@@ -69,7 +75,9 @@ export default class SettingsScreen extends Component  {
               style={this.style.input}
               placeholder="Passwort"
               secureTextEntry={true}
-              onChangeText={(value) => {this.props.onChangeText("nas", "password", value)}}
+              onChangeText={(value) => {
+                this.props.onChangeText("nas", "password", value)
+              }}
               value={this.state.values.password}
             />
           </View>

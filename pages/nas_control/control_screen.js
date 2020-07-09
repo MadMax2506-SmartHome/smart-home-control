@@ -23,18 +23,13 @@ export default class MenuScreen extends Component  {
   }
 
   render() {
-    this.statusText = ""
-    if(this.state.is_online) {
-      this.statusText = "NAS ist online"
-    } else {
-      this.statusText = "NAS ist offline"
-    }
+    let statusText = this.state.is_online ? "NAS ist online" : "NAS ist offline"
     return (
       <ScrollView style={STYLE.SCREEN.main}>
         <View style={STYLE.SCREEN.centerPanel}>
           <View>
             <Text>
-              {this.statusText}
+              {statusText}
             </Text>
           </View>
           <View style={STYLE.SCREEN.btn}>

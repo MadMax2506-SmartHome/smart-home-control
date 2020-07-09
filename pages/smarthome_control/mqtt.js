@@ -1,11 +1,16 @@
 import MQTT from 'sp-react-native-mqtt';
 
-import CheckMqttServer from '../../madmax_modules/mqtt/CheckMqttServer.js'
+import Check_mqtt_server from '../../madmax_modules/mqtt/check_mqtt_server.js'
 
 export default class MqttHome {
   constructor(class_, uri) {
-    CheckMqttServer.check(class_, this.getClient(uri));
+    Check_mqtt_server.check(class_, this.getClient(uri));
   }
+
+  disconnect() {
+    Check_mqtt_server.disconnect()
+  }
+
   getClient(uri) {
     return MQTT.createClient({
       uri: uri,

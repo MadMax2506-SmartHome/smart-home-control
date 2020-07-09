@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, Button, BackHandler } from 'react-native';
+import { StyleSheet, View, Text, Button } from 'react-native';
 
 // Navigation
 import Header_control_right_settings from '../navigation/header/control_right_settings.js';
 
-// Menu
+// Tab - Navigation
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 
-// Menu - Tabs
+import Feature_tab from "./options/feature_tab.js"
 import User_tab from "./options/user_tab.js"
 import Mqtt_tab from "./options/mqtt_tab.js"
 import Nas_tab from "./options/nas_tab.js"
@@ -24,13 +24,24 @@ export default class SettingsScreen extends Component  {
     super(props);
 
     this.db = this.props.db;
-    this.state = {
-      values: {
-        user: this.db.get_user_data(),
-        mqtt: this.db.get_mqtt_data(),
-        nas: this.db.get_nas_data(),
+    this.tab_navigation = {
+      options: null,
+      static_tabs: {
+        feature: null,
+        user: null
       },
+      dynamic_tabs: {
+        mqtt: null,
+        nas: null,
+      }
     }
+    this.state = {
+      values: this.db.get_data()
+    }
+
+    /*this.props.navigation.setOptions({
+      headerRight: () => (<Header_control_right_settings onPress={this.save_data()}/>),
+    });*/
   }
 
   set_data_from_tab(category, elem, value) {
@@ -43,9 +54,15 @@ export default class SettingsScreen extends Component  {
   }
 
   save_data() {
-    let { user, mqtt, nas } = this.state.values
+    let { feature, user, mqtt, nas } = this.state.values
 
     let is_valid = this.validData()
+
+    if(this.db.is_feature_data_empty()) {
+      this.db.insert_feature(feature)
+    } else {
+      this.db.update_feature(feature)
+    }
 
     if(is_valid.user) {
       if(this.db.is_user_data_empty()) {
@@ -61,7 +78,6 @@ export default class SettingsScreen extends Component  {
         this.db.update_mqtt(mqtt)
       }
     }
-
     if(is_valid.nas) {
       if(this.db.is_nas_data_empty()) {
         this.db.insert_nas(nas)
@@ -70,7 +86,7 @@ export default class SettingsScreen extends Component  {
       }
     }
 
-    this.props.tab_navigation.jumpTo("Home_tab")
+    this.props.navigation_tab.jumpTo("Home_tab")
   }
 
   validData() {
@@ -79,7 +95,7 @@ export default class SettingsScreen extends Component  {
     var is_valid = {
       user: true,
       mqtt: true,
-      nas: true,
+      nas: true
     }
 
     // user
@@ -105,42 +121,68 @@ export default class SettingsScreen extends Component  {
     return is_valid;
   }
 
+  set_tab_navigation() {
+    this.tab_navigation.options = {
+      showLabel: true,
+      labelStyle: { fontSize: 12 },
+      indicatorStyle : {backgroundColor: "black"},
+    }
+
+    this.tab_navigation.static_tabs.feature = (
+      <Tab.Screen
+        name="Feature_tab"
+        children={({navigation}) => <Feature_tab navigation={this.props.navigation} navigation_tab={navigation} values={this.state.values.feature} onValueChange={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+        options={{
+          tabBarLabel: "Features"
+        }}
+      />
+    );
+
+    this.tab_navigation.static_tabs.user = (
+      <Tab.Screen
+        name="User_tab"
+        children={({navigation}) => <User_tab navigation={this.props.navigation} navigation_tab={navigation} values={this.state.values.user} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+        options={{
+          tabBarLabel: "Benutzer"
+        }}
+      />
+    );
+
+    this.tab_navigation.dynamic_tabs.mqtt = (
+      <Tab.Screen
+        name="Mqtt_tab"
+        children={({navigation}) => <Mqtt_tab navigation={this.props.navigation} navigation_tab={navigation} values={this.state.values.mqtt} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+        options={{
+          tabBarLabel: "MQTT\nBrocker"
+        }}
+      />
+    );
+
+    this.tab_navigation.dynamic_tabs.nas = (
+      <Tab.Screen
+        name="Nas_tab"
+        children={({navigation}) => <Nas_tab navigation={this.props.navigation} navigation_tab={navigation} values={this.state.values.nas} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+        options={{
+          tabBarLabel: "Nas"
+        }}
+      />
+    );
+  }
+
   render() {
-    this.props.navigation.setOptions({
-      headerRight: () => (
-        <Header_control_right_settings navigation={this.props.navigation} onPress={() => this.save_data()}/>
-      ),
-    });
+    console.log("a");
+    this.set_tab_navigation()
+
+    let { feature } = this.state.values
+    let mqtt_tab    = feature.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.mqtt : null
+    let nas_tab     = feature.is_nas_control_active ? this.tab_navigation.dynamic_tabs.nas : null;
 
     return (
-      <Tab.Navigator
-        tabBarOptions={{
-          showLabel: true,
-          labelStyle: { fontSize: 12 },
-          indicatorStyle : {backgroundColor: "black"},
-        }}
-      >
-        <Tab.Screen
-          name="User"
-          children={() => <User_tab values={this.state.values.user} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
-          options={{
-            tabBarLabel: "Benutzer"
-          }}
-        />
-        <Tab.Screen
-          name="Mqtt"
-          children={() => <Mqtt_tab values={this.state.values.mqtt} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
-          options={{
-            tabBarLabel: "MQTT-Brocker"
-          }}
-        />
-        <Tab.Screen
-          name="Nas"
-          children={() => <Nas_tab values={this.state.values.nas} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
-          options={{
-            tabBarLabel: "Nas"
-          }}
-        />
+      <Tab.Navigator initialRouteName="Feature_tab" tabBarOptions={this.tab_navigation.options}>
+        {this.tab_navigation.static_tabs.feature}
+        {this.tab_navigation.static_tabs.user}
+        {mqtt_tab}
+        {nas_tab}
       </Tab.Navigator>
     );
   }

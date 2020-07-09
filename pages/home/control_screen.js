@@ -9,7 +9,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 // SplashScreen
 import SplashScreen from 'react-native-splash-screen'
 
-// Menu
+// Tab-Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
@@ -29,115 +29,99 @@ export default class HomeScreen extends Component  {
     SplashScreen.show();
 
     this.db = new DB(this);
-    this.state = {
-      showScreenTime: 1500,
+    this.tab_navigation = {
+      options: null,
+      static_tabs: {
+        home: null,
+        setting: null
+      },
+      dynamic_tabs: {
+        smart_home_control: null,
+        nas_control: null,
+      }
     }
   }
 
   set_data_from_sqlite(category, data) {
     this.db.set_data(category, data)
+  }
 
-    if(data == null) {
-      return ;
-    } else if(category == "user") {
-      let { user } = this.state
-      user = this.db.get_name()
-
-      this.setState({user: user});
-    } else if(category == "mqtt") {
-      let { mqtt } = this.state
-      mqtt.uri = this.db.get_mqtt_uri()
-
-      this.setState({mqtt: mqtt});
-    } else if(category == "nas") {
-      let { nas } = this.state
-      nas = this.db.get_nas_data()
-
-      this.setState({nas: nas});
+  set_tab_navigation() {
+    this.tab_navigation.options = {
+      showLabel: true,
+      labelPosition: 'below-icon',
+      labelStyle: { marginBottom: 5, fontSize: 12},
+      activeTintColor : {backgroundColor: "black"},
+      style: {height: 60},
     }
+
+    this.tab_navigation.static_tabs.home = (
+      <Tab.Screen
+        name="Home_tab"
+        children={({navigation})=> <Home_tab db={this.db} navigation={this.props.navigation} navigation_tab={navigation}/>}
+        options={() => ({
+          tabBarLabel: "Home",
+          tabBarIcon: props => (<Ionicons name="home" size={30} color={props.color}/>)
+        })}
+      />
+    );
+
+    this.tab_navigation.dynamic_tabs.smart_home_control = (
+      <Tab.Screen
+        name="Smart_home_control_tab"
+        children={({navigation}) => <Smart_home_tab db={this.db} navigation={this.props.navigation} navigation_tab={navigation}/>}
+        options={() => ({
+          tabBarLabel: "Smart Home",
+          tabBarIcon: props => (<MaterialIcons name="settings-remote" size={30} color={props.color}/>)
+        })}
+      />
+    )
+
+    this.tab_navigation.dynamic_tabs.nas_control = (
+      <Tab.Screen
+        name="nas_control_tab"
+        children={({navigation}) => <Nas_tab db={this.db} navigation={this.props.navigation} navigation_tab={navigation}/>}
+        options={{
+          tabBarLabel: "NAS",
+          tabBarIcon: props => (<MaterialCommunityIcons name="nas" size={30} color={props.color}/>)
+        }}
+      />
+    )
+
+    this.tab_navigation.static_tabs.setting = (
+      <Tab.Screen
+        name="Setting__tab"
+        children={({navigation}) => <Setting_tab db={this.db} navigation={this.props.navigation} navigation_tab={navigation}/>}
+        options={{
+          tabBarLabel: "Einstellungen",
+          tabBarIcon: props => (<Ionicons name="settings" size={30} color={props.color}/>)
+        }}
+      />
+    )
   }
 
   render() {
-    this.props.navigation.setOptions({
-      headerRight: () => (null),
-    });
+    this.set_tab_navigation()
+
+    let smart_home_control_tab  = this.db.get_is_smart_home_control_active() ? this.tab_navigation.dynamic_tabs.smart_home_control : null
+    let nas_control_tab         = this.db.get_is_nas_control_active() ? this.tab_navigation.dynamic_tabs.nas_control : null;
+
     return (
-      <Tab.Navigator
-        initialRouteName = {"Home"}
-        tabBarOptions={{
-          showLabel: true,
-          labelPosition: 'below-icon',
-          labelStyle: { marginBottom: 5, fontSize: 12},
-          activeTintColor : {backgroundColor: "black"},
-          style: {height: 60},
-        }}
-      >
-
-        <Tab.Screen
-          name="Home_tab"
-          children={({navigation})=>
-            <Home_tab
-              db={this.db}
-              navigation={this.props.navigation}
-              tab_navigation={navigation}
-            />
-          }
-          options={() => ({
-            tabBarLabel: "Home",
-            tabBarIcon: props => (<Ionicons name="home" size={30} color={props.color}/>)
-          })}
-        />
-
-        <Tab.Screen
-          name="Smart_home_control_tab"
-          children={({navigation}) =>
-            <Smart_home_tab
-              db={this.db}
-              navigation={this.props.navigation}
-              tab_navigation={navigation}
-            />
-          }
-          options={() => ({
-            tabBarLabel: "Smart Home",
-            tabBarIcon: props => (<MaterialIcons name="settings-remote" size={30} color={props.color}/>)
-          })}
-        />
-
-        <Tab.Screen
-          name="nas_control_tab"
-          children={({navigation}) =>
-             <Nas_tab
-              db={this.db}
-              navigation={this.props.navigation}
-              tab_navigation={navigation}
-            />
-          }
-          options={{
-            tabBarLabel: "NAS",
-            tabBarIcon: props => (<MaterialCommunityIcons name="nas" size={30} color={props.color}/>)
-          }}
-        />
-
-        <Tab.Screen
-          name="Setting__tab"
-          children={({navigation}) =>
-             <Setting_tab
-              db={this.db}
-              navigation={this.props.navigation}
-              tab_navigation={navigation}
-            />
-          }
-          options={{
-            tabBarLabel: "Einstellungen",
-            tabBarIcon: props => (<Ionicons name="settings" size={30} color={props.color}/>)
-          }}
-        />
+      <Tab.Navigator initialRouteName={"Home_tab"} tabBarOptions={this.tab_navigation.options}>
+        {this.tab_navigation.static_tabs.home}
+        {smart_home_control_tab}
+        {nas_control_tab}
+        {this.tab_navigation.static_tabs.setting}
       </Tab.Navigator>
     );
   }
 
   async UNSAFE_componentWillMount() {
-    await new Promise((resolve) => setTimeout(() => { resolve('result') }, this.state.showScreenTime));
+    while(this.db.is_data_load() == false) {
+      await new Promise((resolve) => setTimeout(() => { resolve('result') }, 500));
+    }
+
+    this.forceUpdate();
     SplashScreen.hide();
   }
 };

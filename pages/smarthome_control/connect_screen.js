@@ -3,58 +3,78 @@ import { View, ToastAndroid } from 'react-native';
 
 import LoadData from "../../madmax_modules/loadData/LoadData.js"
 
+// Screen
+import SmartHomeControl from "./control_screen.js"
+
+// Global
 import MQTT from './mqtt.js'
-import Speaker from '../../madmax_modules/speaker/Speaker.js'
-import DB from '../../madmax_modules/sqlite/DB.js'
 import STYLE from '../../data/config/style.js'
 
 export default class ConnectScreen extends Component  {
   constructor(props) {
     super(props);
 
-		this.db = null;
-    this.name = null;
-		this.mqtt = {
+		this.db = this.props.db;
+    this.mqtt = {
       uri: null,
       qos: 0,
       retained: false,
     }
-    this.speaker = new Speaker("de-DE", "de-de-x-nfh");
-
     this.state = {
       pufferTime: 2000,
+      mqtt_is_connected: false,
     }
-		this.initData();
   }
 
-	initData() {
-    this.db = new DB(this);
-  }
+  init_data() {
+    let uri = this.db.get_mqtt_uri()
+    if(uri != this.mqtt.uri) {
+      this.mqtt.uri = uri
 
-  async setDataFromSQLite(data) {
-    this.db.setData(data);
+      if(this.connection != null) {
+        this.connection.disconnect()
+      }
+      this.connection = new MQTT(this, this.mqtt.uri);
 
-    if(this.db.checkIfDataNull()) {
-      await new Promise((resolve) => setTimeout(() => { resolve('result') }, this.state.pufferTime/2));
-      this.props.navigation.navigate('Home');
-      ToastAndroid.show('Einstellungen sind nicht gültig!', ToastAndroid.LONG);
-    } else {
-      this.name     = this.db.get_name()
-      this.mqtt.uri = this.db.get_mqtt_uri();
-      new MQTT(this, this.mqtt.uri);
+      this.state.mqtt_is_connected = false
     }
   }
 
   async setMqttServerToAvailable() {
     await new Promise((resolve) => setTimeout(() => { resolve('result') }, this.state.pufferTime));
-    this.props.navigation.navigate("SmartHomeControl", {mqtt: this.mqtt, speaker: this.speaker, name: this.name})
+    if(this.props.navigation_tab.isFocused()) {
+      this.setState({
+        mqtt_is_connected: true
+      })
+    } else {
+      this.state.mqtt_is_connected = false
+
+      this.connection.disconnect()
+      this.connection = delete this.connection
+    }
   }
 
+  abort_loading() {
+    this.state.mqtt_is_connected = false
+
+    this.connection.disconnect()
+    this.connection = delete this.connection
+
+    this.props.navigation_tab.jumpTo("Home_tab")
+  }
 
   render() {
+    if(this.props.navigation_tab.isFocused()) {
+      if(this.state.mqtt_is_connected) {
+        this.connection = delete this.connection
+        this.props.navigation.navigate("Smart_home_control_screen", { mqtt: this.mqtt });
+      } else {
+        this.init_data()
+      }
+    }
     return (
       <View style={STYLE.SCREEN.main}>
-        <LoadData text="Verbindung zum Server wird aufgebaut" navigation={this.props.navigation}/>
+        <LoadData text="Verbindung zum Server wird aufgebaut" abort={() => this.abort_loading()}/>
       </View>
     );
   }
