@@ -68,6 +68,7 @@ export default class SettingsScreen extends Component  {
             <TextInput
               style={this.style.input}
               placeholder="Passwort"
+              secureTextEntry={true}
               onChangeText={(value) => {this.props.onChangeText("nas", "password", value)}}
               value={this.state.values.password}
             />

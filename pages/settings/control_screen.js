@@ -1,6 +1,9 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text, Button, BackHandler } from 'react-native';
 
+// Navigation
+import Header_control_right_settings from '../navigation/header/control_right_settings.js';
+
 // Menu
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
@@ -20,133 +23,126 @@ export default class SettingsScreen extends Component  {
   constructor(props) {
     super(props);
 
-    this.db = new DB(this);
-    this.newTupel = true;
+    this.db = this.props.db;
     this.state = {
       values: {
-        user: {
-          first_name: null,
-          surname: null
-        },
-        mqtt: {
-          typ: "mqtt",
-          ipaddress: null,
-          port: null,
-        },
-        nas: {
-          ipaddress: null,
-          macaddress: null,
-          username: null,
-          password: null,
-        }
-      },
-      data_is_loaded_from_sqlite: {
-        user: false,
-        mqtt: false,
-        nas: false,
+        user: this.db.get_user_data(),
+        mqtt: this.db.get_mqtt_data(),
+        nas: this.db.get_nas_data(),
       },
     }
   }
 
-  set_data_from_sqlite(category, data) {
-    this.db.set_data(category, data)
-
-    let values = this.state.values
-    if(data != null) {
-      values[category] = data
-    }
-
-    let data_is_loaded_from_sqlite      = this.state.data_is_loaded_from_sqlite
-    data_is_loaded_from_sqlite[category]  = true
+  set_data_from_tab(category, elem, value) {
+    let values              = this.state.values
+    values[category][elem]  = value
 
     this.setState({
-      values: values,
-      data_is_loaded_from_sqlite: data_is_loaded_from_sqlite,
+      values: values
     });
   }
 
-  set_data() {
-    let values = this.state.values
-
-    // user
-    values.user.first_name  = this.db.get_first_name()
-    values.user.surname     = this.db.get_surname()
-
-    // mqtt
-    values.mqtt.ipaddress = this.db.get_mqtt_ipaddress()
-    values.mqtt.port      = this.db.get_mqtt_port()
-
-    // nas
-    values.nas.ipaddress  = this.db.get_nas_ipaddress()
-    values.nas.macaddress = this.db.get_nas_macaddress()
-    values.nas.username   = this.db.get_nas_username()
-    values.nas.password   = this.db.get_nas_password()
-
-    this.state.values = values
-  }
-
-  onChangeText(category, elem, value) {
-    this.state.values[category][elem] = value
-  }
-
   save_data() {
-    if(!this.validData()) {
+    let { user, mqtt, nas } = this.state.values
 
+    let is_valid = this.validData()
+
+    if(is_valid.user) {
+      if(this.db.is_user_data_empty()) {
+        this.db.insert_user(user)
+      } else {
+        this.db.update_user(user)
+      }
+    }
+    if(is_valid.mqtt) {
+      if(this.db.is_mqtt_data_empty()) {
+        this.db.insert_mqtt(mqtt)
+      } else {
+        this.db.update_mqtt(mqtt)
+      }
     }
 
-    if(this.newTupel) {
-
-    } else {
-
+    if(is_valid.nas) {
+      if(this.db.is_nas_data_empty()) {
+        this.db.insert_nas(nas)
+      } else {
+        this.db.update_nas(nas)
+      }
     }
 
-    if(this.db.getMqttIpAddress() == this.state.values.mqtt.ipaddress
-      && this.db.getMqttPort() == this.state.values.mqtt.port) {
-      this.props.navigation.goBack();
-    } else {
-      this.props.navigation.navigate("Home");
-    }
+    this.props.tab_navigation.jumpTo("Home_tab")
   }
 
   validData() {
-    is_valid = true
+    var { user, mqtt, nas } = this.state.values
+
+    var is_valid = {
+      user: true,
+      mqtt: true,
+      nas: true,
+    }
+
+    // user
+    if((user.first_name == null)
+      || (user.surname == null)) {
+        is_valid.user = false
+    }
+
+    // mqtt
+    if((mqtt.port == null || mqtt.port.length < 1 || mqtt.port.length > 4)
+      || (mqtt.ipaddress == null || mqtt.ipaddress.length < 7 || mqtt.ipaddress.length > 15)) {
+        is_valid.mqtt = false
+    }
+
+    // nas
+    if((nas.ipaddress == null || nas.ipaddress.length < 7 || nas.ipaddress.length > 15)
+      || (nas.macaddress == null || nas.macaddress.length != 12)
+      || (nas.username == null)
+      || (nas.password == null)) {
+        is_valid.nas = false
+    }
+
     return is_valid;
   }
 
   render() {
-    if(!this.state.data_is_loaded_from_sqlite.user
-      || !this.state.data_is_loaded_from_sqlite.mqtt
-      || !this.state.data_is_loaded_from_sqlite.nas) {
-      return (
-        <View>
-          <LoadData text="Daten werden geladen" navigation={this.props.navigation}/>
-        </View>
-      );
-    } else {
-      //this.set_data()
+    this.props.navigation.setOptions({
+      headerRight: () => (
+        <Header_control_right_settings navigation={this.props.navigation} onPress={() => this.save_data()}/>
+      ),
+    });
 
-      return (
-        <Tab.Navigator
-          tabBarOptions={{
-            labelStyle: { fontSize: 12 },
-            indicatorStyle : {backgroundColor: "black"}
+    return (
+      <Tab.Navigator
+        tabBarOptions={{
+          showLabel: true,
+          labelStyle: { fontSize: 12 },
+          indicatorStyle : {backgroundColor: "black"},
+        }}
+      >
+        <Tab.Screen
+          name="User"
+          children={() => <User_tab values={this.state.values.user} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+          options={{
+            tabBarLabel: "Benutzer"
           }}
-        >
-          <Tab.Screen
-            name="Benutzer"
-            children={() => <User_tab values={this.state.values.user} style={style_tab_input} onChangeText={(category, elem, value) => this.onChangeText(category, elem, value)}/>}
-          />
-          <Tab.Screen
-            name="MQTT-Brocker"
-            children={() => <Mqtt_tab values={this.state.values.mqtt} style={style_tab_input} onChangeText={(category, elem, value) => this.onChangeText(category, elem, value)}/>}
-          />
-          <Tab.Screen
-            name="NAS"
-            children={() => <Nas_tab values={this.state.values.nas} style={style_tab_input} onChangeText={(category, elem, value) => this.onChangeText(category, elem, value)}/>}
-          />
-        </Tab.Navigator>
-      );
-    }
+        />
+        <Tab.Screen
+          name="Mqtt"
+          children={() => <Mqtt_tab values={this.state.values.mqtt} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+          options={{
+            tabBarLabel: "MQTT-Brocker"
+          }}
+        />
+        <Tab.Screen
+          name="Nas"
+          children={() => <Nas_tab values={this.state.values.nas} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+          options={{
+            tabBarLabel: "Nas"
+          }}
+        />
+      </Tab.Navigator>
+    );
   }
 };
 
