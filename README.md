@@ -22,5 +22,7 @@
 * @react-navigation/material-top-tabs
 * react-native-tab-view
 * @react-navigation/bottom-tabs
+* react-native-vector-icons
+* @react-native-community/toolbar-android
 
-<code>npm i -S sp-react-native-mqtt underscore react-native-sqlite-storage react-native-splash-screen react-native-tts @react-navigation/native @react-navigation/stack react-native-gesture-handler @react-native-community/masked-view react-native-screens @react-native-community/slider @react-navigation/material-top-tabs react-native-tab-view @react-navigation/bottom-tabs</code><br>
+<code>npm i -S sp-react-native-mqtt underscore react-native-sqlite-storage react-native-splash-screen react-native-tts @react-navigation/native @react-navigation/stack react-native-gesture-handler @react-native-community/masked-view react-native-screens @react-native-community/slider @react-navigation/material-top-tabs react-native-tab-view @react-navigation/bottom-tabs react-native-vector-icons @react-native-community/toolbar-android</code><br>
