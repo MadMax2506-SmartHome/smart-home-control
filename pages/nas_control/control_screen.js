@@ -7,11 +7,7 @@ export default class MenuScreen extends Component  {
   constructor(props) {
     super(props);
 
-    const { params } = this.props.route;
-    if(params.nas == undefined) {
-      this.props.navigation.navigate("Home");
-    }
-    this.nas = params.nas;
+    this.nas = this.props.nas;
     this.state = {
       is_online: false
     }
