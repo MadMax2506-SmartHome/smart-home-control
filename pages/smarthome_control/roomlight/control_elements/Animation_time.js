@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
+import { StyleSheet, View, Text, Button } from 'react-native';
 
+// Allgemein
 import Value_slider from '../../../../madmax_modules/slider/Value_slider.js';
 
 export default class Animation_time extends Component  {

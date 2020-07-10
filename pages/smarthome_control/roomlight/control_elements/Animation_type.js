@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
+// Allgemein
 import Item_picker from '../../../../madmax_modules/item_picker/Item_picker.js'
 
 export default class Animation_type extends Component  {
@@ -18,9 +19,7 @@ export default class Animation_type extends Component  {
     return (
       <View>
         <View style={style.header}>
-          <Text>
-            Animationstyp
-          </Text>
+          <Text>Animationstyp</Text>
         </View>
         <View style={style.main}>
           <Item_picker labels={this.state.labels} values={this.state.values} selectedValue={this.state.selectedValue} onChange={(type) => this.props.onChange(type)}/>

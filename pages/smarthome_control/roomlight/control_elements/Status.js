@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Switch } from 'react-native';
 export default class Status extends Component  {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       status: this.props.status,
     }
@@ -14,9 +14,7 @@ export default class Status extends Component  {
     return (
         <View>
           <View style={style.header}>
-            <Text>
-              LED-Leiste (ON | OFF):
-            </Text>
+            <Text>LED-Leiste (ON | OFF):</Text>
           </View>
           <View style={style.main}>
             <Switch

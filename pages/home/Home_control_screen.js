@@ -18,7 +18,7 @@ import Nas_control_tab from "../nas_control/Nas_control_tab.js"
 import Smart_home_connect_tab from "../smarthome_control/Smart_home_connect_tab.js"
 import Setting_control_tab from "../settings/Setting_control_tab.js"
 
-// Globales
+// Allgemein
 import STYLE from '../../data/config/style.js'
 import DB from '../../madmax_modules/sqlite/DB.js'
 

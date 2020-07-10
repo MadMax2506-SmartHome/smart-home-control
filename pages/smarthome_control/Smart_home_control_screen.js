@@ -15,7 +15,7 @@ import STYLE from '../../data/config/style.js'
 export default class Smart_home_control_screen extends Component  {
   constructor(props) {
     super(props);
-    console.log("init global");
+    
     const { params } = this.props.route;
 
     this.mqtt     = params.mqtt
@@ -67,8 +67,7 @@ export default class Smart_home_control_screen extends Component  {
   }
 
   render() {
-    this.set_tab_navigation()
-
+    console.log("return");
     return (
       <Tab.Navigator initialRouteName={"Roomlight_tab"} tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.roomlight}

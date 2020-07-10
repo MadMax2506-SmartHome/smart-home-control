@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet } from 'react-native';
 
 // Navigation
-import Header_control_right_settings from '../navigation/header/control_right_settings.js';
+import Header_control_right_settings from '../navigation/header/Header_control_right_settings.js';
 
 // Tab - Navigation
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -13,8 +13,7 @@ import User_tab from "./tabs/User_tab.js"
 import Mqtt_tab from "./tabs/Mqtt_tab.js"
 import Nas_tab from "./tabs/Nas_tab.js"
 
-// Globales
-import DB from '../../madmax_modules/sqlite/DB.js'
+// Allgemein
 import STYLE from '../../data/config/style.js'
 
 export default class SettingsScreen extends Component  {

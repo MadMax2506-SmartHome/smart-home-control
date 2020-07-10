@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { View, Text, TextInput } from 'react-native';
 
-// Globales
+// Allgemein
 import STYLE from '../../../data/config/style.js'
 
 export default class Mqtt_tab extends Component  {

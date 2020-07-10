@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 
+// Allgemein
 import Color_slider from '../../../../madmax_modules/slider/Rgb_color_slider.js';
 
 export default class Color_content extends Component {
@@ -38,9 +39,7 @@ export default class Color_content extends Component {
         </View>
         <View style={style.main}>
           <View style={{backgroundColor: this.state.colorRGB}}>
-            <Text style={style.colorView}>
-              {this.state.colorRGB}
-            </Text>
+            <Text style={style.colorView}>{this.state.colorRGB}</Text>
           </View>
 
           <View style={style.elem}>

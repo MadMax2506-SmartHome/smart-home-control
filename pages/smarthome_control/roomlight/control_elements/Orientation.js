@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
+// Allgemein
 import Item_picker from '../../../../madmax_modules/item_picker/Item_picker.js'
 
 export default class Orientation extends Component  {

@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, TouchableOpacity} from 'react-native';
+
+// Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
 export default class ControlRight extends Component  {

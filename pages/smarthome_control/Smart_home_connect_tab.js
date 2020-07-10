@@ -1,12 +1,14 @@
 import React, {Component} from 'react';
 import { View, ToastAndroid } from 'react-native';
 
-import LoadData from "../../madmax_modules/load_data/Load_data.js"
-
-// Global
+// MQTT
 import MQTT_AVAILABLE from './mqtt/Mqtt_available.js'
 import MQTT_DATA from './mqtt/Mqtt_data.js'
+
+// Allgemein
 import STYLE from '../../data/config/style.js'
+import LoadData from "../../madmax_modules/load_data/Load_data.js"
+
 
 export default class Smart_home_connect_tab extends Component  {
   constructor(props) {
@@ -14,7 +16,7 @@ export default class Smart_home_connect_tab extends Component  {
 
 		this.db = this.props.db;
 
-    this.mqtt     = {
+    this.mqtt = {
       uri: null,
       connection: {
         available: null,
@@ -28,13 +30,15 @@ export default class Smart_home_connect_tab extends Component  {
       qos: 0,
       retained: false,
     };
-    this.devices  = {
+
+    this.devices = {
       count_devices: 0,
       current_device_name_index: 0,
       device_names: ["roomlight"],
       roomlight: []
     };
-    this.data     = {
+
+    this.data = {
       roomlight: {
         static: {
           lights: {

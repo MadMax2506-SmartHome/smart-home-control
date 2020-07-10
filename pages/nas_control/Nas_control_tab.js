@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { ScrollView, View, Text, Button } from 'react-native';
 
+// Allgemein
 import STYLE from '../../data/config/style.js'
 
 export default class Nas_control_tab extends Component  {
@@ -14,13 +15,9 @@ export default class Nas_control_tab extends Component  {
     this.getStatus()
   }
 
-  async getStatus() {
+  async getStatus() {}
 
-  }
-
-  wakeOnLan() {
-
-  }
+  wakeOnLan() {}
 
   render() {
     let statusText = this.state.is_online ? "NAS ist online" : "NAS ist offline"

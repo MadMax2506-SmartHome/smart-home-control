@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
+// Allgemein
 import STYLE from '../../../data/config/style.js'
 
 export default class Home_tab extends Component  {

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StatusBar, Button } from "react-native"
+import { StatusBar } from "react-native"
 
 // Navigation
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,8 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 // Screens
-import Home from '../home/Control_screen.js'
-
+import Home_control_screen from '../home/Home_control_screen.js'
 import Smart_home_control_screen from '../smarthome_control/Smart_home_control_screen.js'
 
 export default class Navigation extends Component {
@@ -29,7 +28,7 @@ export default class Navigation extends Component {
         >
           <Stack.Screen
             name='Home'
-            component={Home}
+            component={Home_control_screen}
             options={({ navigation }) => ({
               title: 'Smart Home',
               headerRight: () => (null),
