@@ -48,8 +48,8 @@ module.exports = {
           this.config._class.set_config_info(data);
       }
     } else {
-      data = JSON.parse(data);
-      this.config._class.set_config_info(data);
+      let config_data = JSON.parse(data);
+      this.config._class.set_config_info(config_data);
     }
   },
 };

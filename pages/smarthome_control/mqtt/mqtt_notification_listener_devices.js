@@ -50,7 +50,7 @@ module.exports = {
       let device_info = JSON.parse(data);
 
       if(device_info.name == "Roomlight Max") {
-        this.config._class.set_device_info("_class", device_info);
+        this.config._class.set_device_info("roomlight", device_info);
       }
     }
   },

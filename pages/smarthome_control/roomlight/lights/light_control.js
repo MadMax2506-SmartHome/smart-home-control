@@ -20,9 +20,6 @@ export default class Light extends Component {
 
   setData(controlElem, value, msg) {
     this.data[controlElem] = value;
-    console.log("---------------");
-    console.log(this.mqtt.topic.lightConf);
-    console.log("---------------");
     this.mqtt.connection.publish(this.mqtt.topic.lightConf, msg, this.mqtt.retained);
   }
 
