@@ -1,16 +1,16 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
-import ItemPicker from '../../../../../madmax_modules/item-picker/ItemPicker.js'
+import Item_picker from '../../../../madmax_modules/item_picker/Item_picker.js'
 
-export default class AnimationType extends Component  {
+export default class Animation_type extends Component  {
   constructor(props) {
     super(props);
 
     this.state = {
+      selectedValue: this.props.selectedValue,
       labels: this.props.labels,
       values: this.props.values,
-      selectedValue: this.props.selectedValue,
     }
   }
 
@@ -19,11 +19,11 @@ export default class AnimationType extends Component  {
       <View>
         <View style={style.header}>
           <Text>
-            Richtung:
+            Animationstyp
           </Text>
         </View>
         <View style={style.main}>
-          <ItemPicker labels={this.state.labels} values={this.state.values} selectedValue={this.state.selectedValue} onChange={(orientation) => this.props.onChange(orientation)}/>
+          <Item_picker labels={this.state.labels} values={this.state.values} selectedValue={this.state.selectedValue} onChange={(type) => this.props.onChange(type)}/>
         </View>
       </View>
     );

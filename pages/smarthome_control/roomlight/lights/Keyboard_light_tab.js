@@ -9,12 +9,12 @@ import AnimationTime from '../control_elements/Animation_time.js';
 
 import STYLE from '../../../../data/config/style.js'
 
-export default class Light extends Component {
+export default class Keyboard_light_tab extends Component {
   constructor(props) {
     super(props);
 
-    this.data = this.props.data;
-    this.mqtt = this.props.mqtt;
+    this.mqtt   = this.props.mqtt;
+    this.data   = this.props.data;
   }
 
   setData(controlElem, value, msg) {

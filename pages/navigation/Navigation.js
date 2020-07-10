@@ -8,9 +8,9 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 // Screens
-import Home from '../home/control_screen.js'
+import Home from '../home/Control_screen.js'
 
-import Smart_home_control_screen from '../smarthome_control/control_screen.js'
+import Smart_home_control_screen from '../smarthome_control/Smart_home_control_screen.js'
 
 export default class Navigation extends Component {
   render() {

@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Switch } from 'react-native';
 // Globales
 import STYLE from '../../../data/config/style.js'
 
-export default class SettingsScreen extends Component  {
+export default class Feature_tab extends Component  {
   constructor(props) {
     super(props);
 

@@ -1,177 +1,141 @@
 import React, {Component} from 'react';
-import { StyleSheet, ScrollView, View, Text, Button } from 'react-native';
 
-// Menu
+// Tab-Navigation
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 
-// Tab
-import Keyboard_light_tab from "./lights/keyboard_tab.js"
-import Bed_wall_light_tab from "./lights/bed_wall_tab.js"
-import Bed_side_light_tab from "./lights/bed_side_tab.js"
-
-import LoadData from "../../../madmax_modules/loadData/LoadData.js"
+import Keyboard_light_tab from "./lights/Keyboard_light_tab.js"
+import Bed_wall_light_tab from "./lights/Bed_wall_light_tab.js"
+import Bed_side_light_tab from "./lights/Bed_side_light_tab.js"
 
 // Global
 import STYLE from '../../../data/config/style.js'
-import MQTT from './mqtt/mqtt_roomlight.js'
 
-export default class RoomlightTab extends Component {
+export default class Roomlight_tab extends Component {
   constructor(props) {
     super(props);
+    console.log("init roomlight");
+    this.tab_navigation = {
+      options: null,
+      static_tabs: {
+        keyboard: null,
+        bed_wall: null,
+        bed_side: null,
+      },
+    }
 
-    this.contentData  = {
-      lights: {
-        values: ["keyboard", "bedWall", "bedSide"],
-        indices: ["keyboard", "bed-wall", "bed-side"],
-        topics: {
-          keyboard: "/keyboard",
-          bedWall: "/bed/wall",
-          bedSide: "/bed/side",
-        },
+    this.roomlight = {
+      keyboard: {
+        data: null,
+        mqtt: null,
       },
-      animationTyp: {
-        labels: ["Fade", "Rainbow", "to Color"],
-        values: ["fade", "rainbow", "toColor"],
+      bedWall: {
+        data: null,
+        mqtt: null,
       },
-      orientation: {
-        labels: ["nach Links", "nach Rechts", "von der Mitte"],
-        values: ["l", "r", "c"],
+      bedSide: {
+        data: null,
+        mqtt: null,
       }
-    };
-
-    this.device = [];
-    this.data   = {
-      "keyboard": [],
-      "bedWall": [],
-      "bedSide": [],
-    };
-    this.mqtt   = {
-      connection: null,
-      uri: this.props.mqtt.uri,
-      topic: {
-        devices: "devices",
-        globalConf: "",
-        lightConf: "",
-        globalStatus: "",
-        lightStatus: "",
-      },
-      qos: this.props.mqtt.qos,
-      retained: this.props.mqtt.retained,
-    };
-
-    this.state = {
-      dataIsLoadedFromMqttBrocker: false,
-      isLoadingData: false,
     }
   }
 
-  checkDeviceInfo() {
-    if(this.device.length == 0
-      && !this.state.dataIsLoadedFromMqttBrocker) {
-      this.mqtt.connection = new MQTT(this, this.mqtt.uri, this.mqtt.qos);
+  set_data() {
+    let { roomlight } = this.props
+    let { mqtt }      = this.props
 
-      this.mqtt.connection.deleteDeviceListener();
-      this.mqtt.connection.setDeviceListener(this.mqtt.topic.devices);
+    let light_names = roomlight.static.lights.values
 
-      this.mqtt.connection.publish(this.mqtt.topic.devices, "list-devices", this.mqtt.retained);
-    } else if(this.state.dataIsLoadedFromMqttBrocker) {
-      this.checkConfigInfo();
+    let light_name  = null
+    let light_data  = null
+    let light_mqtt  = null
+
+    for(var i = 0; i < light_names.length; i++) {
+      light_data  = roomlight
+      light_mqtt  = mqtt
+      light_name  = light_names[i]
+
+      light_data.dynamic = light_data.dynamic[light_name]
+
+      light_mqtt.connection         = light_mqtt.connection.data
+  		light_mqtt.topic.lightStatus  = light_mqtt.topic.globalStatus + light_data.static.lights.topics[light_name];
+  		light_mqtt.topic.lightConf    = light_mqtt.topic.globalConf + light_data.static.lights.topics[light_name];
+
+      this.roomlight[light_name].data = light_data
+      this.roomlight[light_name].mqtt = light_mqtt
     }
   }
 
-  checkConfigInfo() {
-    if(!this.state.dataIsLoadedFromMqttBrocker
-      && !this.isLoadingData) {
-      this.mqtt.topic.globalConf   = this.device.topic.conf;
-      this.mqtt.topic.globalStatus = this.device.topic.status;
-
-      this.state.isLoadingData = true;
-
-      this.mqtt.connection.deleteGlobalStatusListener();
-      this.mqtt.connection.setGlobalStatusListener(this.mqtt.topic.globalStatus);
-
-      this.mqtt.connection.publish(this.mqtt.topic.globalConf, "get-conf", this.mqtt.retained);
+  set_tab_navigation() {
+    this.tab_navigation.options = {
+      showLabel: true,
+      labelStyle: { fontSize: 12 },
+      indicatorStyle : {backgroundColor: "black"}
     }
-  }
 
-  // called by mqtt
-  setDeviceInfo(device) {
-    this.device = device;
-    this.checkConfigInfo();
-  }
-
-  // called by mqtt
-  setConfigInfo(data) {
-    if(data == "end") {
-      this.setState({
-        dataIsLoadedFromMqttBrocker: true,
-        isLoadingData: false,
-      });
-    } else {
-      var place = "";
-      for(var i = 0; i < this.contentData.lights.values.length; i++) {
-        if(data[this.contentData.lights.indices[i]] != undefined) {
-          place = i;
-          break;
+    this.tab_navigation.static_tabs.keyboard = (
+      <Tab.Screen
+        name="Keyboard_light_tab"
+        children={({navigation}) =>
+          <Keyboard_light_tab
+            mqtt={this.roomlight.keyboard.mqtt}
+            data={this.roomlight.keyboard.data}
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+          />
         }
-      }
-      this.data[this.contentData.lights.values[place]] = data[this.contentData.lights.indices[place]];
-    }
+        options={{
+          tabBarLabel: "Tastatur"
+        }}
+      />
+    );
+
+    this.tab_navigation.static_tabs.bed_wall = (
+      <Tab.Screen
+        name="Bed_wall_light_tab"
+        children={({navigation}) =>
+          <Bed_wall_light_tab
+            mqtt={this.roomlight.bedWall.mqtt}
+            data={this.roomlight.bedWall.data}
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+          />
+        }
+        options={{
+          tabBarLabel: "Wand"
+        }}
+      />
+    );
+
+    /*this.tab_navigation.static_tabs.bed_side = (
+      <Tab.Screen
+        name="Bed_side_light_tab"
+        children={({navigation}) =>
+          <Bed_side_light_tab
+            mqtt={this.roomlight.bed_side.mqtt}
+            data={this.roomlight.bed_side.data}
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+          />
+        }
+        options={{
+          tabBarLabel: "seitlich"
+        }}
+      />
+    );*/
   }
 
   render() {
-    if(this.state.dataIsLoadedFromMqttBrocker) {
-      return (
-        <Tab.Navigator
-          tabBarOptions={{
-            showLabel: true,
-            labelStyle: { fontSize: 12 },
-            indicatorStyle : {backgroundColor: "black"}
-          }}
-        >
-          <Tab.Screen
-            name="Tastatur"
-            children={() =>
-              <Keyboard_light_tab
-                value       = {this.contentData.lights.values[0]}
-                contentData = {this.contentData}
-                data        = {this.data[this.contentData.lights.values[0]]}
-                mqtt        = {this.mqtt}
-              />
-            }
-          />
-          <Tab.Screen
-            name="Bett-Wand"
-            children={() =>
-              <Bed_wall_light_tab
-                value       = {this.contentData.lights.values[1]}
-                contentData = {this.contentData}
-                data        = {this.data[this.contentData.lights.values[1]]}
-                mqtt        = {this.mqtt}
-              />
-            }
-          />
-          <Tab.Screen
-            name="Bett-seitlich"
-            children={() =>
-              <Bed_side_light_tab
-                value       = {this.contentData.lights.values[2]}
-                contentData = {this.contentData}
-                data        = {this.data[this.contentData.lights.values[2]]}
-                mqtt        = {this.mqtt}
-              />
-            }
-          />
-        </Tab.Navigator>
-      );
-    } else {
-      this.checkDeviceInfo();
-      return (
-        <View>
-          <LoadData text="Daten werden geladen" navigation={this.props.navigation} />
-        </View>
-      );
+    if(this.props.navigation_tab.isFocused()) {
+      this.set_data();
+      this.set_tab_navigation()
     }
+
+    return (
+      <Tab.Navigator initialRouteName={"Keyboard_light_tab"} tabBarOptions={this.tab_navigation.options}>
+        {this.tab_navigation.static_tabs.keyboard}
+        {this.tab_navigation.static_tabs.bed_wall}
+      </Tab.Navigator>
+    );
   }
 };

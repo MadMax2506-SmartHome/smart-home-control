@@ -8,10 +8,10 @@ import Header_control_right_settings from '../navigation/header/control_right_se
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 
-import Feature_tab from "./options/feature_tab.js"
-import User_tab from "./options/user_tab.js"
-import Mqtt_tab from "./options/mqtt_tab.js"
-import Nas_tab from "./options/nas_tab.js"
+import Feature_tab from "./tabs/feature_tab.js"
+import User_tab from "./tabs/user_tab.js"
+import Mqtt_tab from "./tabs/mqtt_tab.js"
+import Nas_tab from "./tabs/nas_tab.js"
 
 // Globales
 import DB from '../../madmax_modules/sqlite/DB.js'
@@ -24,6 +24,7 @@ export default class SettingsScreen extends Component  {
     super(props);
 
     this.db = this.props.db;
+
     this.tab_navigation = {
       options: null,
       static_tabs: {
@@ -35,6 +36,7 @@ export default class SettingsScreen extends Component  {
         nas: null,
       }
     }
+
     this.state = {
       values: this.db.get_data()
     }
@@ -131,7 +133,14 @@ export default class SettingsScreen extends Component  {
     this.tab_navigation.static_tabs.feature = (
       <Tab.Screen
         name="Feature_tab"
-        children={({navigation}) => <Feature_tab navigation={this.props.navigation} navigation_tab={navigation} values={this.state.values.feature} onValueChange={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+        children={({navigation}) =>
+          <Feature_tab
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+            values={this.state.values.feature}
+            onValueChange={(category, elem, value) => this.set_data_from_tab(category, elem, value)}
+          />
+        }
         options={{
           tabBarLabel: "Features"
         }}
@@ -141,7 +150,15 @@ export default class SettingsScreen extends Component  {
     this.tab_navigation.static_tabs.user = (
       <Tab.Screen
         name="User_tab"
-        children={({navigation}) => <User_tab navigation={this.props.navigation} navigation_tab={navigation} values={this.state.values.user} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+        children={({navigation}) =>
+          <User_tab
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+            values={this.state.values.user}
+            style={style_tab_input}
+            onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}
+          />
+        }
         options={{
           tabBarLabel: "Benutzer"
         }}
@@ -151,7 +168,15 @@ export default class SettingsScreen extends Component  {
     this.tab_navigation.dynamic_tabs.mqtt = (
       <Tab.Screen
         name="Mqtt_tab"
-        children={({navigation}) => <Mqtt_tab navigation={this.props.navigation} navigation_tab={navigation} values={this.state.values.mqtt} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+        children={({navigation}) =>
+          <Mqtt_tab
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+            values={this.state.values.mqtt}
+            style={style_tab_input}
+            onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}
+          />
+        }
         options={{
           tabBarLabel: "MQTT\nBrocker"
         }}
@@ -161,7 +186,15 @@ export default class SettingsScreen extends Component  {
     this.tab_navigation.dynamic_tabs.nas = (
       <Tab.Screen
         name="Nas_tab"
-        children={({navigation}) => <Nas_tab navigation={this.props.navigation} navigation_tab={navigation} values={this.state.values.nas} style={style_tab_input} onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}/>}
+        children={({navigation}) =>
+          <Nas_tab
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+            values={this.state.values.nas}
+            style={style_tab_input}
+            onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}
+          />
+        }
         options={{
           tabBarLabel: "Nas"
         }}
@@ -170,8 +203,9 @@ export default class SettingsScreen extends Component  {
   }
 
   render() {
-    console.log("a");
-    this.set_tab_navigation()
+    if(this.props.navigation_tab.isFocused()) {
+      this.set_tab_navigation()
+    }
 
     let { feature } = this.state.values
     let mqtt_tab    = feature.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.mqtt : null

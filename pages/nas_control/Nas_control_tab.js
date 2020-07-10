@@ -3,7 +3,7 @@ import { ScrollView, View, Text, Button } from 'react-native';
 
 import STYLE from '../../data/config/style.js'
 
-export default class MenuScreen extends Component  {
+export default class Nas_control_tab extends Component  {
   constructor(props) {
     super(props);
 

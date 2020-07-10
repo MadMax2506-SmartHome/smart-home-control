@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 
 import Slider from '@react-native-community/slider';
 
-export default class RGB_ColorSlider extends Component {
+export default class Value_slider extends Component {
   constructor(props) {
     super(props);
 
@@ -18,17 +18,15 @@ export default class RGB_ColorSlider extends Component {
   render() {
     return(
       <View style={style.content}>
-        <View style = {style.sliderContent}>
+        <View style={style.sliderContent}>
           <Slider
-            value = {this.state.startValue}
-            minimumValue = {this.state.minValue}
-            maximumValue = {this.state.maxValue}
-
-            thumbTintColor = {this.props.sliderColor}
-            minimumTrackTintColor = {this.props.sliderColor}
-            maximumTrackTintColor = "#000000"
-
-            onValueChange = {(value) =>{
+            value={this.state.startValue}
+            minimumValue={this.state.minValue}
+            maximumValue={this.state.maxValue}
+            thumbTintColor={this.props.sliderColor}
+            minimumTrackTintColor={this.props.sliderColor}
+            maximumTrackTintColor="#000000"
+            onValueChange={(value) =>{
               this.setState({currentValue: Math.round(value)});
               if(this.props.onChange != undefined) {
                 this.props.onChange(Math.round(value))

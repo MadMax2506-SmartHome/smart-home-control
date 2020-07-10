@@ -4,7 +4,7 @@ import { View, Text, TextInput } from 'react-native';
 // Globales
 import STYLE from '../../../data/config/style.js'
 
-export default class SettingsScreen extends Component  {
+export default class Mqtt_tab extends Component  {
   constructor(props) {
     super(props);
 
@@ -19,31 +19,33 @@ export default class SettingsScreen extends Component  {
       <View style={STYLE.SCREEN.centerPanel}>
         <View style={this.style.inputPanel}>
           <View style={this.style.label}>
-            <Text>Vorname</Text>
+            <Text>IP-Adresse</Text>
           </View>
           <View style={this.style.inputContent}>
             <TextInput
               style={this.style.input}
-              placeholder="Vorname"
+              keyboardType="number-pad"
+              placeholder="192.168.178.1"
               onChangeText={(value) => {
-                this.props.onChangeText("user", "first_name", value)
+                this.props.onChangeText("mqtt", "ipaddress", value)
               }}
-              value={this.state.values.first_name}
+              value={this.state.values.ipaddress}
             />
-          </View>
+            </View>
         </View>
         <View style={this.style.inputPanel}>
           <View style={this.style.label}>
-            <Text>Nachname</Text>
+            <Text>Port</Text>
           </View>
           <View style={this.style.inputContent}>
             <TextInput
               style={this.style.input}
-              placeholder="Nachname"
+              keyboardType="number-pad"
+              placeholder="1883"
               onChangeText={(value) => {
-                this.props.onChangeText("user", "surname", value)
+                this.props.onChangeText("mqtt", "port", value)
               }}
-              value={this.state.values.surname}
+              value={this.state.values.port}
             />
           </View>
         </View>

@@ -4,6 +4,7 @@ import { StyleSheet, View, Text, Switch } from 'react-native';
 export default class Status extends Component  {
   constructor(props) {
     super(props);
+    
     this.state = {
       status: this.props.status,
     }

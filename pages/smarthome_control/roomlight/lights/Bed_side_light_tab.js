@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
 import { View } from 'react-native';
 
-import Light from "./light_control.js"
+import Light_control from "./Light_control.js"
 
-export default class KeyboardScreen extends Light {
-  constructor(props) {
+export default class Bed_side_light_tab extends Component {
+	constructor(props) {
     super(props);
 
 		this.value 				= this.props.value;
@@ -14,16 +14,13 @@ export default class KeyboardScreen extends Light {
 		this.mqtt = this.props.mqtt;
 
 		this.mqtt.topic.lightStatus = this.mqtt.topic.globalStatus + this.contentData.lights.topics[this.value];
-		this.mqtt.topic.lightConf = this.mqtt.topic.globalConf + this.contentData.lights.topics[this.value];
+		this.mqtt.topic.lightConf   = this.mqtt.topic.globalConf + this.contentData.lights.topics[this.value];
   }
 
   render() {
-    console.log("-------------");
-    console.log(this.mqtt);
-    console.log("-------------");
-    return(
+		return(
       <View>
-        <Light data={this.data} mqtt={this.mqtt} contentData={this.contentData} />
+        <Light_control data={this.data} mqtt={this.mqtt} contentData={this.contentData} />
       </View>
     );
   }

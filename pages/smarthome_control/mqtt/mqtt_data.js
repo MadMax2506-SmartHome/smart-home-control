@@ -1,9 +1,9 @@
 import MQTT from 'sp-react-native-mqtt';
 
-import Mqtt_notification_listener_devices from './mqtt_notification_listener_devices.js'
-import Mqtt_notifications_listener_global_status from './mqtt_notifications_listener_global_status.js';
+import Mqtt_notification_listener_devices from './Mqtt_notification_listener_devices.js'
+import Mqtt_notifications_listener_global_status from './Mqtt_notifications_listener_global_status.js';
 
-export default class Mqtt__class {
+export default class Mqtt_data {
   constructor(_class, uri, qos) {
     this._class  = _class;
     this.uri        = uri;

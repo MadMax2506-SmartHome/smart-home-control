@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 
-import ColorSlider from '../../../../../madmax_modules/slider/RGB_ColorSlider.js';
+import Color_slider from '../../../../madmax_modules/slider/Rgb_color_slider.js';
 
-export default class ColorContent extends Component {
+export default class Color_content extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -44,13 +44,13 @@ export default class ColorContent extends Component {
           </View>
 
           <View style={style.elem}>
-            <ColorSlider for="red" value={this.state.colorArr.red} sliderColor="red" onChange={(sliderColor, value) => this.changeColor(sliderColor, value)}/>
+            <Color_slider for="red" value={this.state.colorArr.red} sliderColor="red" onChange={(sliderColor, value) => this.changeColor(sliderColor, value)}/>
           </View>
           <View style={style.elem}>
-            <ColorSlider for="green" value={this.state.colorArr.green} sliderColor="green" onChange={(sliderColor, value) => this.changeColor(sliderColor, value)}/>
+            <Color_slider for="green" value={this.state.colorArr.green} sliderColor="green" onChange={(sliderColor, value) => this.changeColor(sliderColor, value)}/>
           </View>
           <View style={style.elem}>
-            <ColorSlider for="blue" value={this.state.colorArr.blue} sliderColor="blue" onChange={(sliderColor, value) => this.changeColor(sliderColor, value)}/>
+            <Color_slider for="blue" value={this.state.colorArr.blue} sliderColor="blue" onChange={(sliderColor, value) => this.changeColor(sliderColor, value)}/>
           </View>
 
           <View style={style.controlPanel}>

@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text, TextInput, Button } from 'react-native';
 
-import ValueSlider from '../../../../../madmax_modules/slider/ValueSlider.js';
+import Value_slider from '../../../../madmax_modules/slider/Value_slider.js';
 
-export default class AnimationTime extends Component  {
+export default class Animation_time extends Component  {
   constructor(props) {
     super(props);
     this.state = {
@@ -15,13 +15,11 @@ export default class AnimationTime extends Component  {
     return (
       <View>
         <View style={style.header}>
-          <Text>
-            Animationszeit (in ms):
-          </Text>
+          <Text>Animationszeit (in ms):</Text>
         </View>
         <View style={style.main}>
           <View style={style.input}>
-            <ValueSlider value={this.state.time} sliderColor="black" onChange={(time) => this.setState({time: time})}/>
+            <Value_slider value={this.state.time} sliderColor="black" onChange={(time) => this.setState({time: time})}/>
           </View>
           <View style={style.controlPanel}>
             <View style={style.saveBtn}>

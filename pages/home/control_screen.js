@@ -13,10 +13,10 @@ import SplashScreen from 'react-native-splash-screen'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
-import Home_tab from "./tabs/home_tab.js"
-import Nas_tab from "../nas_control/control_screen.js"
-import Smart_home_tab from "../smarthome_control/connect_screen.js"
-import Setting_tab from "../settings/control_screen.js"
+import Home_tab from "./tabs/Home_tab.js"
+import Nas_control_tab from "../nas_control/Nas_control_tab.js"
+import Smart_home_connect_tab from "../smarthome_control/Smart_home_connect_tab.js"
+import Setting_control_tab from "../settings/Setting_control_tab.js"
 
 // Globales
 import STYLE from '../../data/config/style.js'
@@ -29,6 +29,7 @@ export default class HomeScreen extends Component  {
     SplashScreen.show();
 
     this.db = new DB(this);
+
     this.tab_navigation = {
       options: null,
       static_tabs: {
@@ -40,6 +41,8 @@ export default class HomeScreen extends Component  {
         nas_control: null,
       }
     }
+
+    this.set_tab_navigation()
   }
 
   set_data_from_sqlite(category, data) {
@@ -58,7 +61,13 @@ export default class HomeScreen extends Component  {
     this.tab_navigation.static_tabs.home = (
       <Tab.Screen
         name="Home_tab"
-        children={({navigation})=> <Home_tab db={this.db} navigation={this.props.navigation} navigation_tab={navigation}/>}
+        children={({navigation})=>
+          <Home_tab
+            db={this.db}
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+          />
+        }
         options={() => ({
           tabBarLabel: "Home",
           tabBarIcon: props => (<Ionicons name="home" size={30} color={props.color}/>)
@@ -69,7 +78,13 @@ export default class HomeScreen extends Component  {
     this.tab_navigation.dynamic_tabs.smart_home_control = (
       <Tab.Screen
         name="Smart_home_control_tab"
-        children={({navigation}) => <Smart_home_tab db={this.db} navigation={this.props.navigation} navigation_tab={navigation}/>}
+        children={({navigation}) =>
+          <Smart_home_tab
+            db={this.db}
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+          />
+        }
         options={() => ({
           tabBarLabel: "Smart Home",
           tabBarIcon: props => (<MaterialIcons name="settings-remote" size={30} color={props.color}/>)
@@ -80,7 +95,13 @@ export default class HomeScreen extends Component  {
     this.tab_navigation.dynamic_tabs.nas_control = (
       <Tab.Screen
         name="nas_control_tab"
-        children={({navigation}) => <Nas_tab db={this.db} navigation={this.props.navigation} navigation_tab={navigation}/>}
+        children={({navigation}) =>
+          <Nas_control_tab
+            db={this.db}
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+          />
+        }
         options={{
           tabBarLabel: "NAS",
           tabBarIcon: props => (<MaterialCommunityIcons name="nas" size={30} color={props.color}/>)
@@ -91,7 +112,13 @@ export default class HomeScreen extends Component  {
     this.tab_navigation.static_tabs.setting = (
       <Tab.Screen
         name="Setting__tab"
-        children={({navigation}) => <Setting_tab db={this.db} navigation={this.props.navigation} navigation_tab={navigation}/>}
+        children={({navigation}) =>
+          <Setting_control_tab
+            db={this.db}
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+          />
+        }
         options={{
           tabBarLabel: "Einstellungen",
           tabBarIcon: props => (<Ionicons name="settings" size={30} color={props.color}/>)
@@ -101,8 +128,6 @@ export default class HomeScreen extends Component  {
   }
 
   render() {
-    this.set_tab_navigation()
-
     let smart_home_control_tab  = this.db.get_is_smart_home_control_active() ? this.tab_navigation.dynamic_tabs.smart_home_control : null
     let nas_control_tab         = this.db.get_is_nas_control_active() ? this.tab_navigation.dynamic_tabs.nas_control : null;
 

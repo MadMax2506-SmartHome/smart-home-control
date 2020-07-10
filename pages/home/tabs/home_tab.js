@@ -3,7 +3,7 @@ import { StyleSheet, View, Text } from 'react-native';
 
 import STYLE from '../../../data/config/style.js'
 
-export default class HomeScreen extends Component  {
+export default class Home_tab extends Component  {
   constructor(props) {
     super(props);
   }
