@@ -8,10 +8,10 @@ import Header_control_right_settings from '../navigation/header/control_right_se
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 
-import Feature_tab from "./tabs/feature_tab.js"
-import User_tab from "./tabs/user_tab.js"
-import Mqtt_tab from "./tabs/mqtt_tab.js"
-import Nas_tab from "./tabs/nas_tab.js"
+import Feature_tab from "./tabs/Feature_tab.js"
+import User_tab from "./tabs/User_tab.js"
+import Mqtt_tab from "./tabs/Mqtt_tab.js"
+import Nas_tab from "./tabs/Nas_tab.js"
 
 // Globales
 import DB from '../../madmax_modules/sqlite/DB.js'

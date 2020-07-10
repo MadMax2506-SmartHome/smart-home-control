@@ -35,6 +35,25 @@ export default class Smart_home_control_screen extends Component  {
       retained: this.mqtt.retained,
     };
 
+    const { params } = this.props.route;
+
+    this.mqtt     = params.mqtt
+    this.devices  = params.devices
+    this.data     = params.data
+
+    this.mqtt_roomlight = {
+      uri: this.mqtt.uri,
+      connection: this.mqtt.connection.data,
+      topic: {
+        globalConf: this.devices.roomlight.topic.conf,
+        lightConf: "",
+        globalStatus: this.devices.roomlight.topic.status,
+        lightStatus: "",
+      },
+      qos: this.mqtt.qos,
+      retained: this.mqtt.retained,
+    };
+
     this.tab_navigation = {
       options: null,
       static_tabs: {
@@ -57,14 +76,7 @@ export default class Smart_home_control_screen extends Component  {
     this.tab_navigation.static_tabs.roomlight = (
       <Tab.Screen
         name="Roomlight_tab"
-        children={({navigation}) =>
-          <Roomlight_tab
-            mqtt={this.mqtt_roomlight}
-            roomlight={this.data.roomlight}
-            navigation={this.props.navigation}
-            navigation_tab={navigation}
-          />
-        }
+        children={({navigation})=> <Roomlight_tab mqtt={this.mqtt_roomlight} roomlight={this.data.roomlight} navigation={this.props.navigation} navigation_tab={navigation}/>}
         options={() => ({
           tabBarLabel: "Beleuchtung",
           tabBarIcon: props => (<FoundationIcons name="lightbulb" size={30} color={props.color}/>)
@@ -74,6 +86,8 @@ export default class Smart_home_control_screen extends Component  {
   }
 
   render() {
+    this.set_tab_navigation()
+
     return (
       <Tab.Navigator initialRouteName={"Roomlight_tab"} tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.roomlight}

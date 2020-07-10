@@ -7,8 +7,14 @@ export default class Bed_wall_light_tab extends Component {
 	constructor(props) {
     super(props);
 
-    this.mqtt   = this.props.mqtt;
-    this.data   = this.props.data;
+		this.value 				= this.props.value;
+    this.contentData  = this.props.contentData;
+
+		this.data	= this.props.data;
+		this.mqtt = this.props.mqtt;
+
+		this.mqtt.topic.lightStatus = this.mqtt.topic.globalStatus + this.contentData.lights.topics[this.value];
+		this.mqtt.topic.lightConf   = this.mqtt.topic.globalConf + this.contentData.lights.topics[this.value];
   }
 
   render() {

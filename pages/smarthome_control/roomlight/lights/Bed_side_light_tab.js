@@ -18,7 +18,7 @@ export default class Bed_side_light_tab extends Component {
   }
 
   render() {
-		return(
+    return(
       <View>
         <Light_control data={this.data} mqtt={this.mqtt} contentData={this.contentData} />
       </View>
