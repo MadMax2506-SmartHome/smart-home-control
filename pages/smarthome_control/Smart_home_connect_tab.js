@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import { View, ToastAndroid } from 'react-native';
 
-import LoadData from "../../madmax_modules/loadData/LoadData.js"
+import LoadData from "../../madmax_modules/load_data/Load_data.js"
 
 // Global
 import MQTT_AVAILABLE from './mqtt/Mqtt_available.js'

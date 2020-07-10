@@ -35,25 +35,6 @@ export default class Smart_home_control_screen extends Component  {
       retained: this.mqtt.retained,
     };
 
-    const { params } = this.props.route;
-
-    this.mqtt     = params.mqtt
-    this.devices  = params.devices
-    this.data     = params.data
-
-    this.mqtt_roomlight = {
-      uri: this.mqtt.uri,
-      connection: this.mqtt.connection.data,
-      topic: {
-        globalConf: this.devices.roomlight.topic.conf,
-        lightConf: "",
-        globalStatus: this.devices.roomlight.topic.status,
-        lightStatus: "",
-      },
-      qos: this.mqtt.qos,
-      retained: this.mqtt.retained,
-    };
-
     this.tab_navigation = {
       options: null,
       static_tabs: {

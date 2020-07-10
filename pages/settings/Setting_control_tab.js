@@ -17,8 +17,6 @@ import Nas_tab from "./tabs/Nas_tab.js"
 import DB from '../../madmax_modules/sqlite/DB.js'
 import STYLE from '../../data/config/style.js'
 
-import LoadData from "../../madmax_modules/loadData/LoadData.js"
-
 export default class SettingsScreen extends Component  {
   constructor(props) {
     super(props);
