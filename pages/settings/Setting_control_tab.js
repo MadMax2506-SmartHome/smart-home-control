@@ -55,7 +55,7 @@ export default class SettingsScreen extends Component  {
   save_data() {
     let { feature, user, mqtt, nas } = this.state.values
 
-    let is_valid = this.validData()
+    let is_valid = this.is_data_valid()
 
     if(this.db.is_feature_data_empty()) {
       this.db.insert_feature(feature)
@@ -88,7 +88,7 @@ export default class SettingsScreen extends Component  {
     this.props.navigation_tab.jumpTo("Home_tab")
   }
 
-  validData() {
+  is_data_valid() {
     var { user, mqtt, nas } = this.state.values
 
     var is_valid = {

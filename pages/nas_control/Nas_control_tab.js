@@ -12,12 +12,12 @@ export default class Nas_control_tab extends Component  {
     this.state = {
       is_online: false
     }
-    this.getStatus()
+    this.get_status()
   }
 
-  async getStatus() {}
+  async get_status() {}
 
-  wakeOnLan() {}
+  wake_on_lan() {}
 
   render() {
     let statusText = this.state.is_online ? "NAS ist online" : "NAS ist offline"
@@ -32,7 +32,7 @@ export default class Nas_control_tab extends Component  {
           <View style={STYLE.SCREEN.btn}>
             <Button
               title="Starten"
-              onPress={() => {this.wakeOnLan();}}
+              onPress={() => {this.wake_on_lan();}}
               color="#000000"
             />
           </View>

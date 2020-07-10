@@ -17,57 +17,57 @@ export default class Light extends Component {
     this.mqtt = this.props.mqtt;
   }
 
-  setData(controlElem, value, msg) {
+  set_data(controlElem, value, msg) {
     this.data.dynamic[controlElem] = value;
     this.mqtt.connection.publish(this.mqtt.topic.lightConf, msg, this.mqtt.retained);
   }
 
-  setStripStatus(status) {
+  set_strip_status(status) {
     let msg = status ? "active" : "idle";
-    this.setData("status", status, msg);
+    this.set_data("status", status, msg);
   }
 
-  setColor(color) {
+  set_color(color) {
     let msg = "color: " + color.red + ";" + color.green + ";" + color.blue;
-    this.setData("color", color, msg);
+    this.set_data("color", color, msg);
   }
 
-  setOrientation(orientation) {
+  set_orientation(orientation) {
     let msg = "orientation: " + orientation;
-    this.setData("orientation", orientation, msg);
+    this.set_data("orientation", orientation, msg);
   }
 
-  setAnimationType(type) {
+  set_animation_type(type) {
     let msg = "animation-typ: " + type;
-    this.setData("type", type, msg);
+    this.set_data("type", type, msg);
   }
 
-  setAnimationTime(time) {
+  set_animation_time(time) {
     let msg = "animation-time: " + time;
-    this.setData("time", time, msg);
+    this.set_data("time", time, msg);
   }
 
   render() {
     return(
       <ScrollView style={STYLE.SCREEN.main}>
         <View>
-          <Status status={this.data.dynamic.status} onChange={(status) => this.setStripStatus(status)}/>
+          <Status status={this.data.dynamic.status} onChange={(status) => this.set_strip_status(status)}/>
         </View>
 
         <View style={style.controlElem}>
-          <ColorContent colors={this.data.dynamic.color} onChange={(color) => this.setColor(color)}/>
+          <ColorContent colors={this.data.dynamic.color} onChange={(color) => this.set_color(color)}/>
         </View>
 
         <View style={style.controlElem}>
-          <Orientation labels={this.data.static.orientation.labels} values={this.data.static.orientation.values} selectedValue={this.data.dynamic.orientation} onChange={(orientation) => this.setOrientation(orientation)}/>
+          <Orientation labels={this.data.static.orientation.labels} values={this.data.static.orientation.values} selectedValue={this.data.dynamic.orientation} onChange={(orientation) => this.set_orientation(orientation)}/>
         </View>
 
         <View style={style.controlElem}>
-          <AnimationType labels={this.data.static.animationTyp.labels} values={this.data.static.animationTyp.values} selectedValue={this.data.dynamic.type} onChange={(type) => this.setAnimationType(type)}/>
+          <AnimationType labels={this.data.static.animationTyp.labels} values={this.data.static.animationTyp.values} selectedValue={this.data.dynamic.type} onChange={(type) => this.set_animation_type(type)}/>
         </View>
 
         <View style={style.controlElem}>
-          <AnimationTime time={this.data.dynamic.time} onChange={(time) => this.setAnimationTime(time)}/>
+          <AnimationTime time={this.data.dynamic.time} onChange={(time) => this.set_animation_time(time)}/>
         </View>
 
         <View style={style.controlPanel}>
