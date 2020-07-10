@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 module.exports = {
-  create(roomlight, mqttClient, channel, qos) {
+  create(_class, mqttClient, channel, qos) {
     if (!mqttClient) {
       return;
     }
@@ -14,9 +14,8 @@ module.exports = {
     this.config = _.extend({
       channel: channel,
       qos: qos,
-      roomlight: roomlight,
+      _class: _class,
     });
-
     mqttClient.then((client) => {
       this.client = client;
       client.on('closed', this.onClosed);
@@ -44,14 +43,13 @@ module.exports = {
     var topic = msg.topic;
     var data  = msg.data;
 
-    if(data == "list-devices") {
-      ;
+    if(data.length < 20) {
+      if(data == "end") {
+          this.config._class.set_config_info(data);
+      }
     } else {
       data = JSON.parse(data);
-
-      if(data.name == "Roomlight Max") {
-        this.config.roomlight.setDeviceInfo(data);
-      }
+      this.config._class.set_config_info(data);
     }
   },
 };

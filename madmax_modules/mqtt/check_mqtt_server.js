@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 module.exports = {
-  check(class_, mqttClient) {
+  check(_class, mqttClient) {
     if (!mqttClient) {
       return;
     }
@@ -12,7 +12,7 @@ module.exports = {
     this.disconnect   = this.disconnect.bind(this);
 
     this.config = _.extend({
-      class_: class_,
+      _class: _class,
     });
 
     mqttClient.then((client) => {
@@ -33,7 +33,7 @@ module.exports = {
   },
   onError(error) {},
   onConnect() {
-    this.config.class_.setMqttServerToAvailable();
+    this.config._class.set_mqtt_brocker_to_available();
   },
   onClosed(err) {},
   onMessage(msg) {},
