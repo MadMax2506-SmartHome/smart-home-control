@@ -22,7 +22,7 @@ import Setting_control_tab from "../settings/Setting_control_tab.js"
 import STYLE from '../../data/config/style.js'
 import DB from '../../madmax_modules/sqlite/DB.js'
 
-export default class HomeScreen extends Component  {
+export default class Control_screen extends Component  {
   constructor(props) {
     super(props);
 
@@ -77,9 +77,9 @@ export default class HomeScreen extends Component  {
 
     this.tab_navigation.dynamic_tabs.smart_home_control = (
       <Tab.Screen
-        name="Smart_home_control_tab"
+        name="Smart_home_connect_tab"
         children={({navigation}) =>
-          <Smart_home_tab
+          <Smart_home_connect_tab
             db={this.db}
             navigation={this.props.navigation}
             navigation_tab={navigation}
@@ -94,7 +94,7 @@ export default class HomeScreen extends Component  {
 
     this.tab_navigation.dynamic_tabs.nas_control = (
       <Tab.Screen
-        name="nas_control_tab"
+        name="Nas_control_tab"
         children={({navigation}) =>
           <Nas_control_tab
             db={this.db}
