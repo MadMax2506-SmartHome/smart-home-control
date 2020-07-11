@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text } from 'react-native';
+import {StyleSheet, Text} from 'react-native';
 
 // Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -15,6 +15,7 @@ import Nas_tab from "./tabs/Nas_tab.js"
 
 // Allgemein
 import STYLE from '../../data/config/style.js'
+import TOAST from '../../madmax_modules/notification/toast.js'
 
 export default class SettingsScreen extends Component  {
   constructor(props) {
@@ -36,7 +37,8 @@ export default class SettingsScreen extends Component  {
     }
 
     this.state = {
-      values: this.db.get_data()
+      values: this.db.get_data(),
+      tab_visibility: this.props.get_tab_visibility()
     }
   }
 
@@ -89,7 +91,11 @@ export default class SettingsScreen extends Component  {
       }
     }
 
-    this.props.navigation_tab.jumpTo("Home_tab")
+    TOAST.notification("Daten werden gespeichert...");
+    this.props.set_tab_visibility(feature.is_smart_home_control_active ,feature.is_nas_control_active);
+    this.setState({
+      tab_visibility: this.props.get_tab_visibility()
+    });
   }
 
   is_data_valid() {
@@ -225,16 +231,14 @@ export default class SettingsScreen extends Component  {
       this.set_tab_navigation()
     }
 
-    let { feature } = this.state.values
-    let mqtt_tab    = feature.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.mqtt : null
-    let nas_tab     = feature.is_nas_control_active ? this.tab_navigation.dynamic_tabs.nas : null;
+    var {tab_visibility} = this.state
 
     return (
       <Tab.Navigator initialRouteName="Feature_tab" tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.feature}
         {this.tab_navigation.static_tabs.user}
-        {mqtt_tab}
-        {nas_tab}
+        {tab_visibility.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.mqtt : null}
+        {tab_visibility.is_nas_control_active ? this.tab_navigation.dynamic_tabs.nas : null}
         {this.tab_navigation.static_tabs.save}
       </Tab.Navigator>
     );
