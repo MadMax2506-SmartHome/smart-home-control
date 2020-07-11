@@ -20,11 +20,9 @@ import Setting_control_tab from "../settings/Setting_control_tab.js"
 import STYLE from '../../data/config/style.js'
 import DB from '../../madmax_modules/sqlite/DB.js'
 
-export default class Control_screen extends Component  {
+export default class Home_control_screen extends Component  {
   constructor(props) {
     super(props);
-
-    SplashScreen.show();
 
     this.db = new DB(this);
 
@@ -40,11 +38,32 @@ export default class Control_screen extends Component  {
       }
     }
 
+    this.state = {
+      tab_visibility: {
+        is_smart_home_control_active: false,
+        is_nas_control_active: false,
+      }
+    }
+
     this.set_tab_navigation()
   }
 
   set_data_from_sqlite(category, data) {
     this.db.set_data(category, data)
+  }
+
+  set_tab_visibility(is_smart_home_control_active, is_nas_control_active) {
+    let {tab_visibility} = this.state
+    tab_visibility.is_smart_home_control_active = is_smart_home_control_active
+    tab_visibility.is_nas_control_active        = is_nas_control_active
+
+    this.setState({
+      tab_visibility: tab_visibility,
+    });
+  }
+
+  get_tab_visibility() {
+    return this.state.tab_visibility;
   }
 
   set_tab_navigation() {
@@ -115,6 +134,8 @@ export default class Control_screen extends Component  {
             db={this.db}
             navigation={this.props.navigation}
             navigation_tab={navigation}
+            set_tab_visibility={(is_smart_home_control_active, is_nas_control_active) => this.set_tab_visibility(is_smart_home_control_active, is_nas_control_active)}
+            get_tab_visibility={() => this.get_tab_visibility()}
           />
         }
         options={{
@@ -126,25 +147,26 @@ export default class Control_screen extends Component  {
   }
 
   render() {
-    let smart_home_control_tab  = this.db.get_is_smart_home_control_active() ? this.tab_navigation.dynamic_tabs.smart_home_control : null
-    let nas_control_tab         = this.db.get_is_nas_control_active() ? this.tab_navigation.dynamic_tabs.nas_control : null;
+    var {tab_visibility} = this.state
 
     return (
       <Tab.Navigator initialRouteName={"Home_tab"} tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.home}
-        {smart_home_control_tab}
-        {nas_control_tab}
+        {tab_visibility.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.smart_home_control : null}
+        {tab_visibility.is_nas_control_active ? this.tab_navigation.dynamic_tabs.nas_control : null}
         {this.tab_navigation.static_tabs.setting}
       </Tab.Navigator>
     );
   }
 
   async UNSAFE_componentWillMount() {
+    const wait = 1000
     while(this.db.is_data_load() == false) {
-      await new Promise((resolve) => setTimeout(() => { resolve('result') }, 500));
+      await new Promise((resolve) => setTimeout(() => { resolve('result') }, wait));
     }
 
-    this.forceUpdate();
+    this.set_tab_visibility(this.db.get_is_smart_home_control_active(), this.db.get_is_nas_control_active())
+
     SplashScreen.hide();
   }
 };
