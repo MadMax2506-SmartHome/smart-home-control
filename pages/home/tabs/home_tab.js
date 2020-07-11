@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 
 // Allgemein
 import STYLE from '../../../data/config/style.js'
@@ -14,7 +14,7 @@ export default class Home_tab extends Component  {
       <View style={STYLE.SCREEN.main}>
         <View style={STYLE.SCREEN.centerPanel}>
           <View style={STYLE.SCREEN.panel}>
-            <Text>Wilkommen in ihrem Smart-Home</Text>
+            <Text>Wilkommen in Ihrem Smart Home Client</Text>
           </View>
         </View>
       </View>
