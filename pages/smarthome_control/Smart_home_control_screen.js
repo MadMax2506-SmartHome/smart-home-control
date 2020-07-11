@@ -112,7 +112,7 @@ export default class Smart_home_control_screen extends Component  {
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            this.props.navigation.navigate("Home_screen")
+            this.props.navigation.navigate("Home_control_screen")
           }
         }}
       />

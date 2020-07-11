@@ -14,7 +14,6 @@ const Tab = createBottomTabNavigator();
 
 import Home_tab from "./tabs/Home_tab.js"
 import Nas_control_tab from "../nas_control/Nas_control_tab.js"
-import Smart_home_connect_tab from "../smarthome_control/Smart_home_connect_tab.js"
 import Setting_control_tab from "../settings/Setting_control_tab.js"
 
 // Allgemein
@@ -77,17 +76,17 @@ export default class Control_screen extends Component  {
     this.tab_navigation.dynamic_tabs.smart_home_control = (
       <Tab.Screen
         name="Smart_home_connect_tab"
-        children={({navigation}) =>
-          <Smart_home_connect_tab
-            db={this.db}
-            navigation={this.props.navigation}
-            navigation_tab={navigation}
-          />
-        }
+        children={({navigation}) => null}
         options={() => ({
           tabBarLabel: "Smart Home",
           tabBarIcon: props => (<MaterialIcons name="settings-remote" size={30} color={props.color}/>)
         })}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            this.props.navigation.navigate("Smart_home_connect_screen", {db: this.db})
+          }
+        }}
       />
     )
 

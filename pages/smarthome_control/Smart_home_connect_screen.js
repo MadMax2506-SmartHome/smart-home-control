@@ -12,8 +12,9 @@ import LoadData from "../../madmax_modules/load_data/Load_data.js"
 export default class Smart_home_connect_tab extends Component  {
   constructor(props) {
     super(props);
-    
-		this.db = this.props.db;
+
+    const {params} = this.props.route;
+		this.db = params.db;
 
     this.state = {
       available: {
@@ -90,13 +91,6 @@ export default class Smart_home_connect_tab extends Component  {
     }
 
     this.reset_data();
-
-    this.props.navigation_tab.jumpTo("Home_tab")
-    while(this.props.navigation_tab.isFocused() == false) {
-      await new Promise((resolve) => setTimeout(() => { resolve('result') }, 500));
-    }
-
-    this.forceUpdate();
   }
 
   init_global_brocker_connection() {
@@ -116,7 +110,7 @@ export default class Smart_home_connect_tab extends Component  {
 
   // called by mqtt listener
   set_mqtt_brocker_to_available() {
-    if(this.props.navigation_tab.isFocused()) {
+    if(this.props.navigation.isFocused()) {
       let {available} = this.state
       available.is_loading  = false
       available.is_true     = true
@@ -228,7 +222,7 @@ export default class Smart_home_connect_tab extends Component  {
   }
 
   render() {
-    if(this.props.navigation_tab.isFocused()) {
+    if(this.props.navigation.isFocused()) {
       if(this.state.available.is_loading) {
         this.init_global_brocker_connection()
       } else if(this.state.available.is_true) {
@@ -238,13 +232,17 @@ export default class Smart_home_connect_tab extends Component  {
           this.check_device_info();
         }
       }
-    } else {
-      console.log("no Focus");
     }
 
     return (
       <View style={STYLE.SCREEN.main}>
-        <LoadData text="Verbindung zum Server wird aufgebaut" abort={() => this.abort_loading()}/>
+        <LoadData
+          text="Verbindung zum Server wird aufgebaut"
+          abort={() => {
+            this.props.navigation.navigate("Home_control_screen");
+            this.abort_loading();
+          }}
+        />
       </View>
     );
   }

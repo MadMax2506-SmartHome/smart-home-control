@@ -9,6 +9,7 @@ const Stack = createStackNavigator();
 
 // Screens
 import Home_control_screen from '../home/Home_control_screen.js'
+import Smart_home_connect_screen from '../smarthome_control/Smart_home_connect_screen.js'
 import Smart_home_control_screen from '../smarthome_control/Smart_home_control_screen.js'
 
 export default class Navigation extends Component {
@@ -27,11 +28,20 @@ export default class Navigation extends Component {
           }}
         >
           <Stack.Screen
-            name='Home_screen'
+            name='Home_control_screen'
             component={Home_control_screen}
             options={({ navigation }) => ({
               title: 'Smart Home',
               headerRight: () => (null),
+            })}
+          />
+
+          <Stack.Screen
+            name='Smart_home_connect_screen'
+            component={Smart_home_connect_screen}
+            options={({ navigation }) => ({
+              title: 'Smart Home',
+              headerLeft: () => (null),
             })}
           />
 
