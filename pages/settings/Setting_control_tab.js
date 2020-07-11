@@ -22,7 +22,7 @@ import STYLE from '../../data/config/style.js'
 export default class SettingsScreen extends Component  {
   constructor(props) {
     super(props);
-
+    
     this.db = this.props.db;
 
     this.tab_navigation = {

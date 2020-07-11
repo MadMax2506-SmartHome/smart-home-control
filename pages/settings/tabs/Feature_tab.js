@@ -7,7 +7,7 @@ import STYLE from '../../../data/config/style.js'
 export default class Feature_tab extends Component  {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       values: this.props.values
     }
