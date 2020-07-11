@@ -5,10 +5,11 @@ import Mqtt_notification_listener_devices from './Mqtt_notification_listener_dev
 import Mqtt_notifications_listener_global_status from './Mqtt_notifications_listener_global_status.js';
 
 export default class Mqtt_data {
-  constructor(_class, uri, qos) {
-    this._class  = _class;
-    this.uri        = uri;
-    this.qos        = qos;
+  constructor(_class, uri, qos, retained) {
+    this._class   = _class;
+    this.uri      = uri;
+    this.qos      = qos;
+    this.retained = retained
   }
 
   get_client(clientId) {
@@ -39,10 +40,11 @@ export default class Mqtt_data {
     Mqtt_notifications_listener_global_status.create(this._class, this.get_client(), channel, this.qos);
   }
 
-  publish(topic, msg, retained) {
+  publish(topic, msg) {
+    var {qos, retained} = this
     this.get_client().then(function(client) {
       client.on('connect', function() {
-        client.publish(topic, msg, 0, retained);
+        client.publish(topic, msg, qos, retained);
       });
       client.connect();
     }).catch();

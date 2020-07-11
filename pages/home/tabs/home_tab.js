@@ -7,6 +7,7 @@ import STYLE from '../../../data/config/style.js'
 export default class Home_tab extends Component  {
   constructor(props) {
     super(props);
+    console.log(props.navigation_tab);
   }
 
   render() {

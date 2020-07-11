@@ -12,20 +12,36 @@ import LoadData from "../../madmax_modules/load_data/Load_data.js"
 export default class Smart_home_connect_tab extends Component  {
   constructor(props) {
     super(props);
-
+    
 		this.db = this.props.db;
+
+    this.state = {
+      available: {
+        is_loading: false,
+        is_true: false,
+      },
+      data: {
+        is_loading: false,
+        is_loaded: false,
+      }
+    }
+    this.reset_data();
+  }
+
+  reset_data() {
+    this.state.available.is_loading   = true
+    this.state.available.is_true      = false
+
+    this.state.data.is_loading        = false
+    this.state.data.is_loaded         = false
 
     this.mqtt = {
       uri: null,
       connection: null,
       topic: {
         devices: "devices",
-        conf: {
-          global: ""
-        },
-        status: {
-          global: ""
-        },
+        conf: "",
+        status: "",
       },
       qos: 0,
       retained: false,
@@ -66,37 +82,26 @@ export default class Smart_home_connect_tab extends Component  {
         },
       }
     }
-
-    this.state = {
-      available: {
-        is_loading: true,
-        is_true: false,
-      },
-      data: {
-        is_loading: false,
-        is_loaded: false,
-      }
-    }
   }
 
-  abort_loading() {
-    this.state.available.is_loading   = true
-    this.state.available.is_true      = false
-    
-    this.state.data.is_loading        = false
-    this.state.data.is_loaded         = true
-
+  async abort_loading() {
     if(this.mqtt.connection != null) {
-      this.mqtt.connection.disconnect()
-      this.mqtt.connection = delete this.mqtt.connection
+      this.mqtt.connection.disconnect();
     }
 
+    this.reset_data();
+
     this.props.navigation_tab.jumpTo("Home_tab")
+    while(this.props.navigation_tab.isFocused() == false) {
+      await new Promise((resolve) => setTimeout(() => { resolve('result') }, 500));
+    }
+
+    this.forceUpdate();
   }
 
   init_global_brocker_connection() {
     let uri = this.db.get_mqtt_uri()
-    if(uri != this.mqtt.uri) {
+    if(uri != this.mqtt.uri || this.mqtt.connection == null) {
       this.mqtt.uri = uri
 
       if(this.mqtt.connection != null) {
@@ -137,12 +142,12 @@ export default class Smart_home_connect_tab extends Component  {
 
   check_device_info() {
     if(!this.are_all_devices_set() && !this.state.data.is_loaded) {
-      this.mqtt.connection = new MQTT_DATA(this, this.mqtt.uri, this.mqtt.qos);
+      this.mqtt.connection = new MQTT_DATA(this, this.mqtt.uri, this.mqtt.qos, this.mqtt.retained);
 
       this.mqtt.connection.delete_device_listener();
       this.mqtt.connection.set_device_listener(this.mqtt.topic.devices);
 
-      this.mqtt.connection.publish(this.mqtt.topic.devices, "list-devices", this.mqtt.retained);
+      this.mqtt.connection.publish(this.mqtt.topic.devices, "list-devices");
     } else if(this.state.data.is_loaded) {
       this.check_config_info();
     }
@@ -152,13 +157,13 @@ export default class Smart_home_connect_tab extends Component  {
     if(!this.state.data.is_loaded && this.state.data.is_loading) {
       let device = this.devices[this.devices.names[this.devices.index]]
 
-      this.mqtt.topic.conf.global   = device.topic.conf;
-      this.mqtt.topic.status.global = device.topic.status;
+      this.mqtt.topic.conf   = device.topic.conf;
+      this.mqtt.topic.status = device.topic.status;
 
       this.mqtt.connection.delete_global_status_listener();
-      this.mqtt.connection.set_global_status_listener(this.mqtt.topic.status.global);
+      this.mqtt.connection.set_global_status_listener(this.mqtt.topic.status);
 
-      this.mqtt.connection.publish(this.mqtt.topic.conf.global, "get-conf", this.mqtt.retained);
+      this.mqtt.connection.publish(this.mqtt.topic.conf, "get-conf");
     }
   }
 
@@ -204,8 +209,12 @@ export default class Smart_home_connect_tab extends Component  {
   }
 
   loaded_data() {
+    // filter mqtt
+    let {mqtt}  = this
+    this.mqtt   = mqtt.connection;
+
     // filter devices
-    let devices   = this.devices
+    let {devices} = this
     this.devices  = {}
 
     for(var i = 0; i < devices.names.length; i++) {
@@ -213,6 +222,9 @@ export default class Smart_home_connect_tab extends Component  {
     }
 
     this.props.navigation.navigate("Smart_home_control_screen", {mqtt: this.mqtt, devices: this.devices, data: this.data})
+
+    // reset
+    this.abort_loading();
   }
 
   render() {
@@ -226,6 +238,8 @@ export default class Smart_home_connect_tab extends Component  {
           this.check_device_info();
         }
       }
+    } else {
+      console.log("no Focus");
     }
 
     return (

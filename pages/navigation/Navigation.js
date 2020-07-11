@@ -27,7 +27,7 @@ export default class Navigation extends Component {
           }}
         >
           <Stack.Screen
-            name='Home'
+            name='Home_screen'
             component={Home_control_screen}
             options={({ navigation }) => ({
               title: 'Smart Home',

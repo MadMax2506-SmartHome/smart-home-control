@@ -1,12 +1,11 @@
 import React, {Component} from 'react';
+import { Text, View } from 'react-native';
 
 // Tab-Navigation
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 
-import Keyboard_light_tab from "./lights/Keyboard_light_tab.js"
-import Bed_wall_light_tab from "./lights/Bed_wall_light_tab.js"
-import Bed_side_light_tab from "./lights/Bed_side_light_tab.js"
+import Light_control from "./Light_control.js"
 
 // Global
 import STYLE from '../../../data/config/style.js'
@@ -14,7 +13,10 @@ import STYLE from '../../../data/config/style.js'
 export default class Roomlight_tab extends Component {
   constructor(props) {
     super(props);
-    console.log("init roomlight");
+
+    this.mqtt       = this.props.mqtt
+    this.roomlight  = this.props.roomlight
+
     this.tab_navigation = {
       options: null,
       static_tabs: {
@@ -22,47 +24,6 @@ export default class Roomlight_tab extends Component {
         bed_wall: null,
         bed_side: null,
       },
-    }
-
-    this.roomlight = {
-      keyboard: {
-        data: null,
-        mqtt: null,
-      },
-      bedWall: {
-        data: null,
-        mqtt: null,
-      },
-      bedSide: {
-        data: null,
-        mqtt: null,
-      }
-    }
-  }
-
-  set_data() {
-    let { roomlight } = this.props
-    let { mqtt }      = this.props
-
-    let light_names = roomlight.static.lights.values
-
-    let light_name  = null
-    let light_data  = null
-    let light_mqtt  = null
-
-    for(var i = 0; i < light_names.length; i++) {
-      light_data  = roomlight
-      light_mqtt  = mqtt
-      light_name  = light_names[i]
-
-      light_data.dynamic = light_data.dynamic[light_name]
-
-      light_mqtt.connection         = light_mqtt.connection.data
-  		light_mqtt.topic.lightStatus  = light_mqtt.topic.globalStatus + light_data.static.lights.topics[light_name];
-  		light_mqtt.topic.lightConf    = light_mqtt.topic.globalConf + light_data.static.lights.topics[light_name];
-
-      this.roomlight[light_name].data = light_data
-      this.roomlight[light_name].mqtt = light_mqtt
     }
   }
 
@@ -77,9 +38,10 @@ export default class Roomlight_tab extends Component {
       <Tab.Screen
         name="Keyboard_light_tab"
         children={({navigation}) =>
-          <Keyboard_light_tab
-            mqtt={this.roomlight.keyboard.mqtt}
-            data={this.roomlight.keyboard.data}
+          <Light_control
+            mqtt={this.mqtt}
+            topic={this.roomlight.topic.keyboard}
+            data={this.roomlight.data.keyboard}
             navigation={this.props.navigation}
             navigation_tab={navigation}
           />
@@ -94,9 +56,10 @@ export default class Roomlight_tab extends Component {
       <Tab.Screen
         name="Bed_wall_light_tab"
         children={({navigation}) =>
-          <Bed_wall_light_tab
-            mqtt={this.roomlight.bedWall.mqtt}
-            data={this.roomlight.bedWall.data}
+          <Light_control
+            mqtt={this.mqtt}
+            topic={this.roomlight.topic.bed_wall}
+            data={this.roomlight.data.bed_wall}
             navigation={this.props.navigation}
             navigation_tab={navigation}
           />
@@ -107,13 +70,14 @@ export default class Roomlight_tab extends Component {
       />
     );
 
-    /*this.tab_navigation.static_tabs.bed_side = (
+    this.tab_navigation.static_tabs.bed_side = (
       <Tab.Screen
         name="Bed_side_light_tab"
         children={({navigation}) =>
-          <Bed_side_light_tab
-            mqtt={this.roomlight.bed_side.mqtt}
-            data={this.roomlight.bed_side.data}
+          <Light_control
+            mqtt={this.mqtt}
+            topic={this.roomlight.topic.bed_side}
+            data={this.roomlight.data.bed_side}
             navigation={this.props.navigation}
             navigation_tab={navigation}
           />
@@ -122,19 +86,19 @@ export default class Roomlight_tab extends Component {
           tabBarLabel: "seitlich"
         }}
       />
-    );*/
+    );
   }
 
   render() {
     if(this.props.navigation_tab.isFocused()) {
-      this.set_data();
       this.set_tab_navigation()
     }
 
     return (
-      <Tab.Navigator initialRouteName={"Keyboard_light_tab"} tabBarOptions={this.tab_navigation.options}>
+      <Tab.Navigator initialRouteName="Keyboard_light_tab" tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.keyboard}
         {this.tab_navigation.static_tabs.bed_wall}
+        {this.tab_navigation.static_tabs.bed_side}
       </Tab.Navigator>
     );
   }

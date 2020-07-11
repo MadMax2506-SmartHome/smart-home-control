@@ -1,25 +1,26 @@
 import React, { Component } from 'react'
 import { StyleSheet, ScrollView, View, Button } from 'react-native';
 
-import Status from '../control_elements/Status.js';
-import ColorContent from '../control_elements/Color_content.js';
-import Orientation from '../control_elements/Orientation.js'
-import AnimationType from '../control_elements/Animation_type.js';
-import AnimationTime from '../control_elements/Animation_time.js';
+import Status from './control_elements/Status.js';
+import ColorContent from './control_elements/Color_content.js';
+import Orientation from './control_elements/Orientation.js'
+import AnimationType from './control_elements/Animation_type.js';
+import AnimationTime from './control_elements/Animation_time.js';
 
-import STYLE from '../../../../data/config/style.js'
+import STYLE from '../../../data/config/style.js'
 
 export default class Light extends Component {
   constructor(props) {
     super(props);
 
-    this.data = this.props.data;
-    this.mqtt = this.props.mqtt;
+    this.mqtt   = this.props.mqtt;
+    this.topic  = this.props.topic;
+    this.data   = this.props.data;
   }
 
-  set_data(controlElem, value, msg) {
-    this.data.dynamic[controlElem] = value;
-    this.mqtt.connection.publish(this.mqtt.topic.lightConf, msg, this.mqtt.retained);
+  set_data(control_elem, value, msg) {
+    this.data.dynamic[control_elem] = value;
+    this.mqtt.publish(this.topic.conf, msg);
   }
 
   set_strip_status(status) {
@@ -54,19 +55,19 @@ export default class Light extends Component {
           <Status status={this.data.dynamic.status} onChange={(status) => this.set_strip_status(status)}/>
         </View>
 
-        <View style={style.controlElem}>
+        <View style={style.control_elem}>
           <ColorContent colors={this.data.dynamic.color} onChange={(color) => this.set_color(color)}/>
         </View>
 
-        <View style={style.controlElem}>
+        <View style={style.control_elem}>
           <Orientation labels={this.data.static.orientation.labels} values={this.data.static.orientation.values} selectedValue={this.data.dynamic.orientation} onChange={(orientation) => this.set_orientation(orientation)}/>
         </View>
 
-        <View style={style.controlElem}>
+        <View style={style.control_elem}>
           <AnimationType labels={this.data.static.animationTyp.labels} values={this.data.static.animationTyp.values} selectedValue={this.data.dynamic.type} onChange={(type) => this.set_animation_type(type)}/>
         </View>
 
-        <View style={style.controlElem}>
+        <View style={style.control_elem}>
           <AnimationTime time={this.data.dynamic.time} onChange={(time) => this.set_animation_time(time)}/>
         </View>
 
@@ -75,7 +76,7 @@ export default class Light extends Component {
             <Button
               color="black"
               title="Animation neustarten"
-              onPress={() => this.mqtt.connection.publish(this.mqtt.topic.lightConf, "restart-animation", this.mqtt.retained)}
+              onPress={() => this.mqtt.publish(this.topic.conf, "restart-animation")}
             />
           </View>
           <View style={style.btn}>
@@ -84,7 +85,7 @@ export default class Light extends Component {
               title="Konfiguration zurücksetzen"
               onPress={() => {
                 this.setLight(this.light);
-                this.mqtt.connection.publish(this.mqtt.topic.lightConf, "reload-conf", this.mqtt.retained);
+                this.mqtt.publish(this.topic.conf, "reload-conf");
               }}
             />
           </View>
@@ -92,7 +93,7 @@ export default class Light extends Component {
             <Button
               color="black"
               title="Konfiguration übernehmen"
-              onPress={() => this.mqtt.connection.publish(this.mqtt.topic.lightConf, "save-conf", this.mqtt.retained)}
+              onPress={() => this.mqtt.publish(this.topic.conf.light, "save-conf")}
             />
           </View>
         </View>
@@ -102,7 +103,7 @@ export default class Light extends Component {
 }
 
 const style = StyleSheet.create({
-  controlElem: {
+  control_elem: {
     marginTop: 20,
   },
   controlPanel: {

@@ -4,9 +4,6 @@ import { StyleSheet, Text } from 'react-native';
 // Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-// Navigation
-import Header_control_right_settings from '../navigation/header/Header_control_right_settings.js';
-
 // Tab - Navigation
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
@@ -22,7 +19,7 @@ import STYLE from '../../data/config/style.js'
 export default class SettingsScreen extends Component  {
   constructor(props) {
     super(props);
-    
+
     this.db = this.props.db;
 
     this.tab_navigation = {

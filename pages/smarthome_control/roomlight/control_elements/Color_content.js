@@ -7,27 +7,28 @@ import Color_slider from '../../../../madmax_modules/slider/Rgb_color_slider.js'
 export default class Color_content extends Component {
   constructor(props) {
     super(props);
+
     this.state = {
-      colorArr: this.props.colors,
-      colorRGB: this.set_rgb(this.props.colors),
-      colorIsChange: false,
+      color_array: this.props.colors,
+      color_rgb: this.set_rgb(this.props.colors),
+      color_is_change: false,
     }
   }
 
-  set_rgb(colorArr) {
-    const red   = colorArr.red > 0 ? colorArr.red.toString(16) : "00";
-    const green = colorArr.green > 0 ? colorArr.green.toString(16) : "00";
-    const blue  = colorArr.blue > 0 ? colorArr.blue.toString(16) : "00";
+  set_rgb(color_array) {
+    const red   = color_array.red > 0 ? color_array.red.toString(16) : "00";
+    const green = color_array.green > 0 ? color_array.green.toString(16) : "00";
+    const blue  = color_array.blue > 0 ? color_array.blue.toString(16) : "00";
     return ("#" + red + green + blue).toUpperCase();
   }
 
   change_color(elem, value) {
-    let color = this.state.colorArr;
+    let color = this.state.color_array;
     color[elem] = value;
     this.setState({
-      colorArr: color,
-      colorRGB: this.set_rgb(color),
-      colorIsChange: true,
+      color_array: color,
+      color_rgb: this.set_rgb(color),
+      color_is_change: true,
     });
   }
 
@@ -38,18 +39,18 @@ export default class Color_content extends Component {
           <Text>Streifenfarbe</Text>
         </View>
         <View style={style.main}>
-          <View style={{backgroundColor: this.state.colorRGB}}>
-            <Text style={style.colorView}>{this.state.colorRGB}</Text>
+          <View style={{backgroundColor: this.state.color_rgb}}>
+            <Text style={style.colorView}>{this.state.color_rgb}</Text>
           </View>
 
           <View style={style.elem}>
-            <Color_slider for="red" value={this.state.colorArr.red} sliderColor="red" onChange={(sliderColor, value) => this.change_color(sliderColor, value)}/>
+            <Color_slider for="red" value={this.state.color_array.red} sliderColor="red" onChange={(sliderColor, value) => this.change_color(sliderColor, value)}/>
           </View>
           <View style={style.elem}>
-            <Color_slider for="green" value={this.state.colorArr.green} sliderColor="green" onChange={(sliderColor, value) => this.change_color(sliderColor, value)}/>
+            <Color_slider for="green" value={this.state.color_array.green} sliderColor="green" onChange={(sliderColor, value) => this.change_color(sliderColor, value)}/>
           </View>
           <View style={style.elem}>
-            <Color_slider for="blue" value={this.state.colorArr.blue} sliderColor="blue" onChange={(sliderColor, value) => this.change_color(sliderColor, value)}/>
+            <Color_slider for="blue" value={this.state.color_array.blue} sliderColor="blue" onChange={(sliderColor, value) => this.change_color(sliderColor, value)}/>
           </View>
 
           <View style={style.controlPanel}>
@@ -58,9 +59,9 @@ export default class Color_content extends Component {
                 title = "Übernehmen"
                 color = "black"
                 onPress={() => {
-                  if(this.state.colorIsChange) {
-                    this.setState({colorIsChange: false})
-                    this.props.onChange(this.state.colorArr)
+                  if(this.state.color_is_change) {
+                    this.setState({color_is_change: false})
+                    this.props.onChange(this.state.color_array)
                   }
                 }}
               />

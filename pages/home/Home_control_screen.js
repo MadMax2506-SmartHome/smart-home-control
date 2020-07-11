@@ -1,5 +1,4 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Button, Text, ToastAndroid, Image } from 'react-native';
 
 // Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
