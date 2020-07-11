@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
+
+// Icons
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 // Navigation
 import Header_control_right_settings from '../navigation/header/Header_control_right_settings.js';
@@ -26,7 +29,8 @@ export default class SettingsScreen extends Component  {
       options: null,
       static_tabs: {
         feature: null,
-        user: null
+        user: null,
+        save: null,
       },
       dynamic_tabs: {
         mqtt: null,
@@ -37,10 +41,13 @@ export default class SettingsScreen extends Component  {
     this.state = {
       values: this.db.get_data()
     }
+  }
 
-    /*this.props.navigation.setOptions({
-      headerRight: () => (<Header_control_right_settings onPress={this.save_data()}/>),
-    });*/
+  get_style(color) {
+    return {
+        color: color,
+        textAlign: "center",
+    }
   }
 
   set_data_from_tab(category, elem, value) {
@@ -124,7 +131,7 @@ export default class SettingsScreen extends Component  {
     this.tab_navigation.options = {
       showLabel: true,
       labelStyle: { fontSize: 12 },
-      indicatorStyle : {backgroundColor: "black"},
+      indicatorStyle: {backgroundColor: "black"},
     }
 
     this.tab_navigation.static_tabs.feature = (
@@ -139,7 +146,7 @@ export default class SettingsScreen extends Component  {
           />
         }
         options={{
-          tabBarLabel: "Features"
+          tabBarLabel: (props) => (<Text style={this.get_style(props.color)}>Features</Text>)
         }}
       />
     );
@@ -157,7 +164,7 @@ export default class SettingsScreen extends Component  {
           />
         }
         options={{
-          tabBarLabel: "Benutzer"
+          tabBarLabel: (props) => (<Text style={this.get_style(props.color)}>Benutzer</Text>)
         }}
       />
     );
@@ -175,7 +182,7 @@ export default class SettingsScreen extends Component  {
           />
         }
         options={{
-          tabBarLabel: "MQTT\nBrocker"
+          tabBarLabel: (props) => (<Text style={this.get_style(props.color)}>MQTT Brocker</Text>)
         }}
       />
     );
@@ -193,9 +200,26 @@ export default class SettingsScreen extends Component  {
           />
         }
         options={{
-          tabBarLabel: "Nas"
+          tabBarLabel: (props) => (<Text style={this.get_style(props.color)}>NAS</Text>)
         }}
       />
+    );
+
+    this.tab_navigation.static_tabs.save = (
+      <Tab.Screen
+        name="Save_tab"
+        children={({navigation}) => (null)}
+        options={{
+          tabBarLabel: (props) => (<Ionicons style={this.get_style("black")} name="save" size={25}/>)
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            this.save_data()
+          }
+        }}
+      />
+
     );
   }
 
@@ -214,6 +238,7 @@ export default class SettingsScreen extends Component  {
         {this.tab_navigation.static_tabs.user}
         {mqtt_tab}
         {nas_tab}
+        {this.tab_navigation.static_tabs.save}
       </Tab.Navigator>
     );
   }
