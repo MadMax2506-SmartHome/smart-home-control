@@ -1,4 +1,13 @@
-import { StyleSheet } from 'react-native';
+import {StyleSheet} from 'react-native';
+
+const headerStyle = {
+  headerStyle: {backgroundColor: '#ffffff'},
+  headerTintColor: '#000000',
+  headerTitleStyle: {
+    fontFamily: 'sans-serif',
+    fontWeight: 'bold',
+  },
+};
 
 const screenStyle = StyleSheet.create({
   header: {
@@ -26,5 +35,6 @@ const screenStyle = StyleSheet.create({
 });
 
 export default {
+  NAVIGATION_HEADER: headerStyle,
   SCREEN: screenStyle,
 };
