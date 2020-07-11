@@ -48,7 +48,7 @@ export default class DB {
   }
 
   is_data_load() {
-    return (this.load_data.feature && this.load_data.user && this.load_data.mqtt && this.load_data.nas) == true ? true : false
+    return (this.load_data.feature && this.load_data.user && this.load_data.mqtt && this.load_data.nas)
   }
 
   get_data() {
@@ -56,14 +56,14 @@ export default class DB {
   }
 
   set_data(category, data) {
+    this.load_data[category] = true
+    
     if(data != null) {
       if(category == "feature") {
         data.is_smart_home_control_active = Boolean(data.is_smart_home_control_active)
         data.is_nas_control_active        = Boolean(data.is_nas_control_active)
       }
-
-      this.data[category]       = data
-      this.load_data[category]  = true
+      this.data[category] = data
     }
   }
 
