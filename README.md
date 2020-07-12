@@ -11,7 +11,7 @@
 * <code>npm installreact-native-gesture-handler</code>
 * <code>npm install@react-native-community/masked-view</code>
 * <code>npm installreact-native-screens</code>
-* <code>npm install@react-native-community/slider</code>
+* <code>npm install @react-native-community/slider</code>
 * <code>npm install@react-navigation/material-top-tabs</code>
 * <code>npm installreact-native-tab-view</code>
 * <code>npm install@react-navigation/bottom-tabs</code>
