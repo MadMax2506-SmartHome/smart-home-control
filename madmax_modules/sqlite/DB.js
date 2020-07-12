@@ -65,7 +65,6 @@ export default class DB {
   }
 
   set_data(category, data) {
-    console.log(data);
     this.load_data[category] = true
 
     if(data == null) {
@@ -140,7 +139,7 @@ export default class DB {
   insert_feature(data) {
     var sql     = "INSERT INTO " + DB_TABLE_FEATURE + "(id, is_smart_home_control_active, is_nas_control_active) VALUES(?, ?, ?);";
     var values  = [1, data.is_smart_home_control_active, data.is_nas_control_active];
-    console.log(values);
+
     this.con.transaction(tx => {
       tx.executeSql(sql, values);
     });
