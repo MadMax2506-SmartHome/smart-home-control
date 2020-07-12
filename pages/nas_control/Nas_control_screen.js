@@ -18,42 +18,25 @@ export default class Nas_control_tab extends Component  {
     }
   }
 
-  async get_status() {
-    var is_reachable = await true
-
-    if(is_reachable != this.state.is_reachable) {
-      this.setState({
-        is_reachable: is_reachable
-      });
-    }
-  }
+  get_status() {}
 
   wake_on_lan() {}
 
   shutdown() {}
 
   render() {
-    this.get_status()
-    let statusText = this.state.is_reachable ? "NAS ist online" : "NAS ist offline"
     return (
       <ScrollView style={STYLE.SCREEN.main}>
         <View style={STYLE.SCREEN.centerPanel}>
           <View>
             <Text>
-              {statusText}
+              Demnächst verfügbar
             </Text>
           </View>
           <View style={STYLE.SCREEN.btn}>
             <Button
-              title="Wake on LAN"
-              onPress={() => {this.wake_on_lan();}}
-              color="#000000"
-            />
-          </View>
-          <View style={STYLE.SCREEN.btn}>
-            <Button
-              title="Shutdown"
-              onPress={() => {this.shutdown();}}
+              title="Exit"
+              onPress={() => {this.props.navigation.navigate("Home_control_screen");}}
               color="#000000"
             />
           </View>
