@@ -59,7 +59,8 @@ export default class SettingsScreen extends Component  {
   }
 
   save_data() {
-    let { feature, user, mqtt, nas } = this.state.values
+    TOAST.notification("Daten werden gespeichert...");
+    let {feature, user, mqtt, nas} = this.state.values
 
     let is_valid = this.is_data_valid()
 
@@ -91,7 +92,7 @@ export default class SettingsScreen extends Component  {
       }
     }
 
-    TOAST.notification("Daten werden gespeichert...");
+    TOAST.notification("Daten wurden gespeichert!");
     this.props.set_tab_visibility(feature.is_smart_home_control_active ,feature.is_nas_control_active);
     this.setState({
       tab_visibility: this.props.get_tab_visibility()
@@ -230,9 +231,8 @@ export default class SettingsScreen extends Component  {
     if(this.props.navigation_tab.isFocused()) {
       this.set_tab_navigation()
     }
-
+    
     var {tab_visibility} = this.state
-
     return (
       <Tab.Navigator initialRouteName="Feature_tab" tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.feature}

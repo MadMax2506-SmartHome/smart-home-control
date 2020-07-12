@@ -6,6 +6,7 @@ const DB_TABLE_USER     = "user";
 const DB_TABLE_MQTT     = "mqtt";
 const DB_TABLE_NAS      = "nas";
 
+
 export default class DB {
   constructor(class_) {
     this.class_ = class_;
@@ -17,10 +18,18 @@ export default class DB {
       mqtt: false,
       nas: false,
     }
+
+    this.is_empty = {
+      feature: false,
+      user: false,
+      mqtt: false,
+      nas: false,
+    }
+
     this.data = {
       feature: {
-        is_smart_home_control_active: null,
-        is_nas_control_active: null,
+        is_smart_home_control_active: false,
+        is_nas_control_active: false,
       },
       user: {
         first_name: null,
@@ -56,9 +65,12 @@ export default class DB {
   }
 
   set_data(category, data) {
+    console.log(data);
     this.load_data[category] = true
-    
-    if(data != null) {
+
+    if(data == null) {
+      this.is_empty[category] = true
+    } else {
       if(category == "feature") {
         data.is_smart_home_control_active = Boolean(data.is_smart_home_control_active)
         data.is_nas_control_active        = Boolean(data.is_nas_control_active)
@@ -70,36 +82,36 @@ export default class DB {
   create() {
     // feature
     var sql_feature = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_FEATURE + "("
-      + "feature_id int,"
+      + "id int,"
       + "is_smart_home_control_active bool,"
       + "is_nas_control_active bool,"
-      + "PRIMARY KEY(feature_id));";
+      + "PRIMARY KEY(id));";
 
     // user
     var sql_user = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_USER + "("
-      + "user_id int,"
+      + "id int,"
       + "first_name char(255),"
       + "surname char(255),"
-      + "PRIMARY KEY(user_id));";
+      + "PRIMARY KEY(id));";
 
     // mqtt
     var sql_mqtt = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_MQTT + "("
-      + "mqtt_id int,"
+      + "id int,"
       + "typ char(10),"
       + "ipaddress char(15),"
       + "port int,"
-      + "PRIMARY KEY(mqtt_id));";
+      + "PRIMARY KEY(id));";
 
     // nas
     var sql_nas = "CREATE TABLE IF NOT EXISTS " + DB_TABLE_NAS + "("
-      + "nas_id int,"
+      + "id int,"
       + "ipaddress char(15),"
       + "macaddress char(12),"
       + "username char(255),"
       + "password char(255),"
-      + "PRIMARY KEY(nas_id));";
+      + "PRIMARY KEY(id));";
 
-    //sql
+    // sql
     this.con.transaction(tx => {
       tx.executeSql(sql_feature, []);
       tx.executeSql(sql_user, []);
@@ -110,14 +122,7 @@ export default class DB {
 
 // feature
   is_feature_data_empty() {
-    let { feature } = this.data
-
-    if(feature.is_smart_home_control_active == null
-      && feature.is_nas_control_active == null) {
-      return true
-    } else {
-      return false
-    }
+    return this.is_empty.feature
   }
 
   get_feature_data() {
@@ -132,28 +137,29 @@ export default class DB {
     return (this.data == null || this.data.feature.is_nas_control_active == null) ? '' : Boolean(this.data.feature.is_nas_control_active);
   }
 
-  insert_feature(values) {
-    var sql_feature     = "INSERT INTO " + DB_TABLE_FEATURE + "(feature_id, is_smart_home_control_active, is_nas_control_active) VALUES(?, ?, ?);";
-
-    var values_feature  = [1, values.is_smart_home_control_active, values.is_nas_control_active];
+  insert_feature(data) {
+    var sql     = "INSERT INTO " + DB_TABLE_FEATURE + "(id, is_smart_home_control_active, is_nas_control_active) VALUES(?, ?, ?);";
+    var values  = [1, data.is_smart_home_control_active, data.is_nas_control_active];
+    console.log(values);
     this.con.transaction(tx => {
-      tx.executeSql(sql_feature, values_feature);
+      tx.executeSql(sql, values);
     });
   }
 
-  update_feature(values) {
-    var sql_feature     = "UPDATE " + DB_TABLE_FEATURE + " SET is_smart_home_control_active = ?, is_nas_control_active = ? WHERE feature_id = ?;";
-    var values_feature  = [values.is_smart_home_control_active, values.is_nas_control_active, 1];
+  update_feature(data) {
+    var sql     = "UPDATE " + DB_TABLE_FEATURE + " SET is_smart_home_control_active = ?, is_nas_control_active = ? WHERE id = ?;";
+    var values  = [data.is_smart_home_control_active, data.is_nas_control_active, 1];
 
     this.con.transaction(tx => {
-      tx.executeSql(sql_feature, values_feature);
+      tx.executeSql(sql, values);
     });
   }
 
   select_feature() {
-    var sql_feature = "SELECT is_smart_home_control_active, is_nas_control_active FROM " + DB_TABLE_FEATURE + ";"
+    var sql = "SELECT is_smart_home_control_active, is_nas_control_active FROM " + DB_TABLE_FEATURE + ";"
+
     this.con.transaction(tx => {
-      tx.executeSql(sql_feature, [], (tx, res) => {
+      tx.executeSql(sql, [], (tx, res) => {
         var length = res.rows.length;
         if(length > 0) {
           var data = res.rows.item(0);
@@ -167,14 +173,7 @@ export default class DB {
 
 // user
   is_user_data_empty() {
-    let { user } = this.data
-
-    if(user.first_name == null
-      && user.surname == null) {
-      return true
-    } else {
-      return false
-    }
+    return this.is_empty.user
   }
 
   get_user_data() {
@@ -193,28 +192,29 @@ export default class DB {
     return (this.data == null || this.data.user.surname == null) ? '' : this.data.user.surname;
   }
 
-  insert_user(values) {
-    var sql_user     = "INSERT INTO " + DB_TABLE_USER + "(user_id, first_name, surname) VALUES(?, ?, ?);";
+  insert_user(data) {
+    var sql     = "INSERT INTO " + DB_TABLE_USER + "(id, first_name, surname) VALUES(?, ?, ?);";
+    var values  = [1, data.first_name, data.surname];
 
-    var values_user  = [1, values.first_name, values.surname];
     this.con.transaction(tx => {
-      tx.executeSql(sql_user, values_user);
+      tx.executeSql(sql, values);
     });
   }
 
-  update_user(values) {
-    var sql_user     = "UPDATE " + DB_TABLE_USER + " SET first_name = ?, surname = ? WHERE user_id = ?;";
-    var values_user  = [values.first_name, values.surname, 1];
+  update_user(data) {
+    var sql     = "UPDATE " + DB_TABLE_USER + " SET first_name = ?, surname = ? WHERE id = ?;";
+    var values  = [data.first_name, data.surname, 1];
 
     this.con.transaction(tx => {
-      tx.executeSql(sql_user, values_user);
+      tx.executeSql(sql, values);
     });
   }
 
   select_user() {
-    var sql_user = "SELECT first_name, surname FROM " + DB_TABLE_USER + ";"
+    var sql = "SELECT first_name, surname FROM " + DB_TABLE_USER + ";"
+
     this.con.transaction(tx => {
-      tx.executeSql(sql_user, [], (tx, res) => {
+      tx.executeSql(sql, [], (tx, res) => {
         var length = res.rows.length;
         if(length > 0) {
           var data = res.rows.item(0);
@@ -228,15 +228,7 @@ export default class DB {
 
 // mqtt
   is_mqtt_data_empty() {
-    let { mqtt } = this.data
-
-    if(mqtt.typ == null
-      && mqtt.ipaddress == null
-      && mqtt.port == null) {
-      return true
-    } else {
-      return false
-    }
+    return this.is_empty.mqtt
   }
 
   get_mqtt_data() {
@@ -259,33 +251,33 @@ export default class DB {
     return (this.data == null || this.data.mqtt.ipaddress == null) ? '' : this.data.mqtt.ipaddress;
   }
 
-  insert_mqtt(values) {
-    var sql_mqtt     = "INSERT INTO " + DB_TABLE_MQTT + "(mqtt_id, typ, ipaddress, port) VALUES(?, ?, ?, ?);";
-
-    var values_mqtt  = [1, values.typ, values.ipaddress, parseInt(values.port)];
+  insert_mqtt(data) {
+    var sql     = "INSERT INTO " + DB_TABLE_MQTT + "(id, typ, ipaddress, port) VALUES(?, ?, ?, ?);";
+    var values  = [1, data.typ, data.ipaddress, parseInt(data.port)];
 
     this.con.transaction(tx => {
-      tx.executeSql(sql_mqtt, values_mqtt);
+      tx.executeSql(sql, values);
     });
   }
 
-  update_mqtt(values) {
-    var sql_mqtt     = "UPDATE " + DB_TABLE_MQTT + " SET typ = ?, ipaddress = ?, port = ? WHERE mqtt_id = ?;";
-    var values_mqtt  = [values.typ, values.ipaddress, parseInt(values.port), 1];
+  update_mqtt(data) {
+    var sql     = "UPDATE " + DB_TABLE_MQTT + " SET typ = ?, ipaddress = ?, port = ? WHERE id = ?;";
+    var values  = [data.typ, data.ipaddress, parseInt(data.port), 1];
 
     this.con.transaction(tx => {
-      tx.executeSql(sql_mqtt, values_mqtt);
+      tx.executeSql(sql, values);
     });
   }
 
   select_mqtt() {
-    var sql_mqtt = "SELECT typ, ipaddress, port FROM " + DB_TABLE_MQTT + ";"
+    var sql = "SELECT typ, ipaddress, port FROM " + DB_TABLE_MQTT + ";"
+
     this.con.transaction(tx => {
-      tx.executeSql(sql_mqtt, [], (tx, res) => {
+      tx.executeSql(sql, [], (tx, res) => {
         var length = res.rows.length;
         if(length > 0) {
           var data = res.rows.item(0);
-          data.port = data.port.toString()
+          this.data.port = this.data.port.toString()
           this.class_.set_data_from_sqlite("mqtt", data);
         } else {
           this.class_.set_data_from_sqlite("mqtt", null);
@@ -296,16 +288,7 @@ export default class DB {
 
 // nas
   is_nas_data_empty() {
-    let { nas } = this.data
-
-    if(nas.ipaddress == null
-      && nas.macaddress == null
-      && nas.username == null
-      && nas.password == null) {
-      return true
-    } else {
-      return false
-    }
+    return this.is_empty.nas
   }
 
   get_nas_data() {
@@ -328,33 +311,33 @@ export default class DB {
     return (this.data == null || this.data.nas.password == null) ? '' : this.data.nas_password;
   }
 
-  insert_nas(values) {
-    var sql_nas      = "INSERT INTO " + DB_TABLE_NAS + "(nas_id, ipaddress, macaddress, username, password) VALUES(?, ?, ?, ?, ?);";
-
-    var values_nas   = [1, values.ipaddress, values.macaddress, values.username, values.password];
+  insert_nas(data) {
+    var sql     = "INSERT INTO " + DB_TABLE_NAS + "(id, ipaddress, macaddress, username, password) VALUES(?, ?, ?, ?, ?);";
+    var values  = [1, data.ipaddress, data.macaddress, data.username, data.password];
 
     this.con.transaction(tx => {
-      tx.executeSql(sql_nas, values_nas);
+      tx.executeSql(sql, values);
     });
   }
 
-  update_nas(values) {
-    var sql_nas     = "UPDATE " + DB_TABLE_NAS + " SET ipaddress = ?, macaddress = ?, username = ?, password = ? WHERE nas_id = ?;";
-    var values_nas  = [values.ipaddress, values.macaddress, values.username, values.password, 1];
+  update_nas(data) {
+    var sql     = "UPDATE " + DB_TABLE_NAS + " SET ipaddress = ?, macaddress = ?, username = ?, password = ? WHERE id = ?;";
+    var values  = [data.ipaddress, data.macaddress, data.username, data.password, 1];
 
     this.con.transaction(tx => {
-      tx.executeSql(sql_nas, values_nas);
+      tx.executeSql(sql, values);
     });
   }
 
   select_nas() {
-    var sql_nas = "SELECT ipaddress, macaddress, username, password FROM " + DB_TABLE_NAS + ";"
+    var sql = "SELECT ipaddress, macaddress, username, password FROM " + DB_TABLE_NAS + ";"
+
     this.con.transaction(tx => {
-      tx.executeSql(sql_nas, [], (tx, res) => {
+      tx.executeSql(sql, [], (tx, res) => {
         var length = res.rows.length;
         if(length > 0) {
           var data = res.rows.item(0);
-          this.class_.set_data_from_sqlite("nas", data);
+          this.class_.set_data_from_sqlite("nas", this.data);
         } else {
           this.class_.set_data_from_sqlite("nas", null);
         }
