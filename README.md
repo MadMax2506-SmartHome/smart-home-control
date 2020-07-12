@@ -1,28 +1,19 @@
 # ReactNative-SmartHome
 
-## Initialisierung
-
-* <code>npm i</code>
-* <code>npm i -S jetifier</code>
-* <code>npx jetifier</code><br>
-
-
-## Modules
-* sp-react-native-mqtt
-* underscore
-* react-native-sqlite-storage
-* react-native-splash-screen
-* react-native-tts
-* @react-navigation/native
-* @react-navigation/stack
-* react-native-gesture-handler
-* @react-native-community/masked-view
-* react-native-screens
-* @react-native-community/slider
-* @react-navigation/material-top-tabs
-* react-native-tab-view
-* @react-navigation/bottom-tabs
-* react-native-vector-icons
-* @react-native-community/toolbar-android
-
-<code>npm i -S sp-react-native-mqtt underscore react-native-sqlite-storage react-native-splash-screen react-native-tts @react-navigation/native @react-navigation/stack react-native-gesture-handler @react-native-community/masked-view react-native-screens @react-native-community/slider @react-navigation/material-top-tabs react-native-tab-view @react-navigation/bottom-tabs react-native-vector-icons @react-native-community/toolbar-android</code><br>
+## verwendete Module installieren
+* <code>npm installsp-react-native-mqtt</code>
+* <code>npm installunderscore</code>
+* <code>npm installreact-native-sqlite-storage</code>
+* <code>npm installreact-native-splash-screen</code>
+* <code>npm installreact-native-tts</code>
+* <code>npm install@react-navigation/native</code>
+* <code>npm install@react-navigation/stack</code>
+* <code>npm installreact-native-gesture-handler</code>
+* <code>npm install@react-native-community/masked-view</code>
+* <code>npm installreact-native-screens</code>
+* <code>npm install@react-native-community/slider</code>
+* <code>npm install@react-navigation/material-top-tabs</code>
+* <code>npm installreact-native-tab-view</code>
+* <code>npm install@react-navigation/bottom-tabs</code>
+* <code>npm installreact-native-vector-icons</code>
+* <code>npm install@react-native-community/toolbar-android</code>
