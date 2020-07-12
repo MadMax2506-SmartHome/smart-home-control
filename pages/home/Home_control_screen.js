@@ -13,7 +13,6 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
 import Home_tab from "./tabs/Home_tab.js"
-import Nas_control_tab from "../nas_control/Nas_control_tab.js"
 import Setting_control_tab from "../settings/Setting_control_tab.js"
 
 // Allgemein
@@ -112,16 +111,16 @@ export default class Home_control_screen extends Component  {
     this.tab_navigation.dynamic_tabs.nas_control = (
       <Tab.Screen
         name="Nas_control_tab"
-        children={({navigation}) =>
-          <Nas_control_tab
-            db={this.db}
-            navigation={this.props.navigation}
-            navigation_tab={navigation}
-          />
-        }
+        children={({navigation}) => null}
         options={{
           tabBarLabel: "NAS",
           tabBarIcon: props => (<MaterialCommunityIcons name="nas" size={30} color={props.color}/>)
+        }}
+        listeners={{
+          tabPress: (e) => {
+            e.preventDefault();
+            this.props.navigation.navigate("Nas_control_screen", {db: this.db})
+          }
         }}
       />
     )

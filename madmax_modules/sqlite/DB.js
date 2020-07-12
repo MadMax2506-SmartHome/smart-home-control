@@ -295,19 +295,19 @@ export default class DB {
   }
 
   get_nas_ipaddress() {
-    return (this.data == null || this.data.nas.ipaddress == null) ? '' : this.data.nas_ipaddress;
+    return (this.data == null || this.data.nas.ipaddress == null) ? '' : this.data.nas.ipaddress;
   }
 
   get_nas_macaddress() {
-    return (this.data == null || this.data.nas.macaddress == null) ? '' : this.data.nas_macaddress;
+    return (this.data == null || this.data.nas.macaddress == null) ? '' : this.data.nas.macaddress;
   }
 
   get_nas_username() {
-    return (this.data == null || this.data.nas.username == null) ? '' : this.data.nas_username;
+    return (this.data == null || this.data.nas.username == null) ? '' : this.data.nas.username;
   }
 
   get_nas_password() {
-    return (this.data == null || this.data.nas.password == null) ? '' : this.data.nas_password;
+    return (this.data == null || this.data.nas.password == null) ? '' : this.data.nas.password;
   }
 
   insert_nas(data) {
@@ -336,7 +336,7 @@ export default class DB {
         var length = res.rows.length;
         if(length > 0) {
           var data = res.rows.item(0);
-          this.class_.set_data_from_sqlite("nas", this.data);
+          this.class_.set_data_from_sqlite("nas", data);
         } else {
           this.class_.set_data_from_sqlite("nas", null);
         }

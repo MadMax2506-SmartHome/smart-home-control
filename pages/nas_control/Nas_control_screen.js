@@ -8,19 +8,33 @@ export default class Nas_control_tab extends Component  {
   constructor(props) {
     super(props);
 
-    this.nas = this.props.nas;
+    const {params} = this.props.route;
+		this.db = params.db;
+
+    this.nas  = this.db.get_nas_data();
+
     this.state = {
-      is_online: false
+      is_reachable: false
     }
-    this.get_status()
   }
 
-  async get_status() {}
+  async get_status() {
+    var is_reachable = await true
+
+    if(is_reachable != this.state.is_reachable) {
+      this.setState({
+        is_reachable: is_reachable
+      });
+    }
+  }
 
   wake_on_lan() {}
 
+  shutdown() {}
+
   render() {
-    let statusText = this.state.is_online ? "NAS ist online" : "NAS ist offline"
+    this.get_status()
+    let statusText = this.state.is_reachable ? "NAS ist online" : "NAS ist offline"
     return (
       <ScrollView style={STYLE.SCREEN.main}>
         <View style={STYLE.SCREEN.centerPanel}>
@@ -31,8 +45,15 @@ export default class Nas_control_tab extends Component  {
           </View>
           <View style={STYLE.SCREEN.btn}>
             <Button
-              title="Starten"
+              title="Wake on LAN"
               onPress={() => {this.wake_on_lan();}}
+              color="#000000"
+            />
+          </View>
+          <View style={STYLE.SCREEN.btn}>
+            <Button
+              title="Shutdown"
+              onPress={() => {this.shutdown();}}
               color="#000000"
             />
           </View>
