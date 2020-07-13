@@ -276,7 +276,7 @@ export default class DB {
         var length = res.rows.length;
         if(length > 0) {
           var data = res.rows.item(0);
-          this.data.port = this.data.port.toString()
+          data.port = data.port.toString()
           this.class_.set_data_from_sqlite("mqtt", data);
         } else {
           this.class_.set_data_from_sqlite("mqtt", null);

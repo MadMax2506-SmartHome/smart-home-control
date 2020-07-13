@@ -48,7 +48,7 @@ export default class Home_control_screen extends Component  {
   }
 
   set_data_from_sqlite(category, data) {
-    this.db.set_data(category, data)
+    this.db.set_data(category, data);
   }
 
   set_tab_visibility(is_smart_home_control_active, is_nas_control_active) {
