@@ -93,7 +93,7 @@ export default class Light extends Component {
             <Button
               color="black"
               title="Konfiguration übernehmen"
-              onPress={() => this.mqtt.publish(this.topic.conf.light, "save-conf")}
+              onPress={() => this.mqtt.publish(this.topic.conf, "save-conf")}
             />
           </View>
         </View>

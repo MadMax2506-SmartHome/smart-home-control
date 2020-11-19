@@ -1,3 +1,6 @@
+# Own
+.npm_cache
+
 # OSX
 #
 .DS_Store
