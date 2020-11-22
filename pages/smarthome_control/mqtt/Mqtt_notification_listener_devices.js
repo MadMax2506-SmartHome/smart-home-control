@@ -49,7 +49,7 @@ module.exports = {
     } else {
       let device_info = JSON.parse(data);
 
-      if(device_info.name == "Roomlight Max") {
+      if(device_info.name == "roomlight") {
         this.config._class.set_device_info("roomlight", device_info);
       }
     }
