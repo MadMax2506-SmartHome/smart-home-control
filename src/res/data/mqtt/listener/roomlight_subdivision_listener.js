@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 module.exports = {
-  create(_class, mqttClient, channel, qos) {
+  roomlight_subdivision(_class, mqttClient, channel, qos) {
     if (!mqttClient) {
       return;
     }
@@ -44,16 +44,6 @@ module.exports = {
     var topic = msg.topic;
     var data  = msg.data;
 
-    if(data == "list-devices") {
-      ;
-    } else {
-      let device_info = JSON.parse(data);
-      
-      if(device_info.name == "roomlight") {
-        this.config._class.set_device_info(device_info.name, device_info);
-      } else if(device_info.name == "room_thermometer") {
-        this.config._class.set_device_info(device_info.name, device_info);
-      }
-    }
+    this.config._class.set_new_config(data);
   },
 };

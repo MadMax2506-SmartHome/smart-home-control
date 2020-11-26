@@ -8,12 +8,13 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 // Screens
-import Home_control_screen from '../screens/home/Home_control_screen.js'
+import FetchDataScreen from '../screens/FetchDataScreen.js'
 
-import Smart_home_connect_screen from '../screens/smarthome_control/Smart_home_connect_screen.js'
-import Smart_home_control_screen from '../screens/smarthome_control/Smart_home_control_screen.js'
+import HomeScreen from '../screens/home/HomeScreen.js'
 
-import Nas_control_screen from '../screens/nas_control/Nas_control_screen.js'
+import SmartHomeScreen from '../screens/smarthome_control/SmartHomeScreen.js'
+
+import NasScreen from '../screens/nas_control/NasScreen.js'
 
 // Allgemein
 import STYLE from '../res/style.js'
@@ -35,31 +36,38 @@ export default class Navigation extends Component {
     }
 
     return(
-      <NavigationContainer>
-        <StatusBar hidden={true} barStyle="light-content"/>
+      <NavigationContainer
+        initialRouteName="FetchDataScreen"
+      >
+        <StatusBar
+          hidden={true} barStyle="light-content"
+        />
         <Stack.Navigator
           screenOptions={STYLE.NAVIGATION_HEADER}
         >
           <Stack.Screen
-            name='Home_control_screen'
-            component={Home_control_screen}
+            name='FetchDataScreen'
+            component={FetchDataScreen}
+            options={{
+              headerShown: false
+            }}
+          />
+
+          <Stack.Screen
+            name='HomeScreen'
+            component={HomeScreen}
             options={({navigation}) => header_smart_home}
           />
 
           <Stack.Screen
-            name='Smart_home_connect_screen'
-            component={Smart_home_connect_screen}
-            options={({navigation}) => header_smart_home}
-          />
-          <Stack.Screen
-            name='Smart_home_control_screen'
-            component={Smart_home_control_screen}
+            name='SmartHomeScreen'
+            component={SmartHomeScreen}
             options={({navigation}) => header_smart_home}
           />
 
           <Stack.Screen
-            name='Nas_control_screen'
-            component={Nas_control_screen}
+            name='NasScreen'
+            component={NasScreen}
             options={({navigation}) => header_nas}
           />
         </Stack.Navigator>

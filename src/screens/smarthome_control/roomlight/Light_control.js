@@ -13,62 +13,106 @@ export default class Light extends Component {
   constructor(props) {
     super(props);
 
-    this.mqtt   = this.props.mqtt;
-    this.topic  = this.props.topic;
-    this.data   = this.props.data;
-  }
+    this.light = this.props.light;
 
-  set_data(control_elem, value, msg) {
-    this.data.dynamic[control_elem] = value;
-    this.mqtt.publish(this.topic.conf, msg);
+    this.state = {
+      status: this.light.get_status(),
+      color: this.light.get_color(),
+      orientation: {
+        labels: ["nach Links", "nach Rechts", "von der Mitte"],
+        values: ["l", "r", "c"],
+        selected: this.light.get_orientation(),
+      },
+      animationTyp: {
+        labels: ["Fade", "Rainbow", "to Color"],
+        values: ["fade", "rainbow", "to_color"],
+        selected: "",
+      },
+      animationTime: this.light.get_time(),
+    }
   }
 
   set_strip_status(status) {
-    let msg = status ? "active" : "idle";
-    this.set_data("status", status, msg);
+    this.light.set_status(status);
+    this.setState({
+      status: status,
+    });
   }
 
   set_color(color) {
-    let msg = "color: " + color.red + ";" + color.green + ";" + color.blue;
-    this.set_data("color", color, msg);
+    this.light.set_color(color);
+    this.setState({
+      color: color,
+    });
   }
 
-  set_orientation(orientation) {
-    let msg = "orientation: " + orientation;
-    this.set_data("orientation", orientation, msg);
+  set_orientation(orientation_value) {
+    this.light.set_orientation(orientation_value);
+
+    var {orientation} = this.state;
+    orientation.selected = orientation_value;
+    this.setState({
+      orientation: orientation,
+    });
   }
 
-  set_animation_type(type) {
-    let msg = "animation-typ: " + type;
-    this.set_data("type", type, msg);
+  set_animation_type(type_value) {
+    this.light.set_type(type_value);
+
+    var {animationTyp} = this.state;
+    animationTyp.selected = type_value;
+    this.setState({
+      animationTyp: animationTyp,
+    });
   }
 
   set_animation_time(time) {
-    let msg = "animation-time: " + time;
-    this.set_data("time", time, msg);
+    this.light.set_time(time);
+    this.setState({
+      animationTime: time,
+    });
   }
 
   render() {
     return(
       <ScrollView style={STYLE.SCREEN.main}>
         <View>
-          <Status status={this.data.dynamic.status} onChange={(status) => this.set_strip_status(status)}/>
+          <Status
+            status={this.state.status}
+            onChange={(status) => this.set_strip_status(status)}
+          />
         </View>
 
         <View style={style.control_elem}>
-          <ColorContent colors={this.data.dynamic.color} onChange={(color) => this.set_color(color)}/>
+          <ColorContent
+            colors={this.state.color}
+            onChange={(color) => this.set_color(color)}
+          />
         </View>
 
         <View style={style.control_elem}>
-          <Orientation labels={this.data.static.orientation.labels} values={this.data.static.orientation.values} selectedValue={this.data.dynamic.orientation} onChange={(orientation) => this.set_orientation(orientation)}/>
+          <Orientation
+            labels={this.state.orientation.labels}
+            values={this.state.orientation.values}
+            selectedValue={this.state.orientation.selected}
+            onChange={(orientation) => this.set_orientation(orientation)}
+          />
         </View>
 
         <View style={style.control_elem}>
-          <AnimationType labels={this.data.static.animationTyp.labels} values={this.data.static.animationTyp.values} selectedValue={this.data.dynamic.type} onChange={(type) => this.set_animation_type(type)}/>
+          <AnimationType
+            labels={this.state.animationTyp.labels}
+            values={this.state.animationTyp.values}
+            selectedValue={this.state.animationTyp}
+            onChange={(type) => this.set_animation_type(type)}
+          />
         </View>
 
         <View style={style.control_elem}>
-          <AnimationTime time={this.data.dynamic.time} onChange={(time) => this.set_animation_time(time)}/>
+          <AnimationTime
+            time={this.state.animationTime}
+            onChange={(time) => this.set_animation_time(time)}
+          />
         </View>
 
         <View style={style.controlPanel}>
@@ -76,24 +120,21 @@ export default class Light extends Component {
             <Button
               color="black"
               title="Animation neustarten"
-              onPress={() => this.mqtt.publish(this.topic.conf, "restart-animation")}
+              onPress={() => this.light.restart_animation()}
             />
           </View>
           <View style={style.btn}>
             <Button
               color="black"
               title="Konfiguration zurücksetzen"
-              onPress={() => {
-                this.setLight(this.light);
-                this.mqtt.publish(this.topic.conf, "reload-conf");
-              }}
+              onPress={() => this.light.reload_conf()}
             />
           </View>
           <View style={style.btn}>
             <Button
               color="black"
               title="Konfiguration übernehmen"
-              onPress={() => this.mqtt.publish(this.topic.conf, "save-conf")}
+              onPress={() => this.light.save_conf()}
             />
           </View>
         </View>

@@ -4,7 +4,7 @@ import { View, Text, TextInput } from 'react-native';
 // Allgemein
 import STYLE from '../../../res/style.js'
 
-export default class Mqtt_tab extends Component  {
+export default class UserTab extends Component  {
   constructor(props) {
     super(props);
 
@@ -19,32 +19,31 @@ export default class Mqtt_tab extends Component  {
       <View style={STYLE.SCREEN.centerPanel}>
         <View style={this.style.inputPanel}>
           <View style={this.style.label}>
-            <Text>IP-Adresse</Text>
+            <Text>Vorname</Text>
           </View>
           <View style={this.style.inputContent}>
             <TextInput
               style={this.style.input}
-              placeholder="192.168.178.1"
+              placeholder="Vorname"
               onChangeText={(value) => {
-                this.props.onChangeText("mqtt", "ipaddress", value)
+                this.props.onChangeText("user", "first_name", value)
               }}
-              value={this.state.values.ipaddress}
+              value={this.state.values.first_name}
             />
-            </View>
+          </View>
         </View>
         <View style={this.style.inputPanel}>
           <View style={this.style.label}>
-            <Text>Port</Text>
+            <Text>Nachname</Text>
           </View>
           <View style={this.style.inputContent}>
             <TextInput
               style={this.style.input}
-              keyboardType="number-pad"
-              placeholder="1883"
+              placeholder="Nachname"
               onChangeText={(value) => {
-                this.props.onChangeText("mqtt", "port", value)
+                this.props.onChangeText("user", "surname", value)
               }}
-              value={this.state.values.port}
+              value={this.state.values.surname}
             />
           </View>
         </View>

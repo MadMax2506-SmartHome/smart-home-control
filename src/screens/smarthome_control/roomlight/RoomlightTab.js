@@ -14,8 +14,7 @@ export default class Roomlight_tab extends Component {
   constructor(props) {
     super(props);
 
-    this.mqtt       = this.props.mqtt
-    this.roomlight  = this.props.roomlight
+    this.data = this.props.data.mqtt.get_roomlight_device();
 
     this.tab_navigation = {
       options: null,
@@ -36,12 +35,10 @@ export default class Roomlight_tab extends Component {
 
     this.tab_navigation.static_tabs.keyboard = (
       <Tab.Screen
-        name="Keyboard_light_tab"
+        name="KeyboardLightTab"
         children={({navigation}) =>
           <Light_control
-            mqtt={this.mqtt}
-            topic={this.roomlight.topic.keyboard}
-            data={this.roomlight.data.keyboard}
+            light={this.data.get_subdivision()["keyboard"]}
             navigation={this.props.navigation}
             navigation_tab={navigation}
           />
@@ -54,12 +51,10 @@ export default class Roomlight_tab extends Component {
 
     this.tab_navigation.static_tabs.bed_wall = (
       <Tab.Screen
-        name="Bed_wall_light_tab"
+        name="BedWallLightTab"
         children={({navigation}) =>
           <Light_control
-            mqtt={this.mqtt}
-            topic={this.roomlight.topic.bed_wall}
-            data={this.roomlight.data.bed_wall}
+            light={this.data.get_subdivision()["bed-wall"]}
             navigation={this.props.navigation}
             navigation_tab={navigation}
           />
@@ -72,12 +67,10 @@ export default class Roomlight_tab extends Component {
 
     this.tab_navigation.static_tabs.bed_side = (
       <Tab.Screen
-        name="Bed_side_light_tab"
+        name="BedSideLightTab"
         children={({navigation}) =>
           <Light_control
-            mqtt={this.mqtt}
-            topic={this.roomlight.topic.bed_side}
-            data={this.roomlight.data.bed_side}
+            light={this.data.get_subdivision()["bed-side"]}
             navigation={this.props.navigation}
             navigation_tab={navigation}
           />
@@ -95,7 +88,7 @@ export default class Roomlight_tab extends Component {
     }
 
     return (
-      <Tab.Navigator initialRouteName="Keyboard_light_tab" tabBarOptions={this.tab_navigation.options}>
+      <Tab.Navigator initialRouteName="KeyboardLightTab" tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.keyboard}
         {this.tab_navigation.static_tabs.bed_wall}
         {this.tab_navigation.static_tabs.bed_side}
