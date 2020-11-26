@@ -17,7 +17,7 @@ import Setting_control_tab from "../settings/Setting_control_tab.js"
 
 // Allgemein
 import STYLE from '../../res/style.js'
-import DB from '../../components/DB.js'
+import DB from '../../res/DB.js'
 
 export default class Home_control_screen extends Component  {
   constructor(props) {

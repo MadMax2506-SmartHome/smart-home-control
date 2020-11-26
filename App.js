@@ -4,7 +4,7 @@ import React, {Component} from 'react';
 import SplashScreen from 'react-native-splash-screen'
 
 // Navigation
-import Navigation from './pages/navigation/Navigation.js'
+import Navigation from './src/navigation/Navigation.js'
 
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 

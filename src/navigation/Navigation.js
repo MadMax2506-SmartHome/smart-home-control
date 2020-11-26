@@ -8,15 +8,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 const Stack = createStackNavigator();
 
 // Screens
-import Home_control_screen from '../home/Home_control_screen.js'
+import Home_control_screen from '../screens/home/Home_control_screen.js'
 
-import Smart_home_connect_screen from '../smarthome_control/Smart_home_connect_screen.js'
-import Smart_home_control_screen from '../smarthome_control/Smart_home_control_screen.js'
+import Smart_home_connect_screen from '../screens/smarthome_control/Smart_home_connect_screen.js'
+import Smart_home_control_screen from '../screens/smarthome_control/Smart_home_control_screen.js'
 
-import Nas_control_screen from '../nas_control/Nas_control_screen.js'
+import Nas_control_screen from '../screens/nas_control/Nas_control_screen.js'
 
 // Allgemein
-import STYLE from '../../data/config/style.js'
+import STYLE from '../res/style.js'
 
 export default class Navigation extends Component {
   constructor(props) {
