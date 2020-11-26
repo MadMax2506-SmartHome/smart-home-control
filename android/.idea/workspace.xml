@@ -28,9 +28,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c08ce09b-655e-4c63-aa54-ac4a1341d87a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/screens/smarthome_control/Smart_home_control_screen.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/screens/smarthome_control/Smart_home_control_screen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/navigation/Navigation.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/navigation/Navigation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/res/data/Storage.js" beforeDir="false" afterPath="$PROJECT_DIR$/../src/res/data/Storage.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
