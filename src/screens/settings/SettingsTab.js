@@ -8,10 +8,10 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 
-import Feature_tab from "./tabs/Feature_tab.js"
-import User_tab from "./tabs/User_tab.js"
-import Mqtt_tab from "./tabs/Mqtt_tab.js"
-import Nas_tab from "./tabs/Nas_tab.js"
+import FeatureTab from "./tabs/FeatureTab.js"
+import UserTab from "./tabs/UserTab.js"
+import MqttTab from "./tabs/MqttTab.js"
+import NasTab from "./tabs/NasTab.js"
 
 // Allgemein
 import STYLE from '../../res/style.js'
@@ -140,9 +140,9 @@ export default class SettingsScreen extends Component  {
 
     this.tab_navigation.static_tabs.feature = (
       <Tab.Screen
-        name="Feature_tab"
+        name="FeatureTab"
         children={({navigation}) =>
-          <Feature_tab
+          <FeatureTab
             navigation={this.props.navigation}
             navigation_tab={navigation}
             values={this.state.values.feature}
@@ -157,9 +157,9 @@ export default class SettingsScreen extends Component  {
 
     this.tab_navigation.static_tabs.user = (
       <Tab.Screen
-        name="User_tab"
+        name="UserTab"
         children={({navigation}) =>
-          <User_tab
+          <UserTab
             navigation={this.props.navigation}
             navigation_tab={navigation}
             values={this.state.values.user}
@@ -175,9 +175,9 @@ export default class SettingsScreen extends Component  {
 
     this.tab_navigation.dynamic_tabs.mqtt = (
       <Tab.Screen
-        name="Mqtt_tab"
+        name="MqttTab"
         children={({navigation}) =>
-          <Mqtt_tab
+          <MqttTab
             navigation={this.props.navigation}
             navigation_tab={navigation}
             values={this.state.values.mqtt}
@@ -193,9 +193,9 @@ export default class SettingsScreen extends Component  {
 
     this.tab_navigation.dynamic_tabs.nas = (
       <Tab.Screen
-        name="Nas_tab"
+        name="NasTab"
         children={({navigation}) =>
-          <Nas_tab
+          <NasTab
             navigation={this.props.navigation}
             navigation_tab={navigation}
             values={this.state.values.nas}
@@ -234,7 +234,7 @@ export default class SettingsScreen extends Component  {
 
     var {tab_visibility} = this.state
     return (
-      <Tab.Navigator initialRouteName="Feature_tab" tabBarOptions={this.tab_navigation.options}>
+      <Tab.Navigator initialRouteName="FeatureTab" tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.feature}
         {this.tab_navigation.static_tabs.user}
         {tab_visibility.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.mqtt : null}

@@ -12,8 +12,8 @@ import SplashScreen from 'react-native-splash-screen'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
-import Home_tab from "./tabs/Home_tab.js"
-import Setting_control_tab from "../settings/Setting_control_tab.js"
+import HomeTab from "./tabs/HomeTab.js"
+import SettingsTab from "../settings/SettingsTab.js"
 
 // Allgemein
 import STYLE from '../../res/style.js'
@@ -76,9 +76,9 @@ export default class Home_control_screen extends Component  {
 
     this.tab_navigation.static_tabs.home = (
       <Tab.Screen
-        name="Home_tab"
+        name="HomeTab"
         children={({navigation})=>
-          <Home_tab
+          <HomeTab
             db={this.db}
             navigation={this.props.navigation}
             navigation_tab={navigation}
@@ -129,7 +129,7 @@ export default class Home_control_screen extends Component  {
       <Tab.Screen
         name="Setting__tab"
         children={({navigation}) =>
-          <Setting_control_tab
+          <SettingsTab
             db={this.db}
             navigation={this.props.navigation}
             navigation_tab={navigation}
@@ -149,7 +149,7 @@ export default class Home_control_screen extends Component  {
     var {tab_visibility} = this.state
 
     return (
-      <Tab.Navigator initialRouteName={"Home_tab"} tabBarOptions={this.tab_navigation.options}>
+      <Tab.Navigator initialRouteName={"HomeTab"} tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.home}
         {tab_visibility.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.smart_home_control : null}
         {tab_visibility.is_nas_control_active ? this.tab_navigation.dynamic_tabs.nas_control : null}
