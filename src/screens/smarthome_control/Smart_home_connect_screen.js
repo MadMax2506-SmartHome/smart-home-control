@@ -38,13 +38,19 @@ export default class Smart_home_connect_tab extends Component  {
 
     this.mqtt = {
       uri: null,
-      connection: null,
+      connection: {
+        global: null,
+        roomlight: null,
+      },
       topic: {
         devices: "devices",
         roomlight: {
           conf: "",
           status: "",
-        }
+        },
+        room_thermometer: {
+          temperature: ""
+        },
       },
       qos: 0,
       retained: false,
@@ -93,8 +99,8 @@ export default class Smart_home_connect_tab extends Component  {
   }
 
   async abort_loading() {
-    if(this.mqtt.connection != null) {
-      this.mqtt.connection.disconnect();
+    if(this.mqtt.connection.global != null) {
+      this.mqtt.connection.global.disconnect();
     }
 
     this.reset_data();
@@ -102,13 +108,13 @@ export default class Smart_home_connect_tab extends Component  {
 
   init_global_brocker_connection() {
     let uri = this.db.get_mqtt_uri()
-    if(uri != this.mqtt.uri || this.mqtt.connection == null) {
+    if(uri != this.mqtt.uri || this.mqtt.connection.global == null) {
       this.mqtt.uri = uri
 
-      if(this.mqtt.connection != null) {
-        this.mqtt.connection.disconnect()
+      if(this.mqtt.connection.global != null) {
+        this.mqtt.connection.global.disconnect()
       }
-      this.mqtt.connection = new MQTT_AVAILABLE(this, this.mqtt.uri);
+      this.mqtt.connection.global = new MQTT_AVAILABLE(this, this.mqtt.uri);
 
       this.state.available.is_loading   = true
       this.state.available.is_true = false
@@ -129,8 +135,8 @@ export default class Smart_home_connect_tab extends Component  {
       this.state.available.is_loading  = true
       this.state.available.is_true     = false
 
-      this.mqtt.connection.disconnect()
-      this.mqtt.connection = delete this.mqtt.connection
+      this.mqtt.connection.global.disconnect()
+      this.mqtt.connection.global = delete this.mqtt.connection.global
     }
   }
 
@@ -143,12 +149,15 @@ export default class Smart_home_connect_tab extends Component  {
 
   check_device_info() {
     if(!this.are_all_devices_set() && !this.state.data.is_loaded) {
-      this.mqtt.connection = new MQTT_DATA(this, this.mqtt.uri, this.mqtt.qos, this.mqtt.retained);
+      var { mqtt } = this;
 
-      this.mqtt.connection.delete_device_listener();
-      this.mqtt.connection.set_device_listener(this.mqtt.topic.devices);
+      this.mqtt.connection.global           = new MQTT_DATA(this, mqtt.uri, mqtt.qos, mqtt.retained);
+      this.mqtt.connection.roomlight        = new MQTT_DATA(this, mqtt.uri, mqtt.qos, mqtt.retained);
 
-      this.mqtt.connection.publish(this.mqtt.topic.devices, "list-devices");
+      this.mqtt.connection.global.delete_device_listener();
+      this.mqtt.connection.global.set_device_listener(mqtt.topic.devices);
+
+      this.mqtt.connection.global.publish(mqtt.topic.devices, "list-devices");
     } else if(this.state.data.is_loaded) {
       this.check_roomlight_config_info();
     }
@@ -156,15 +165,25 @@ export default class Smart_home_connect_tab extends Component  {
 
   check_roomlight_config_info() {
     if(!this.state.data.is_loaded && this.state.data.is_loading) {
-      let device = this.devices[this.devices.names[0]]
+      var { mqtt }  = this;
+      let device    = this.devices[this.devices.names[0]]
 
       this.mqtt.topic.roomlight.conf   = device.topic.conf;
       this.mqtt.topic.roomlight.status = device.topic.status;
 
-      this.mqtt.connection.delete_global_status_listener();
-      this.mqtt.connection.set_global_status_listener(this.mqtt.topic.roomlight.status);
+      this.mqtt.connection.roomlight.delete_global_status_listener();
+      this.mqtt.connection.roomlight.set_global_status_listener(mqtt.topic.roomlight.status);
 
-      this.mqtt.connection.publish(this.mqtt.topic.roomlight.conf, "get-conf");
+      this.mqtt.connection.roomlight.publish(mqtt.topic.roomlight.conf, "get-conf");
+    }
+  }
+
+  check_room_thermometer_config_info() {
+    if(!this.state.data.is_loaded && this.state.data.is_loading) {
+      var { mqtt }  = this;
+      let device    = this.devices[this.devices.names[1]]
+
+      this.mqtt.topic.room_thermometer.temperature = device.topic.temperature;
     }
   }
 
@@ -178,6 +197,9 @@ export default class Smart_home_connect_tab extends Component  {
 
       // roomlight
       this.check_roomlight_config_info();
+
+      // room thermometer
+      this.check_room_thermometer_config_info()
     }
   }
 
@@ -192,32 +214,42 @@ export default class Smart_home_connect_tab extends Component  {
         data: data
       });
     } else {
-      // roomlight
+      var { data } = this;
+
       var place = "";
-      for(var i = 0; i < this.data.roomlight.static.lights.values.length; i++) {
-        if(config_data[this.data.roomlight.static.lights.indices[i]] != undefined) {
+      for(var i = 0; i < data.roomlight.static.lights.values.length; i++) {
+        if(config_data[data.roomlight.static.lights.indices[i]] != undefined) {
           place = i;
           break;
         }
       }
-      this.data.roomlight.dynamic[this.data.roomlight.static.lights.values[place]] = config_data[this.data.roomlight.static.lights.indices[place]];
+      this.data.roomlight.dynamic[data.roomlight.static.lights.values[place]] = config_data[data.roomlight.static.lights.indices[place]];
     }
   }
 
   loaded_data() {
     // filter mqtt
-    let {mqtt}  = this
-    this.mqtt   = mqtt.connection;
+    let { mqtt, devices }  = this
 
-    // filter devices
+    console.log(this.mqtt);
+    console.log(this.devices);
+    /*// filter devices
     let {devices} = this
     this.devices  = {}
 
     for(var i = 0; i < devices.names.length; i++) {
       this.devices[devices.names[i]] = devices[devices.names[i]]
+    }*/
+    mqtt_compact = {
+      connection: mqtt.connection,
+      data: {
+        uri: mqtt.uri,
+        topic: mqtt.topic,
+        qos: mqtt.qos
+      }
     }
 
-    this.props.navigation.navigate("Smart_home_control_screen", {mqtt: this.mqtt, devices: this.devices, data: this.data})
+    this.props.navigation.navigate("Smart_home_control_screen", {mqtt: mqtt_compact, devices: devices, data: this.data})
 
     // reset
     this.abort_loading();

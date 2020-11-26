@@ -76,9 +76,16 @@ export default class Smart_home_control_screen extends Component  {
   }
 
   set_room_thermometer_data(params) {
-    var room_thermometer = params.data.room_thermometer
-    console.log(room_thermometer);
-    this.room_thermometer = [];
+    var { mqtt, data }        = params
+    var { room_thermometer }  = data
+
+    this.room_thermometer = {
+      mqtt_data: {
+          uri: mqtt.data.uri,
+          topic: mqtt.data.topic.room_thermometer,
+          qos: mqtt.data.qos,
+      },
+    };
   }
 
   set_tab_navigation(params) {
@@ -98,7 +105,6 @@ export default class Smart_home_control_screen extends Component  {
         name="Room_thermometer_tab"
         children={({navigation})=>
           <Room_thermometer_tab
-            mqtt={this.mqtt}
             room_thermometer={this.room_thermometer}
             navigation={this.props.navigation}
             navigation_tab={navigation}
@@ -116,7 +122,7 @@ export default class Smart_home_control_screen extends Component  {
         name="Roomlight_tab"
         children={({navigation})=>
           <Roomlight_tab
-            mqtt={this.mqtt}
+            mqtt={this.mqtt.connection.roomlight}
             roomlight={this.roomlight}
             navigation={this.props.navigation}
             navigation_tab={navigation}
