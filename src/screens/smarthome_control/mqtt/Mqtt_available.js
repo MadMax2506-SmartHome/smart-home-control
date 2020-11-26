@@ -1,7 +1,7 @@
 // MQTT
 import MQTT from 'sp-react-native-mqtt';
 
-import Check_mqtt_server from '../../../components/check_mqtt_server.js'
+import Check_mqtt_server from '../../../res/check_mqtt_server.js'
 
 export default class Mqtt_available {
   constructor(_class, uri) {
