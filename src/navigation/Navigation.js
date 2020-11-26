@@ -49,8 +49,8 @@ export default class Navigation extends Component {
           <Stack.Screen
             name='FetchDataScreen'
             component={FetchDataScreen}
-            options={({navigation}) => {
-              header: () => null
+            options={{
+              headerShown: false
             }}
           />
 

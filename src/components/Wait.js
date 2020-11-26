@@ -11,7 +11,7 @@ export default class Wait extends Component {
   render() {
     return(
       <View style={StyleMain.containerCenter}>
-        <ActivityIndicator size={120} color={Color.blue} />
+        <ActivityIndicator size={120} color={Color.black} />
       </View>
     );
   }

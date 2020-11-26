@@ -4,7 +4,7 @@ import { View, Text } from 'react-native';
 // Allgemein
 import STYLE from '../../../res/style.js'
 
-export default class Home_tab extends Component  {
+export default class HomeTab extends Component  {
   constructor(props) {
     super(props);
   }

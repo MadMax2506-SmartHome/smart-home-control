@@ -2,8 +2,8 @@ import React, {Component} from 'react';
 import { View, ToastAndroid } from 'react-native';
 
 // MQTT
-import MQTT_AVAILABLE from './mqtt/Mqtt_available.js'
-import MQTT_DATA from './mqtt/Mqtt_data.js'
+import MQTT_AVAILABLE from '../../res/data/mqtt/Availability.js'
+import MQTT_DATA from '../../res/data/mqtt/Mqtt_data.js'
 
 // Allgemein
 import STYLE from '../../res/style.js'

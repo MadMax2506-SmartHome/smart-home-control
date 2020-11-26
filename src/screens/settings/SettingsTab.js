@@ -15,13 +15,13 @@ import NasTab from "./tabs/NasTab.js"
 
 // Allgemein
 import STYLE from '../../res/style.js'
-import TOAST from '../../components/toast.js'
+import TOAST from '../../components/Toast.js'
 
-export default class SettingsScreen extends Component  {
+export default class SettingsTab extends Component  {
   constructor(props) {
     super(props);
 
-    this.db = this.props.db;
+    this.data = this.props.data;
 
     this.tab_navigation = {
       options: null,
@@ -36,9 +36,14 @@ export default class SettingsScreen extends Component  {
       }
     }
 
+    var {feature, user, mqtt, nas} = this.data
     this.state = {
-      values: this.db.get_data(),
-      tab_visibility: this.props.get_tab_visibility()
+      values: {
+        feature: feature.get_data(),
+        user: user.get_data(),
+        mqtt: mqtt.get_data(),
+        nas: nas.get_data(),
+      },
     }
   }
 
@@ -58,45 +63,53 @@ export default class SettingsScreen extends Component  {
     });
   }
 
-  save_data() {
-    TOAST.notification("Daten werden gespeichert...");
-    let {feature, user, mqtt, nas} = this.state.values
+  async save_data() {
+    TOAST.notification("Daten werden gespeichert...", 200);
+    var {feature, user, mqtt, nas} = this.data;
 
     let is_valid = this.is_data_valid()
 
-    if(this.db.is_feature_data_empty()) {
-      this.db.insert_feature(feature)
-    } else {
-      this.db.update_feature(feature)
-    }
+    // features
+    var feature_values = this.state.values.feature;
+    await feature.set_data( feature_values.is_smart_home_control_active,
+                            feature_values.is_nas_control_active);
 
+    // user
     if(is_valid.user) {
-      if(this.db.is_user_data_empty()) {
-        this.db.insert_user(user)
-      } else {
-        this.db.update_user(user)
-      }
+      var user_values = this.state.values.user;
+      await user.set_data( user_values.first_name,
+                            user_values.surname);
     }
-    if(is_valid.mqtt) {
-      if(this.db.is_mqtt_data_empty()) {
-        this.db.insert_mqtt(mqtt)
-      } else {
-        this.db.update_mqtt(mqtt)
-      }
-    }
+
+    // nas
     if(is_valid.nas) {
-      if(this.db.is_nas_data_empty()) {
-        this.db.insert_nas(nas)
-      } else {
-        this.db.update_nas(nas)
+      var nas_values = this.state.values.nas;
+      await nas.set_data( nas_values.ipaddress,
+                          nas_values.macaddress,
+                          nas_values.username,
+                          nas_values.password);
+    }
+
+
+    // mqtt
+    if(is_valid.mqtt) {
+      var new_mqtt_values = this.state.values.mqtt;
+      var old_mqtt_values = mqtt.get_data();
+
+      if(new_mqtt_values.ipaddress != old_mqtt_values.ipaddress || new_mqtt_values.port != old_mqtt_values.port) {
+        await mqtt.set_data( new_mqtt_values.ipaddress,
+                              new_mqtt_values.port);
+
+        this.props.navigation.reset({
+          index: 0,
+          routes: [{ name: "FetchDataScreen", params: {} }],
+        });
       }
     }
 
-    TOAST.notification("Daten wurden gespeichert!");
-    this.props.set_tab_visibility(feature.is_smart_home_control_active ,feature.is_nas_control_active);
-    this.setState({
-      tab_visibility: this.props.get_tab_visibility()
-    });
+    this.setState({});
+    this.props.update_root();
+    TOAST.notification("Daten wurden gespeichert!", 200);
   }
 
   is_data_valid() {
@@ -228,17 +241,18 @@ export default class SettingsScreen extends Component  {
   }
 
   render() {
+    var { feature } = this.state.values;
+
     if(this.props.navigation_tab.isFocused()) {
       this.set_tab_navigation()
     }
 
-    var {tab_visibility} = this.state
     return (
       <Tab.Navigator initialRouteName="FeatureTab" tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.feature}
         {this.tab_navigation.static_tabs.user}
-        {tab_visibility.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.mqtt : null}
-        {tab_visibility.is_nas_control_active ? this.tab_navigation.dynamic_tabs.nas : null}
+        {feature.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.mqtt : null}
+        {feature.is_nas_control_active ? this.tab_navigation.dynamic_tabs.nas : null}
         {this.tab_navigation.static_tabs.save}
       </Tab.Navigator>
     );

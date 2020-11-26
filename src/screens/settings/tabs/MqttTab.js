@@ -4,7 +4,7 @@ import { View, Text, TextInput } from 'react-native';
 // Allgemein
 import STYLE from '../../../res/style.js'
 
-export default class Mqtt_tab extends Component  {
+export default class MqttTab extends Component  {
   constructor(props) {
     super(props);
 

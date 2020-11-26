@@ -5,9 +5,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
-// SplashScreen
-import SplashScreen from 'react-native-splash-screen'
-
 // Tab-Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
@@ -17,13 +14,13 @@ import SettingsTab from "../settings/SettingsTab.js"
 
 // Allgemein
 import STYLE from '../../res/style.js'
-import DB from '../../res/DB.js'
 
-export default class Home_control_screen extends Component  {
+export default class HomeScreen extends Component  {
   constructor(props) {
     super(props);
 
-    this.db = new DB(this);
+    const {params}  = this.props.route;
+    this.data       = params.data
 
     this.tab_navigation = {
       options: null,
@@ -37,32 +34,7 @@ export default class Home_control_screen extends Component  {
       }
     }
 
-    this.state = {
-      tab_visibility: {
-        is_smart_home_control_active: false,
-        is_nas_control_active: false,
-      }
-    }
-
     this.set_tab_navigation()
-  }
-
-  set_data_from_sqlite(category, data) {
-    this.db.set_data(category, data);
-  }
-
-  set_tab_visibility(is_smart_home_control_active, is_nas_control_active) {
-    let {tab_visibility} = this.state
-    tab_visibility.is_smart_home_control_active = is_smart_home_control_active
-    tab_visibility.is_nas_control_active        = is_nas_control_active
-
-    this.setState({
-      tab_visibility: tab_visibility,
-    });
-  }
-
-  get_tab_visibility() {
-    return this.state.tab_visibility;
   }
 
   set_tab_navigation() {
@@ -79,7 +51,6 @@ export default class Home_control_screen extends Component  {
         name="HomeTab"
         children={({navigation})=>
           <HomeTab
-            db={this.db}
             navigation={this.props.navigation}
             navigation_tab={navigation}
           />
@@ -102,7 +73,7 @@ export default class Home_control_screen extends Component  {
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            this.props.navigation.navigate("Smart_home_connect_screen", {db: this.db})
+            this.props.navigation.navigate("Smart_home_connect_screen", {data: this.data})
           }
         }}
       />
@@ -119,7 +90,7 @@ export default class Home_control_screen extends Component  {
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            this.props.navigation.navigate("Nas_control_screen", {db: this.db})
+            this.props.navigation.navigate("Nas_control_screen", {data: this.data})
           }
         }}
       />
@@ -130,11 +101,10 @@ export default class Home_control_screen extends Component  {
         name="Setting__tab"
         children={({navigation}) =>
           <SettingsTab
-            db={this.db}
+            data={this.data}
             navigation={this.props.navigation}
             navigation_tab={navigation}
-            set_tab_visibility={(is_smart_home_control_active, is_nas_control_active) => this.set_tab_visibility(is_smart_home_control_active, is_nas_control_active)}
-            get_tab_visibility={() => this.get_tab_visibility()}
+            update_root={() => this.setState({})}
           />
         }
         options={{
@@ -146,26 +116,18 @@ export default class Home_control_screen extends Component  {
   }
 
   render() {
-    var {tab_visibility} = this.state
+    var { feature, mqtt } = this.data;
+    
+    var is_smart_home_tab_visible   = mqtt.is_available() && feature.get_data()["is_smart_home_control_active"];
+    var is_nas_control_tab_visible  = feature.get_data()["is_nas_control_active"];
 
     return (
       <Tab.Navigator initialRouteName={"HomeTab"} tabBarOptions={this.tab_navigation.options}>
         {this.tab_navigation.static_tabs.home}
-        {tab_visibility.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.smart_home_control : null}
-        {tab_visibility.is_nas_control_active ? this.tab_navigation.dynamic_tabs.nas_control : null}
+        {is_smart_home_tab_visible ? this.tab_navigation.dynamic_tabs.smart_home_control : null}
+        {is_nas_control_tab_visible ? this.tab_navigation.dynamic_tabs.nas_control : null}
         {this.tab_navigation.static_tabs.setting}
       </Tab.Navigator>
     );
-  }
-
-  async UNSAFE_componentWillMount() {
-    const wait = 1000
-    while(this.db.is_data_load() == false) {
-      await new Promise((resolve) => setTimeout(() => { resolve('result') }, wait));
-    }
-
-    this.set_tab_visibility(this.db.get_is_smart_home_control_active(), this.db.get_is_nas_control_active())
-
-    SplashScreen.hide();
   }
 };

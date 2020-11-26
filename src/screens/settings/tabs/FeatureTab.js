@@ -4,7 +4,7 @@ import { StyleSheet, View, Text, Switch } from 'react-native';
 // Allgemein
 import STYLE from '../../../res/style.js'
 
-export default class Feature_tab extends Component  {
+export default class FeatureTab extends Component  {
   constructor(props) {
     super(props);
 
