@@ -5,7 +5,6 @@ import Listener from './listener/roomlight_subdivision_listener.js'
 export default class RoomlightSubdivision extends MqttConnection {
   constructor(_class, uri, topic) {
     super(_class, uri, topic);
-    console.log("--");
     Listener.roomlight_subdivision( this, this.get_client(), this.topic, this.qos);
   }
 

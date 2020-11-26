@@ -73,7 +73,7 @@ export default class HomeScreen extends Component  {
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            this.props.navigation.navigate("Smart_home_connect_screen", {data: this.data})
+            this.props.navigation.navigate("SmartHomeScreen", {data: this.data})
           }
         }}
       />
@@ -117,7 +117,7 @@ export default class HomeScreen extends Component  {
 
   render() {
     var { feature, mqtt } = this.data;
-    
+
     var is_smart_home_tab_visible   = mqtt.is_available() && feature.get_data()["is_smart_home_control_active"];
     var is_nas_control_tab_visible  = feature.get_data()["is_nas_control_active"];
 

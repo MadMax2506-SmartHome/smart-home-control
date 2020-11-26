@@ -29,6 +29,8 @@ class DeviceClient {
 export class TemperatureClient extends DeviceClient {
   #connection;
 
+  #update_function;
+
   #humidity;
   #temperature;
 
@@ -52,6 +54,19 @@ export class TemperatureClient extends DeviceClient {
     this.#temperature = temperature;
   }
 
+  refresh(temperature, humidity) {
+    this.set_temperature(temperature);
+    this.set_humidity(humidity);
+
+    if(this.#update_function != null) {
+      this.#update_function();
+    }
+  }
+
+  register_update_function(update_function) {
+    this.#update_function = update_function;
+  }
+
 // getter
   get_humidity() {
     return this.#humidity;
@@ -72,7 +87,11 @@ export class RoomlightClient extends DeviceClient {
 
     this.#uri         = uri;
     this.#connection  = new Roomlight(this, uri, topic);
-    this.#subdivision = {};
+    this.#subdivision = {
+      "bed-side": null,
+      "keyboard": null,
+      "bed-wall": null
+    };
   }
 
   disconnect() {
@@ -92,12 +111,18 @@ export class RoomlightClient extends DeviceClient {
   }
 
   set_subdivision(subdivision) {
-    var name  = Object.keys(subdivision)[0].replace("-", "/");
+    var name  = Object.keys(subdivision)[0];
+    var names = Object.keys(this.#subdivision)
+
+    if(!names.includes(name)) {
+      return;
+    }
+
     var data  = subdivision[name];
     var topic = Object.assign({}, this._topic);
 
-    topic["conf"]   += "/" + name;
-    topic["status"] += "/" + name;
+    topic["conf"]   += "/" + name.replace("-", "/");
+    topic["status"] += "/" + name.replace("-", "/");
 
     this.#subdivision[name] = new RoomlightSubdivisionClient( this.#uri,
                                                               topic,

@@ -12,8 +12,7 @@ import FetchDataScreen from '../screens/FetchDataScreen.js'
 
 import HomeScreen from '../screens/home/HomeScreen.js'
 
-import Smart_home_connect_screen from '../screens/smarthome_control/Smart_home_connect_screen.js'
-import Smart_home_control_screen from '../screens/smarthome_control/Smart_home_control_screen.js'
+import SmartHomeScreen from '../screens/smarthome_control/SmartHomeScreen.js'
 
 import NasScreen from '../screens/nas_control/NasScreen.js'
 
@@ -61,13 +60,8 @@ export default class Navigation extends Component {
           />
 
           <Stack.Screen
-            name='Smart_home_connect_screen'
-            component={Smart_home_connect_screen}
-            options={({navigation}) => header_smart_home}
-          />
-          <Stack.Screen
-            name='Smart_home_control_screen'
-            component={Smart_home_control_screen}
+            name='SmartHomeScreen'
+            component={SmartHomeScreen}
             options={({navigation}) => header_smart_home}
           />
 

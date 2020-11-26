@@ -14,7 +14,6 @@ export default class Temperature extends MqttConnection {
   }
 
   set_temperature(temperature) {
-    this._class.set_humidity(temperature["humidity"]);
-    this._class.set_temperature(temperature["temperature"]);
+    this._class.refresh(temperature["temperature"], temperature["humidity"]);
   }
 }

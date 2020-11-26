@@ -23,7 +23,6 @@ export default class Roomlight extends MqttConnection {
   stop_subdivision() {}
 
   add_subdivision(subdivision_config_info) {
-    console.log(subdivision_config_info);
     this._class.set_subdivision(subdivision_config_info);
   }
 }

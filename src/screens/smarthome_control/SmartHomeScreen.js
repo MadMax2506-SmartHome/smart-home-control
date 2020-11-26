@@ -9,89 +9,34 @@ import FontAwesome5Icons from 'react-native-vector-icons/FontAwesome5';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
-import Roomlight_tab from "./roomlight/Roomlight_tab.js"
-import Room_thermometer_tab from "./room_thermometer/Room_thermometer_tab.js"
+import RoomlightTab from "./roomlight/RoomlightTab.js"
+import RoomThermometerTab from "./RoomThermometerTab.js"
 
 // Allgemein
 import STYLE from '../../res/style.js'
 
-export default class Smart_home_control_screen extends Component  {
+export default class SmartHomeScreen extends Component  {
   constructor(props) {
     super(props);
 
     const {params} = this.props.route;
-
-    this.devices  = params.devices
-    this.mqtt     = params.mqtt
+    this.data = params.data;
 
     this.tab_navigation = {
       options: null,
       static_tabs: {
-        roomlight: null,
-        room_thermometer: null,
         exit: null,
       },
+      dynamic_tabs: {
+        room_thermometer: null,
+        roomlight: null,
+      }
     }
 
     this.set_tab_navigation(params);
   }
 
-  set_roomlight_data(params) {
-    var roomlight = params.data.roomlight
-
-    var global_topic = {
-      status: this.devices.roomlight.topic.status,
-      conf: this.devices.roomlight.topic.conf,
-    }
-
-    this.roomlight  = {
-      data: {
-        keyboard: null,
-        bed_wall: null,
-        bed_side: null,
-      },
-      topic: {
-        global: global_topic,
-        keyboard: null,
-        bed_wall: null,
-        bed_side: null,
-      },
-    }
-
-    var light_names = roomlight.static.lights.values
-    for(var light_name of light_names) {
-      var light_data = {
-        dynamic: roomlight.dynamic[light_name],
-        static:  roomlight.static,
-      }
-
-      var light_topic = {
-        status: global_topic.status + roomlight.static.lights.topics[light_name],
-        conf: global_topic.conf + roomlight.static.lights.topics[light_name],
-      }
-
-      this.roomlight.data[light_name]   = light_data
-      this.roomlight.topic[light_name]  = light_topic
-    }
-  }
-
-  set_room_thermometer_data(params) {
-    var { mqtt, data }        = params
-    var { room_thermometer }  = data
-
-    this.room_thermometer = {
-      mqtt_data: {
-          uri: mqtt.data.uri,
-          topic: mqtt.data.topic.room_thermometer,
-          qos: mqtt.data.qos,
-      },
-    };
-  }
-
   set_tab_navigation(params) {
-    this.set_roomlight_data(params);
-    this.set_room_thermometer_data(params);
-
     this.tab_navigation.options = {
       showLabel: true,
       labelPosition: 'below-icon',
@@ -100,12 +45,12 @@ export default class Smart_home_control_screen extends Component  {
       style: {height: 60},
     }
 
-    this.tab_navigation.static_tabs.room_thermometer = (
+    this.tab_navigation.dynamic_tabs.room_thermometer = (
       <Tab.Screen
-        name="Room_thermometer_tab"
+        name="RoomThermometerTab"
         children={({navigation})=>
-          <Room_thermometer_tab
-            room_thermometer={this.room_thermometer}
+          <RoomThermometerTab
+            data={this.data}
             navigation={this.props.navigation}
             navigation_tab={navigation}
           />
@@ -117,13 +62,12 @@ export default class Smart_home_control_screen extends Component  {
       />
     );
 
-    this.tab_navigation.static_tabs.roomlight = (
+    this.tab_navigation.dynamic_tabs.roomlight = (
       <Tab.Screen
-        name="Roomlight_tab"
+        name="RoomlightTab"
         children={({navigation})=>
-          <Roomlight_tab
-            mqtt={this.mqtt.connection.roomlight}
-            roomlight={this.roomlight}
+          <RoomlightTab
+            data={this.data}
             navigation={this.props.navigation}
             navigation_tab={navigation}
           />
@@ -146,7 +90,7 @@ export default class Smart_home_control_screen extends Component  {
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            this.props.navigation.navigate("Home_control_screen")
+            this.props.navigation.navigate("HomeScreen")
           }
         }}
       />
@@ -154,10 +98,12 @@ export default class Smart_home_control_screen extends Component  {
   }
 
   render() {
+    var {mqtt} = this.data;
+
     return (
       <Tab.Navigator initialRouteName="Room_thermometer_tab" tabBarOptions={this.tab_navigation.options}>
-        {this.tab_navigation.static_tabs.room_thermometer}
-        {this.tab_navigation.static_tabs.roomlight}
+        {mqtt.get_room_thermometer_device() == null ? null : this.tab_navigation.dynamic_tabs.room_thermometer}
+        {mqtt.get_roomlight_device() == null ? null : this.tab_navigation.dynamic_tabs.roomlight}
         {this.tab_navigation.static_tabs.exit}
       </Tab.Navigator>
     );

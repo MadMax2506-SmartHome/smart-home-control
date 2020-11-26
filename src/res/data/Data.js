@@ -75,7 +75,10 @@ export class Mqtt {
       port: await Storage.get_int_entry("port"),
     }
 
-    this.#device_clients = {};
+    this.#device_clients = {
+      roomlight: null,
+      room_thermometer: null,
+    };
   }
 
   async set_data(ipaddress, port) {
@@ -118,6 +121,16 @@ export class Mqtt {
     return copy;
   }
 
+  get_roomlight_device() {
+    var devices = this.get_devices();
+    return devices.roomlight;
+  }
+
+  get_room_thermometer_device() {
+    var devices = this.get_devices();
+    return devices.room_thermometer;
+  }
+
 // mqtt
   async init_devices() {
     var uri = this.get_uri();
@@ -146,8 +159,10 @@ export class Mqtt {
     var keys    = Object.keys(this.#device_clients);
     var length  = keys.length;
     for(var i = 0; i < length; i++) {
-      this.#device_clients[keys[i]].disconnect();
-      this.#device_clients[keys[i]] = null;
+      if(this.#device_clients[keys[i]] != null) {
+        this.#device_clients[keys[i]].disconnect();
+        this.#device_clients[keys[i]] = null;
+      }
     }
   }
 
