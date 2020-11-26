@@ -5,7 +5,7 @@ import { Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 
-import MQTT_TEMPERATURE from '../../../res/data/mqtt/Mqtt_temperature.js'
+//import MQTT_TEMPERATURE from '../../../res/data/mqtt/Mqtt_temperature.js'
 
 // Global
 import STYLE from '../../../res/style.js'

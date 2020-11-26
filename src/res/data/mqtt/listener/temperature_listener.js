@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 module.exports = {
-  create(_class, mqttClient, channel, qos) {
+  temperature(_class, mqttClient, channel, qos) {
     if (!mqttClient) {
       return;
     }
@@ -16,6 +16,7 @@ module.exports = {
       qos: qos,
       _class: _class,
     });
+
     mqttClient.then((client) => {
       this.client = client;
       client.on('closed', this.onClosed);
@@ -43,7 +44,12 @@ module.exports = {
     var topic = msg.topic;
     var data  = msg.data;
 
-    let temperature_data = JSON.parse(data);
-    this.config._class.set_temperature_data(temperature_data);
+    if(data == "list-devices") {
+      ;
+    } else {
+      let device_info = JSON.parse(data);
+
+      this.config._class.set_device_client(device_info);
+    }
   },
 };

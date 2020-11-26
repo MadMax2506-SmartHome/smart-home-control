@@ -1,23 +1,16 @@
 // MQTT
-import MQTT from 'sp-react-native-mqtt';
-
+import MqttConnection from "./MqttConnection.js";
 import Listener from './listener/availability_listener.js'
 
-export default class Availability {
+export default class Availability extends MqttConnection {
   constructor(_class, uri) {
-    this._class = _class;
-    Listener.check(this, this.getClient(uri));
+    super(_class, uri);
+
+    Listener.check(this, this.get_client(uri));
   }
 
   disconnect() {
     Listener.disconnect()
-  }
-
-  getClient(uri) {
-    return MQTT.createClient({
-      uri: uri,
-      clientId: "SmartHomeApp_" + (((1+Math.random())*0x1000000)|0).toString(16).substring(1),
-    });
   }
 
   set_mqtt_brocker_to_available() {

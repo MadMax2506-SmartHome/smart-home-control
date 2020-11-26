@@ -4,7 +4,7 @@ import {View} from 'react-native';
 // SplashScreen
 import SplashScreen from 'react-native-splash-screen'
 
-import { Feature, User, Mqtt, Device, Nas } from "../res/data/Data.js"
+import { Feature, User, Mqtt, Nas } from "../res/data/Data.js"
 import Wait from "../components/Wait.js"
 import TOAST from '../components/Toast.js'
 
@@ -36,19 +36,11 @@ export default class FetchDataScreen extends Component  {
     );
   }
 
-  async UNSAFE_componentWillMount() {
-    // load data
-    await this.load_data();
-
-    // set timeout
-    await new Promise((resolve) => setTimeout(() => { resolve('result') }, TIMEOUT_MS));
-
-    // hide splash screen
-    SplashScreen.hide();
-
-    // load data from mqtt server
+  async load_mqtt() {
+    // check if mqtt brocker is available
     this.mqtt.init_devices();
 
+    // wait for the check -> with timeout
     const time_start = new Date();
     while(this.mqtt.has_check_mqtt_brocker() == false) {
       const time_now    = new Date();
@@ -62,9 +54,27 @@ export default class FetchDataScreen extends Component  {
     }
 
     if(this.mqtt.has_check_mqtt_brocker() && this.mqtt.is_available()) {
-      TOAST.notification("Der MQTT-Brocker konnte erreicht werden!");
+      while(this.mqtt.has_data_loaded() == false) {
+        await new Promise((resolve) => setTimeout(() => { resolve('result') }, TIMEOUT_MS));
+      }
     } else {
-      TOAST.notification("Timeout! \nDer MQTT-Brocker konnte nicht erreicht werden!");
+      TOAST.notification("Timeout! \nDer MQTT-Brocker wurde nicht erreicht.");
+    }
+  }
+
+  async UNSAFE_componentWillMount() {
+    // load data
+    await this.load_data();
+
+    // set timeout
+    await new Promise((resolve) => setTimeout(() => { resolve('result') }, TIMEOUT_MS));
+
+    // hide splash screen
+    SplashScreen.hide();
+
+    // load data from mqtt server
+    if(this.feature.get_data()["is_smart_home_control_active"]) {
+      await this.load_mqtt();
     }
 
     // go to home

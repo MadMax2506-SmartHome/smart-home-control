@@ -1,6 +1,6 @@
 import * as Storage from "./Storage.js"
 import Availability from "./mqtt/Availability.js"
-//import Availability as Mqtt_Availability from "./mqtt/Availability.js"
+import Devices from "./mqtt/Devices.js"
 
 export class Feature {
   #data;
@@ -49,21 +49,30 @@ export class User {
 }
 
 export class Mqtt {
+  #availability_client;
+  #device_client;
+
   #check_mqtt_brocker;
   #is_available;
+  #data_is_loaded;
+
   #data;
+  #device_clients;
 
   constructor() {
     this.#check_mqtt_brocker = false;
     this.#is_available       = false;
+    this.#data_is_loaded     = false;
   }
 
+// data
   async load_data() {
     this.#data = {
       ipaddress: await Storage.get_str_entry("ipaddress"),
       port: await Storage.get_int_entry("port"),
-      devices: [],
     }
+
+    this.#device_clients = [];
   }
 
   async set_data(ipaddress, port) {
@@ -78,12 +87,17 @@ export class Mqtt {
     return copy;
   }
 
+// getter
   has_check_mqtt_brocker() {
     return this.#check_mqtt_brocker;
   }
 
   is_available() {
     return this.#is_available;
+  }
+
+  has_data_loaded() {
+    return this.#data_is_loaded;
   }
 
   get_uri() {
@@ -96,6 +110,11 @@ export class Mqtt {
     }
   }
 
+  get_devices() {
+    return this.#device_clients.slice(0)
+  }
+
+// mqtt
   async init_devices() {
     var uri = this.get_uri();
 
@@ -105,23 +124,56 @@ export class Mqtt {
     }
 
     // general
-    new Availability( this, uri );
+    this.disconnect();
+    this.#availability_client = new Availability( this, uri );
   }
 
-  // methods which called by the mqtt client
-  set_mqtt_brocker_to_available() {
-    this.#check_mqtt_brocker = true;
-    this.#is_available       = true;
+  disconnect() {
+    if(this.#availability_client) {
+      this.availability_client.disconnect();
+      this.#availability_client = null;
+    }
 
-    console.log("available");
+    if(this.#device_client) {
+      this.device_client.disconnect();
+      this.#device_client = null;
+    }
+  }
+
+// methods which called by the mqtt client
+  async set_mqtt_brocker_to_available() {
+    this.#check_mqtt_brocker  = true;
+    this.#is_available        = true;
+
+    this.#device_client = new Devices( this, this.get_uri() );
+
+    await new Promise((resolve) => setTimeout(() => { resolve('result') }, 5000));
+    this.#data_is_loaded = true;
+  }
+
+  add_device_client(device_info) {
+    var device_client = new DeviceClient( device_info["name"],
+                                          device_info["topic"],
+                                          device_info["mac-address"],);
+    this.#device_clients.push( device_client );
   }
 }
 
-export class Device {
-  #data;
+class DeviceClient {
+  #connection;
 
-  constructor() {
-    this.#data = {}
+  #name;
+  #topic;
+  #macaddress;
+
+  constructor(name, topic, macaddress) {
+    this.#name        = name;
+    this.#topic       = topic;
+    this.#macaddress  = macaddress;
+  }
+
+  get_name() {
+    return this.#name;
   }
 }
 
