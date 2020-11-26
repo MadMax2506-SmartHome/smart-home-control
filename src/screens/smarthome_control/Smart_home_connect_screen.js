@@ -41,8 +41,10 @@ export default class Smart_home_connect_tab extends Component  {
       connection: null,
       topic: {
         devices: "devices",
-        conf: "",
-        status: "",
+        roomlight: {
+          conf: "",
+          status: "",
+        }
       },
       qos: 0,
       retained: false,
@@ -50,7 +52,6 @@ export default class Smart_home_connect_tab extends Component  {
 
     this.devices = {
       count: 0,
-      index: 0,
       names: ["roomlight", "room_thermometer"],
       roomlight: [],
       room_thermometer: [],
@@ -149,21 +150,21 @@ export default class Smart_home_connect_tab extends Component  {
 
       this.mqtt.connection.publish(this.mqtt.topic.devices, "list-devices");
     } else if(this.state.data.is_loaded) {
-      this.check_config_info();
+      this.check_roomlight_config_info();
     }
   }
 
-  check_config_info() {
+  check_roomlight_config_info() {
     if(!this.state.data.is_loaded && this.state.data.is_loading) {
-      let device = this.devices[this.devices.names[this.devices.index]]
+      let device = this.devices[this.devices.names[0]]
 
-      this.mqtt.topic.conf   = device.topic.conf;
-      this.mqtt.topic.status = device.topic.status;
+      this.mqtt.topic.roomlight.conf   = device.topic.conf;
+      this.mqtt.topic.roomlight.status = device.topic.status;
 
       this.mqtt.connection.delete_global_status_listener();
-      this.mqtt.connection.set_global_status_listener(this.mqtt.topic.status);
+      this.mqtt.connection.set_global_status_listener(this.mqtt.topic.roomlight.status);
 
-      this.mqtt.connection.publish(this.mqtt.topic.conf, "get-conf");
+      this.mqtt.connection.publish(this.mqtt.topic.roomlight.conf, "get-conf");
     }
   }
 
@@ -174,37 +175,32 @@ export default class Smart_home_connect_tab extends Component  {
 
     if(this.are_all_devices_set()) {
       this.state.data.is_loading = true;
-      this.check_config_info();
+
+      // roomlight
+      this.check_roomlight_config_info();
     }
   }
 
   // called by mqtt listener
-  set_config_info(config_data) {
+  set_roomlight_config_info(config_data) {
     if(config_data == "end") {
-      if(this.devices.index < (this.devices.count - 1)) {
-        this.devices.index++
-        this.check_config_info()
-      } else {
-        let { data } = this.state
-        data.is_loading = false
-        data.is_loaded = true
+      let { data } = this.state
+      data.is_loading = false
+      data.is_loaded = true
 
-        this.setState({
-          data: data
-        });
-      }
+      this.setState({
+        data: data
+      });
     } else {
-      let device_name = this.devices.names[this.devices.index]
-      if(device_name == "roomlight") {
-        var place = "";
-        for(var i = 0; i < this.data.roomlight.static.lights.values.length; i++) {
-          if(config_data[this.data.roomlight.static.lights.indices[i]] != undefined) {
-            place = i;
-            break;
-          }
+      // roomlight
+      var place = "";
+      for(var i = 0; i < this.data.roomlight.static.lights.values.length; i++) {
+        if(config_data[this.data.roomlight.static.lights.indices[i]] != undefined) {
+          place = i;
+          break;
         }
-        this.data.roomlight.dynamic[this.data.roomlight.static.lights.values[place]] = config_data[this.data.roomlight.static.lights.indices[place]];
       }
+      this.data.roomlight.dynamic[this.data.roomlight.static.lights.values[place]] = config_data[this.data.roomlight.static.lights.indices[place]];
     }
   }
 

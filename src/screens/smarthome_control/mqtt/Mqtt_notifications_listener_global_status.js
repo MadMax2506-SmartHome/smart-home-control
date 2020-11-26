@@ -45,11 +45,11 @@ module.exports = {
 
     if(data.length < 20) {
       if(data == "end") {
-          this.config._class.set_config_info(data);
+          this.config._class.set_roomlight_config_info(data);
       }
     } else {
       let config_data = JSON.parse(data);
-      this.config._class.set_config_info(config_data);
+      this.config._class.set_roomlight_config_info(config_data);
     }
   },
 };

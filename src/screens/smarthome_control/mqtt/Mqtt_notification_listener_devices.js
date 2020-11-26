@@ -48,9 +48,11 @@ module.exports = {
       ;
     } else {
       let device_info = JSON.parse(data);
-
+      
       if(device_info.name == "roomlight") {
-        this.config._class.set_device_info("roomlight", device_info);
+        this.config._class.set_device_info(device_info.name, device_info);
+      } else if(device_info.name == "room_thermometer") {
+        this.config._class.set_device_info(device_info.name, device_info);
       }
     }
   },

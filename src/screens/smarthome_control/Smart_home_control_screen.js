@@ -3,12 +3,14 @@ import { Text, View } from "react-native"
 // Icons
 import FoundationIcons from 'react-native-vector-icons/Foundation';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import FontAwesome5Icons from 'react-native-vector-icons/FontAwesome5';
 
 // Tab Navigation
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
 import Roomlight_tab from "./roomlight/Roomlight_tab.js"
+import Room_thermometer_tab from "./room_thermometer/Room_thermometer_tab.js"
 
 // Allgemein
 import STYLE from '../../res/style.js'
@@ -26,6 +28,7 @@ export default class Smart_home_control_screen extends Component  {
       options: null,
       static_tabs: {
         roomlight: null,
+        room_thermometer: null,
         exit: null,
       },
     }
@@ -72,8 +75,15 @@ export default class Smart_home_control_screen extends Component  {
     }
   }
 
+  set_room_thermometer_data(params) {
+    var room_thermometer = params.data.room_thermometer
+    console.log(room_thermometer);
+    this.room_thermometer = [];
+  }
+
   set_tab_navigation(params) {
     this.set_roomlight_data(params);
+    this.set_room_thermometer_data(params);
 
     this.tab_navigation.options = {
       showLabel: true,
@@ -82,6 +92,24 @@ export default class Smart_home_control_screen extends Component  {
       activeTintColor : {backgroundColor: "black"},
       style: {height: 60},
     }
+
+    this.tab_navigation.static_tabs.room_thermometer = (
+      <Tab.Screen
+        name="Room_thermometer_tab"
+        children={({navigation})=>
+          <Room_thermometer_tab
+            mqtt={this.mqtt}
+            room_thermometer={this.room_thermometer}
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+          />
+        }
+        options={() => ({
+          tabBarLabel: "Temperatur",
+          tabBarIcon: props => (<FontAwesome5Icons name="temperature-high" size={30} color={props.color}/>)
+        })}
+      />
+    );
 
     this.tab_navigation.static_tabs.roomlight = (
       <Tab.Screen
@@ -121,7 +149,8 @@ export default class Smart_home_control_screen extends Component  {
 
   render() {
     return (
-      <Tab.Navigator initialRouteName="Roomlight_tab" tabBarOptions={this.tab_navigation.options}>
+      <Tab.Navigator initialRouteName="Room_thermometer_tab" tabBarOptions={this.tab_navigation.options}>
+        {this.tab_navigation.static_tabs.room_thermometer}
         {this.tab_navigation.static_tabs.roomlight}
         {this.tab_navigation.static_tabs.exit}
       </Tab.Navigator>

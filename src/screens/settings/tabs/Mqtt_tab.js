@@ -24,7 +24,6 @@ export default class Mqtt_tab extends Component  {
           <View style={this.style.inputContent}>
             <TextInput
               style={this.style.input}
-              keyboardType="number-pad"
               placeholder="192.168.178.1"
               onChangeText={(value) => {
                 this.props.onChangeText("mqtt", "ipaddress", value)
