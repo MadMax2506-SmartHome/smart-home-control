@@ -6,14 +6,15 @@ export default class Temperature extends MqttConnection {
   constructor(_class, uri, topic) {
     super(_class, uri, topic);
 
-    Listener.get_devices( this, this.get_client() , this.topic, this.qos);
+    Listener.temperature( this, this.get_client(), this.topic, this.qos);
   }
 
   disconnect() {
     Listener.disconnect();
   }
 
-  delete_temperature_listener() {
-    Listener.disconnect();
+  set_temperature(temperature) {
+    this._class.set_humidity(temperature["humidity"]);
+    this._class.set_temperature(temperature["temperature"]);
   }
 }

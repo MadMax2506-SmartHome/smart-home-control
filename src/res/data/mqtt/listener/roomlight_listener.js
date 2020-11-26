@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 module.exports = {
-  temperature(_class, mqttClient, channel, qos) {
+  roomlight(_class, mqttClient, channel, qos) {
     if (!mqttClient) {
       return;
     }
@@ -44,7 +44,15 @@ module.exports = {
     var topic = msg.topic;
     var data  = msg.data;
 
-    let temperature = JSON.parse(data);
-    this.config._class.set_temperature(temperature);
+    if(data == "start") {
+      this.config._class.start_subdivision();
+    } else if(data == "end") {
+      this.config._class.stop_subdivision();
+    } else if(data == "power-on") {} else {
+      try {
+        let subdivision = JSON.parse(data);
+        this.config._class.add_subdivision(subdivision);
+      } catch (e) {}
+    }
   },
 };

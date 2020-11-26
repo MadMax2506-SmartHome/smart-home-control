@@ -1,7 +1,7 @@
 import _ from 'underscore';
 
 module.exports = {
-  temperature(_class, mqttClient, channel, qos) {
+  roomlight_subdivision(_class, mqttClient, channel, qos) {
     if (!mqttClient) {
       return;
     }
@@ -44,7 +44,6 @@ module.exports = {
     var topic = msg.topic;
     var data  = msg.data;
 
-    let temperature = JSON.parse(data);
-    this.config._class.set_temperature(temperature);
+    this.config._class.set_new_config(data);
   },
 };

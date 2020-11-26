@@ -1,6 +1,9 @@
-import * as Storage from "./Storage.js"
-import Availability from "./mqtt/Availability.js"
-import Devices from "./mqtt/Devices.js"
+import * as Storage from "./Storage.js";
+
+import { TemperatureClient, RoomlightClient } from "./DeviceClient.js"
+
+import Availability from "./mqtt/Availability.js";
+import Devices from "./mqtt/Devices.js";
 
 export class Feature {
   #data;
@@ -72,7 +75,7 @@ export class Mqtt {
       port: await Storage.get_int_entry("port"),
     }
 
-    this.#device_clients = [];
+    this.#device_clients = {};
   }
 
   async set_data(ipaddress, port) {
@@ -111,7 +114,8 @@ export class Mqtt {
   }
 
   get_devices() {
-    return this.#device_clients.slice(0)
+    var copy = Object.assign({}, this.#device_clients)
+    return copy;
   }
 
 // mqtt
@@ -138,6 +142,13 @@ export class Mqtt {
       this.device_client.disconnect();
       this.#device_client = null;
     }
+
+    var keys    = Object.keys(this.#device_clients);
+    var length  = keys.length;
+    for(var i = 0; i < length; i++) {
+      this.#device_clients[keys[i]].disconnect();
+      this.#device_clients[keys[i]] = null;
+    }
   }
 
 // methods which called by the mqtt client
@@ -152,28 +163,20 @@ export class Mqtt {
   }
 
   add_device_client(device_info) {
-    var device_client = new DeviceClient( device_info["name"],
-                                          device_info["topic"],
-                                          device_info["mac-address"],);
-    this.#device_clients.push( device_client );
-  }
-}
+    if(device_info["name"] == "roomlight") {
+      var device_client = new RoomlightClient( this.get_uri(),
+                                                  device_info["name"],
+                                                  device_info["topic"],
+                                                  device_info["mac-address"],);
+      this.#device_clients["roomlight"] = device_client;
 
-class DeviceClient {
-  #connection;
-
-  #name;
-  #topic;
-  #macaddress;
-
-  constructor(name, topic, macaddress) {
-    this.#name        = name;
-    this.#topic       = topic;
-    this.#macaddress  = macaddress;
-  }
-
-  get_name() {
-    return this.#name;
+    } else if(device_info["name"] == "room_thermometer") {
+      var device_client = new TemperatureClient( this.get_uri(),
+                                                  device_info["name"],
+                                                  device_info["topic"],
+                                                  device_info["mac-address"],);
+      this.#device_clients["room_thermometer"] = device_client;
+    }
   }
 }
 
