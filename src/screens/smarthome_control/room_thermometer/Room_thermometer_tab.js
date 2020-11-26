@@ -42,7 +42,7 @@ export default class Room_thermometer_tab extends Component {
       <View>
         <View>
           <Text>
-            Raum Thermometer
+            Raum-Thermometer
           </Text>
         </View>
 
