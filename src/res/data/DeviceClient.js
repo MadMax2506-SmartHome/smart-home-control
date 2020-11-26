@@ -161,7 +161,7 @@ class RoomlightSubdivisionClient {
   }
 
   publish(msg) {
-    this.#connection.publish(this.topic.conf, msg);
+    this.#connection.publish(this.#topic["conf"], msg);
   }
 
   disconnect() {
@@ -214,5 +214,18 @@ class RoomlightSubdivisionClient {
 
   get_type() {
     return this.#type;
+  }
+
+// other
+  restart_animation() {
+    this.publish("restart-animation")
+  }
+
+  reload_conf() {
+    this.publish("reload-conf")
+  }
+
+  save_conf() {
+    this.publish("save-conf")
   }
 }
