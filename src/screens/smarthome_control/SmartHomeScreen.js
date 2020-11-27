@@ -24,9 +24,6 @@ export default class SmartHomeScreen extends Component  {
 
     this.tab_navigation = {
       options: null,
-      static_tabs: {
-        exit: null,
-      },
       dynamic_tabs: {
         room_thermometer: null,
         roomlight: null,
@@ -78,23 +75,6 @@ export default class SmartHomeScreen extends Component  {
         })}
       />
     );
-
-    this.tab_navigation.static_tabs.exit = (
-      <Tab.Screen
-        name="Exit_tab"
-        children={({navigation})=> null}
-        options={() => ({
-          tabBarLabel: "Verlassen",
-          tabBarIcon: props => (<MaterialIcons name="exit-to-app" size={30} color={props.color}/>)
-        })}
-        listeners={{
-          tabPress: (e) => {
-            e.preventDefault();
-            this.props.navigation.navigate("HomeScreen")
-          }
-        }}
-      />
-    );
   }
 
   render() {
@@ -104,7 +84,6 @@ export default class SmartHomeScreen extends Component  {
       <Tab.Navigator initialRouteName="Room_thermometer_tab" tabBarOptions={this.tab_navigation.options}>
         {mqtt.get_room_thermometer_device() == null ? null : this.tab_navigation.dynamic_tabs.room_thermometer}
         {mqtt.get_roomlight_device() == null ? null : this.tab_navigation.dynamic_tabs.roomlight}
-        {this.tab_navigation.static_tabs.exit}
       </Tab.Navigator>
     );
   }
