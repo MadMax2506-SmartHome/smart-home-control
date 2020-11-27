@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 
 // Allgemein
-import Value_slider from '../../../../components/slider/Value_slider.js';
+import ValueSlider from '../../../../components/slider/ValueSlider.js';
 
-export default class Animation_time extends Component  {
+export default class AnimationTime extends Component  {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,7 +20,7 @@ export default class Animation_time extends Component  {
         </View>
         <View style={style.main}>
           <View style={style.input}>
-            <Value_slider value={this.state.time} sliderColor="black" onChange={(time) => this.setState({time: time})}/>
+            <ValueSlider value={this.state.time} sliderColor="black" onChange={(time) => this.setState({time: time})}/>
           </View>
           <View style={style.controlPanel}>
             <View style={style.saveBtn}>

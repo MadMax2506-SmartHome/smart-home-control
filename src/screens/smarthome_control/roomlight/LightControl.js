@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import { StyleSheet, ScrollView, View, Button } from 'react-native';
 
 import Status from './control_elements/Status.js';
-import ColorContent from './control_elements/Color_content.js';
+import ColorContent from './control_elements/ColorContent.js';
 import Orientation from './control_elements/Orientation.js'
-import AnimationType from './control_elements/Animation_type.js';
-import AnimationTime from './control_elements/Animation_time.js';
+import AnimationType from './control_elements/AnimationType.js';
+import AnimationTime from './control_elements/AnimationTime.js';
 
 import STYLE from '../../../res/style.js'
 
-export default class Light extends Component {
+export default class LightControl extends Component {
   constructor(props) {
     super(props);
 

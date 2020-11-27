@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 // Allgemein
-import Item_picker from '../../../../components/Item_picker.js'
+import ItemPicker from '../../../../components/ItemPicker.js'
 
 export default class Orientation extends Component  {
   constructor(props) {
@@ -24,7 +24,7 @@ export default class Orientation extends Component  {
           </Text>
         </View>
         <View style={style.main}>
-          <Item_picker labels={this.state.labels} values={this.state.values} selectedValue={this.state.selectedValue} onChange={(orientation) => this.props.onChange(orientation)}/>
+          <ItemPicker labels={this.state.labels} values={this.state.values} selectedValue={this.state.selectedValue} onChange={(orientation) => this.props.onChange(orientation)}/>
         </View>
       </View>
     );

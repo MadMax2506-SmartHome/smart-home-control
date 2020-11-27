@@ -5,7 +5,7 @@ import { Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 
-import Light_control from "./Light_control.js"
+import LightControl from "./LightControl.js"
 
 // Global
 import STYLE from '../../../res/style.js'
@@ -37,7 +37,7 @@ export default class Roomlight_tab extends Component {
       <Tab.Screen
         name="KeyboardLightTab"
         children={({navigation}) =>
-          <Light_control
+          <LightControl
             light={this.data.get_subdivision()["keyboard"]}
             navigation={this.props.navigation}
             navigation_tab={navigation}
@@ -53,7 +53,7 @@ export default class Roomlight_tab extends Component {
       <Tab.Screen
         name="BedWallLightTab"
         children={({navigation}) =>
-          <Light_control
+          <LightControl
             light={this.data.get_subdivision()["bed-wall"]}
             navigation={this.props.navigation}
             navigation_tab={navigation}
@@ -69,7 +69,7 @@ export default class Roomlight_tab extends Component {
       <Tab.Screen
         name="BedSideLightTab"
         children={({navigation}) =>
-          <Light_control
+          <LightControl
             light={this.data.get_subdivision()["bed-side"]}
             navigation={this.props.navigation}
             navigation_tab={navigation}
@@ -88,7 +88,10 @@ export default class Roomlight_tab extends Component {
     }
 
     return (
-      <Tab.Navigator initialRouteName="KeyboardLightTab" tabBarOptions={this.tab_navigation.options}>
+      <Tab.Navigator
+        initialRouteName="KeyboardLightTab"
+        tabBarOptions={this.tab_navigation.options}
+      >
         {this.tab_navigation.static_tabs.keyboard}
         {this.tab_navigation.static_tabs.bed_wall}
         {this.tab_navigation.static_tabs.bed_side}

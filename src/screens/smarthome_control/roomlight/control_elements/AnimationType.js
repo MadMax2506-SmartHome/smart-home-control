@@ -2,9 +2,9 @@ import React, {Component} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
 // Allgemein
-import Item_picker from '../../../../components/Item_picker.js'
+import ItemPicker from '../../../../components/ItemPicker.js'
 
-export default class Animation_type extends Component  {
+export default class AnimationType extends Component  {
   constructor(props) {
     super(props);
 
@@ -22,7 +22,7 @@ export default class Animation_type extends Component  {
           <Text>Animationstyp</Text>
         </View>
         <View style={style.main}>
-          <Item_picker labels={this.state.labels} values={this.state.values} selectedValue={this.state.selectedValue} onChange={(type) => this.props.onChange(type)}/>
+          <ItemPicker labels={this.state.labels} values={this.state.values} selectedValue={this.state.selectedValue} onChange={(type) => this.props.onChange(type)}/>
         </View>
       </View>
     );

@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, Button } from 'react-native';
 
 import Slider from '@react-native-community/slider';
 
-export default class Rgb_color_slider extends Component {
+export default class RgbColorSlider extends Component {
   constructor(props) {
     super(props);
 
