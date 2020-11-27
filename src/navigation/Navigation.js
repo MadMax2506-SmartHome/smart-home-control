@@ -56,19 +56,16 @@ export default class Navigation extends Component {
           <Stack.Screen
             name='HomeScreen'
             component={HomeScreen}
-            options={({navigation}) => header_smart_home}
           />
 
           <Stack.Screen
             name='SmartHomeScreen'
             component={SmartHomeScreen}
-            options={({navigation}) => header_smart_home}
           />
 
           <Stack.Screen
             name='NasScreen'
             component={NasScreen}
-            options={({navigation}) => header_nas}
           />
         </Stack.Navigator>
       </NavigationContainer>

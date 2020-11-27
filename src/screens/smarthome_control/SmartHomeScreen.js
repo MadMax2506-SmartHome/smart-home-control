@@ -9,6 +9,8 @@ import FontAwesome5Icons from 'react-native-vector-icons/FontAwesome5';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
+import NavHeader from "../../navigation//Header.js"
+
 import RoomlightTab from "./roomlight/RoomlightTab.js"
 import RoomThermometerTab from "./RoomThermometerTab.js"
 
@@ -31,6 +33,24 @@ export default class SmartHomeScreen extends Component  {
     }
 
     this.set_tab_navigation(params);
+  }
+
+  componentDidMount() {
+    this.setHeader();
+  }
+
+  setHeader() {
+    var { navigation }  = this.props;
+
+    navigation.setOptions({
+      header: (props) => (
+        <NavHeader
+          navigation={navigation}
+          screenName={props.scene.route.name}
+          back={() => this.props.navigation.navigate("HomeScreen")}
+        />
+      ),
+    });
   }
 
   set_tab_navigation(params) {

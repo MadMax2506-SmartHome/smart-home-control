@@ -9,6 +9,8 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
+import NavHeader from "../../navigation//Header.js"
+
 import HomeTab from "./tabs/HomeTab.js"
 import SettingsTab from "../settings/SettingsTab.js"
 
@@ -35,6 +37,23 @@ export default class HomeScreen extends Component  {
     }
 
     this.set_tab_navigation()
+  }
+
+  componentDidMount() {
+    this.setHeader();
+  }
+
+  setHeader() {
+    var { navigation }  = this.props;
+
+    navigation.setOptions({
+      header: (props) => (
+        <NavHeader
+          navigation={navigation}
+          screenName={props.scene.route.name}
+        />
+      ),
+    });
   }
 
   set_tab_navigation() {
