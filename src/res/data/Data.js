@@ -141,7 +141,6 @@ export class Mqtt {
     }
 
     // general
-    this.disconnect();
     this.#availability_client = new Availability( this, uri );
   }
 

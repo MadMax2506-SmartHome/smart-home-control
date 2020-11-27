@@ -15,6 +15,5 @@ export default class Availability extends MqttConnection {
 
   set_mqtt_brocker_to_available() {
     this._class.set_mqtt_brocker_to_available();
-    this.disconnect();
   }
 }
