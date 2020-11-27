@@ -20,16 +20,12 @@ export default class AnimationTime extends Component  {
         </View>
         <View style={style.main}>
           <View style={style.input}>
-            <ValueSlider value={this.state.time} sliderColor="black" onChange={(time) => this.setState({time: time})}/>
-          </View>
-          <View style={style.controlPanel}>
-            <View style={style.saveBtn}>
-              <Button
-                color="#000000"
-                title = "Übernehmen"
-                onPress={() => this.props.onChange(this.state.time)}
-              />
-            </View>
+            <ValueSlider
+              value={this.state.time}
+              sliderColor="black"
+              onComplete={() => this.props.onChange(this.state.time)}
+              onChange={(time) => this.setState({time: time})}
+            />
           </View>
         </View>
       </View>

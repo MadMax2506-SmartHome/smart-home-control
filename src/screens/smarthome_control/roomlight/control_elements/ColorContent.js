@@ -44,32 +44,41 @@ export default class ColorContent extends Component {
           </View>
 
           <View style={style.elem}>
-            <RgbColorSlider for="red" value={this.state.color_array.red} sliderColor="red" onChange={(sliderColor, value) => this.change_color(sliderColor, value)}/>
+            <RgbColorSlider
+              for="red"
+              value={this.state.color_array.red}
+              sliderColor="red"
+              onChange={(sliderColor, value) => this.change_color(sliderColor, value)}
+              onComplete={() => this.save_color()}
+            />
           </View>
           <View style={style.elem}>
-            <RgbColorSlider for="green" value={this.state.color_array.green} sliderColor="green" onChange={(sliderColor, value) => this.change_color(sliderColor, value)}/>
+            <RgbColorSlider
+              for="green"
+              value={this.state.color_array.green}
+              sliderColor="green"
+              onChange={(sliderColor, value) => this.change_color(sliderColor, value)}
+              onComplete={() => this.save_color()}
+            />
           </View>
           <View style={style.elem}>
-            <RgbColorSlider for="blue" value={this.state.color_array.blue} sliderColor="blue" onChange={(sliderColor, value) => this.change_color(sliderColor, value)}/>
-          </View>
-
-          <View style={style.controlPanel}>
-            <View style={style.saveBtn}>
-              <Button
-                title = "Übernehmen"
-                color = "black"
-                onPress={() => {
-                  if(this.state.color_is_change) {
-                    this.setState({color_is_change: false})
-                    this.props.onChange(this.state.color_array)
-                  }
-                }}
-              />
-            </View>
+            <RgbColorSlider
+              for="blue"
+              value={this.state.color_array.blue}
+              sliderColor="blue" onChange={(sliderColor, value) => this.change_color(sliderColor, value)}
+              onComplete={() => this.save_color()}
+            />
           </View>
         </View>
       </View>
     );
+  }
+
+  save_color() {
+    if(this.state.color_is_change) {
+      this.setState({color_is_change: false})
+      this.props.onChange(this.state.color_array)
+    }
   }
 }
 

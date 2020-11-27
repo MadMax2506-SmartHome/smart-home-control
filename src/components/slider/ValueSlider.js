@@ -26,6 +26,11 @@ export default class ValueSlider extends Component {
             thumbTintColor={this.props.sliderColor}
             minimumTrackTintColor={this.props.sliderColor}
             maximumTrackTintColor="#000000"
+            onSlidingComplete={() => {
+              if(this.props.onComplete != undefined) {
+                this.props.onComplete();
+              }
+            }}
             onValueChange={(value) =>{
               this.setState({currentValue: Math.round(value)});
               if(this.props.onChange != undefined) {
