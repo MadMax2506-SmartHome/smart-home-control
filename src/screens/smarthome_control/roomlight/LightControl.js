@@ -10,109 +10,155 @@ import AnimationTime from './control_elements/AnimationTime.js';
 import STYLE from '../../../res/style.js'
 
 export default class LightControl extends Component {
+  #light;
+
   constructor(props) {
     super(props);
 
-    this.light = this.props.light;
+    this.#light = this.props.light;
 
     this.state = {
-      status: this.light.get_status(),
-      color: this.light.get_color(),
+      status: this.#light.get_status(),
+      color: this.#light.get_color(),
+      orientation: this.#light.get_orientation(),
+      animationTyp: this.#light.get_type(),
+      animationTime: this.#light.get_time(),
+    }
+
+    this.form_data = {
       orientation: {
         labels: ["nach Links", "nach Rechts", "von der Mitte"],
         values: ["l", "r", "c"],
-        selected: this.light.get_orientation(),
       },
       animationTyp: {
         labels: ["Fade", "Rainbow", "to Color"],
         values: ["fade", "rainbow", "to_color"],
-        selected: "",
       },
-      animationTime: this.light.get_time(),
     }
   }
 
-  set_strip_status(status) {
-    this.light.set_status(status);
-    this.setState({
-      status: status,
-    });
-  }
+  get_filtered_data() {
+    var {form_data, state} = this;
+    var values = Object.assign({}, state)
 
-  set_color(color) {
-    this.light.set_color(color);
-    this.setState({
-      color: color,
-    });
-  }
+    var orientation_labels = form_data.orientation.labels.slice(0);
+    var orientation_values = form_data.orientation.values.slice(0);
+    if(values.animationTyp == "rainbow") {
+      orientation_labels.splice(2, 1)
+      orientation_values.splice(2, 1)
+    }
 
-  set_orientation(orientation_value) {
-    this.light.set_orientation(orientation_value);
+    var data = {
+      status: {
+        visible: true,
+        value: values.status,
+      },
+      color: {
+        visible: ( values.animationTyp != "rainbow" ),
+        value: values.color,
+      },
+      orientation: {
+        visible: true,
+        value: values.orientation,
+        labels: orientation_labels,
+        values: orientation_values,
+      },
+      animationTyp: {
+        visible: true,
+        value: values.animationTyp,
+        labels: form_data.animationTyp.labels,
+        values: form_data.animationTyp.values,
+      },
+      animationTime: {
+        visible: ( values.animationTyp != "to_color" ),
+        value: values.animationTime,
+      },
+    }
 
-    var {orientation} = this.state;
-    orientation.selected = orientation_value;
-    this.setState({
-      orientation: orientation,
-    });
-  }
-
-  set_animation_type(type_value) {
-    this.light.set_type(type_value);
-
-    var {animationTyp} = this.state;
-    animationTyp.selected = type_value;
-    this.setState({
-      animationTyp: animationTyp,
-    });
-  }
-
-  set_animation_time(time) {
-    this.light.set_time(time);
-    this.setState({
-      animationTime: time,
-    });
+    return data
   }
 
   render() {
-    return(
-      <ScrollView style={STYLE.SCREEN.main}>
-        <View>
+    var data = this.get_filtered_data();
+
+    // check the visibility of the elements
+    // status
+    var status = null;
+    if(data.status.visible) {
+      status = (
+        <View style={style.control_elem}>
           <Status
-            status={this.state.status}
+            status={data.status.value}
             onChange={(status) => this.set_strip_status(status)}
           />
-        </View>
+          </View>
+      );
+    }
 
+    // color
+    var color = null;
+    if(data.color.visible) {
+      color = (
         <View style={style.control_elem}>
           <ColorContent
-            colors={this.state.color}
+            colors={data.color.value}
             onChange={(color) => this.set_color(color)}
           />
-        </View>
+          </View>
+      );
+    }
 
+    // orientation
+    var orientation = null;
+    if(data.orientation.visible) {
+      orientation = (
         <View style={style.control_elem}>
           <Orientation
-            labels={this.state.orientation.labels}
-            values={this.state.orientation.values}
-            selectedValue={this.state.orientation.selected}
+            labels={data.orientation.labels}
+            values={data.orientation.values}
+            selectedValue={data.orientation.value}
             onChange={(orientation) => this.set_orientation(orientation)}
           />
         </View>
+      );
+    }
 
+    // animationTyp
+    var typ = null;
+    if(data.animationTyp.visible) {
+      typ = (
         <View style={style.control_elem}>
           <AnimationType
-            labels={this.state.animationTyp.labels}
-            values={this.state.animationTyp.values}
-            selectedValue={this.state.animationTyp}
+            labels={data.animationTyp.labels}
+            values={data.animationTyp.values}
+            selectedValue={data.animationTyp.value}
             onChange={(type) => this.set_animation_type(type)}
           />
         </View>
+      );
+    }
 
+    // animationTime
+    var time = null;
+    if(data.animationTime.visible) {
+      time = (
         <View style={style.control_elem}>
           <AnimationTime
-            time={this.state.animationTime}
+            time={data.animationTime.value}
             onChange={(time) => this.set_animation_time(time)}
           />
+        </View>
+      );
+    }
+
+    return(
+      <ScrollView style={STYLE.SCREEN.main}>
+        <View>
+          {status}
+          {color}
+          {orientation}
+          {typ}
+          {time}
         </View>
 
         <View style={style.controlPanel}>
@@ -120,26 +166,66 @@ export default class LightControl extends Component {
             <Button
               color="black"
               title="Animation neustarten"
-              onPress={() => this.light.restart_animation()}
+              onPress={() => this.#light.restart_animation()}
             />
           </View>
           <View style={style.btn}>
             <Button
               color="black"
               title="Konfiguration zurücksetzen"
-              onPress={() => this.light.reload_conf()}
+              onPress={() => this.#light.reload_conf()}
             />
           </View>
           <View style={style.btn}>
             <Button
               color="black"
               title="Konfiguration übernehmen"
-              onPress={() => this.light.save_conf()}
+              onPress={() => this.#light.save_conf()}
             />
           </View>
         </View>
       </ScrollView>
     );
+  }
+
+  set_strip_status(status) {
+    this.#light.set_status(status);
+
+    this.setState({
+      status: status,
+    });
+  }
+
+  set_color(color) {
+    this.#light.set_color(color);
+
+    this.setState({
+      color: color,
+    });
+  }
+
+  set_orientation(orientation) {
+    this.#light.set_orientation(orientation);
+
+    this.setState({
+      orientation: orientation,
+    });
+  }
+
+  set_animation_type(animationTyp) {
+    this.#light.set_type(animationTyp);
+
+    this.setState({
+      animationTyp: animationTyp,
+    });
+  }
+
+  set_animation_time(animationTime) {
+    this.#light.set_time(animationTime);
+
+    this.setState({
+      animationTime: animationTime,
+    });
   }
 }
 
