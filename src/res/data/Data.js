@@ -50,20 +50,20 @@ export class User {
 }
 
 export class Mqtt {
-  #availability_client;
-  #device_client;
+  #availability_listener;
+  #device_listener;
 
-  #check_mqtt_brocker;
+  #is_mqtt_brocker_is_already_checked;
   #is_available;
-  #data_is_loaded;
+  #is_data_loaded;
 
   #data;
   #device_clients;
 
   constructor() {
-    this.#check_mqtt_brocker = false;
-    this.#is_available       = false;
-    this.#data_is_loaded     = false;
+    this.#is_mqtt_brocker_is_already_checked  = false;
+    this.#is_available                        = false;
+    this.#is_data_loaded                      = false;
   }
 
 // data
@@ -73,6 +73,7 @@ export class Mqtt {
       port: await Storage.get_int_entry("port"),
     }
 
+    this.disconnect();
     this.#device_clients = {
       roomlight: null,
       room_thermometer: null,
@@ -92,16 +93,16 @@ export class Mqtt {
   }
 
 // getter
-  has_check_mqtt_brocker() {
-    return this.#check_mqtt_brocker;
+  get_if_mqtt_is_already_checked() {
+    return this.#is_mqtt_brocker_is_already_checked;
   }
 
-  is_available() {
+  get_if_mqtt_is_available() {
     return this.#is_available;
   }
 
-  has_data_loaded() {
-    return this.#data_is_loaded;
+  get_if_data_loaded() {
+    return this.#is_data_loaded;
   }
 
   get_uri() {
@@ -134,60 +135,62 @@ export class Mqtt {
     var uri = this.get_uri();
 
     if(uri == null) {
-      this.#check_mqtt_brocker = true;
+      this.#is_mqtt_brocker_is_already_checked = true;
       return;
     }
 
     // general
-    this.#availability_client = new Availability( this, uri );
+    this.#availability_listener = new Availability( this, uri );
   }
 
   disconnect() {
-    if(this.#availability_client) {
-      this.availability_client.disconnect();
-      this.#availability_client = null;
+    if(this.#availability_listener) {
+      this.#availability_listener.disconnect();
+      this.#availability_listener = null;
     }
 
-    if(this.#device_client) {
-      this.device_client.disconnect();
-      this.#device_client = null;
+    if(this.#device_listener) {
+      this.#device_listener.disconnect();
+      this.#device_listener = null;
     }
 
-    var keys    = Object.keys(this.#device_clients);
-    var length  = keys.length;
-    for(var i = 0; i < length; i++) {
-      if(this.#device_clients[keys[i]] != null) {
-        this.#device_clients[keys[i]].disconnect();
-        this.#device_clients[keys[i]] = null;
+    if(this.#device_clients) {
+      var keys    = Object.keys(this.#device_clients);
+      var length  = keys.length;
+      for(var i = 0; i < length; i++) {
+        if(this.#device_clients[keys[i]] != null) {
+          this.#device_clients[keys[i]].disconnect();
+          this.#device_clients[keys[i]] = null;
+        }
       }
     }
   }
 
 // methods which called by the mqtt client
   async set_mqtt_brocker_to_available() {
-    this.#check_mqtt_brocker  = true;
+    this.#is_mqtt_brocker_is_already_checked  = true;
     this.#is_available        = true;
 
-    this.#device_client = new Devices( this, this.get_uri() );
+    this.#availability_listener.disconnect();
+    this.#availability_listener = null;
 
-    await new Promise((resolve) => setTimeout(() => { resolve('result') }, 5000));
-    this.#data_is_loaded = true;
+    this.#device_listener = new Devices( this, this.get_uri() );
   }
 
   add_device_client(device_info) {
     if(device_info["name"] == "roomlight") {
-      var device_client = new RoomlightClient( this.get_uri(),
-                                                  device_info["name"],
-                                                  device_info["topic"],
-                                                  device_info["mac-address"],);
-      this.#device_clients["roomlight"] = device_client;
+      this.#device_clients["roomlight"] = new RoomlightClient( this.get_uri(),
+                                                                device_info["name"],
+                                                                device_info["topic"],
+                                                                device_info["mac-address"],);
 
     } else if(device_info["name"] == "room_thermometer") {
-      var device_client = new TemperatureClient( this.get_uri(),
-                                                  device_info["name"],
-                                                  device_info["topic"],
-                                                  device_info["mac-address"],);
-      this.#device_clients["room_thermometer"] = device_client;
+      this.#device_clients["room_thermometer"] = new TemperatureClient( this.get_uri(),
+                                                                        device_info["name"],
+                                                                        device_info["topic"],
+                                                                        device_info["mac-address"],);
     }
+    
+    this.#is_data_loaded = this.#device_clients["roomlight"] != null && this.#device_clients["room_thermometer"] != null;
   }
 }

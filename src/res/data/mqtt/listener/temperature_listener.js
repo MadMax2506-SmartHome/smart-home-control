@@ -29,7 +29,7 @@ module.exports = {
   },
   disconnect() {
     if(this.client) {
-      console.log('Now killing open mqtt notification manager.');
+      console.log('Now killing open temperature listener manager.');
       this.client.disconnect();
     }
   },

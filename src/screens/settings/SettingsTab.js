@@ -88,7 +88,7 @@ export default class SettingsTab extends Component  {
 
         this.props.navigation.reset({
           index: 0,
-          routes: [{ name: "FetchDataScreen", params: {} }],
+          routes: [{ name: "FetchDataScreen", params: { data: this.data } }],
         });
       }
     }

@@ -50,6 +50,12 @@ export default class HomeScreen extends Component  {
         <NavHeader
           navigation={navigation}
           screenName={props.scene.route.name}
+          refresh={() => {
+            this.props.navigation.reset({
+              index: 0,
+              routes: [{ name: "FetchDataScreen", params: { data: this.data } }],
+            });
+          }}
         />
       ),
     });
@@ -109,7 +115,7 @@ export default class HomeScreen extends Component  {
         }}
       />
     )
-    
+
     this.tab_navigation.static_tabs.setting = (
       <Tab.Screen
         name="SettingsTab"
@@ -138,7 +144,7 @@ export default class HomeScreen extends Component  {
   render() {
     var { feature, mqtt } = this.data;
 
-    var is_smart_home_tab_visible = mqtt.is_available() && feature.get_data()["is_smart_home_control_active"];
+    var is_smart_home_tab_visible = mqtt.get_if_mqtt_is_available() && feature.get_data()["is_smart_home_control_active"];
 
     return (
       <Tab.Navigator

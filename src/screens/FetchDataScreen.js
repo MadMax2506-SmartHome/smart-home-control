@@ -20,12 +20,22 @@ export default class FetchDataScreen extends Component  {
   constructor(props) {
     super(props);
 
-    this.feature  = new Feature();
-    this.user     = new User();
-    this.mqtt     = new Mqtt();
+    const {params} = this.props.route;
+
+    if(params == undefined || params.data == undefined) {
+      this.feature  = new Feature();
+      this.user     = new User();
+      this.mqtt     = new Mqtt();
+    } else {
+      var { data } = params;
+
+      this.feature  = data.feature;
+      this.user     = data.user;
+      this.mqtt     = data.mqtt;
+    }
   }
 
-  async load_data() {
+  async init_data() {
     await this.feature.load_data();
     await this.user.load_data();
     await this.mqtt.load_data();
@@ -39,45 +49,57 @@ export default class FetchDataScreen extends Component  {
     );
   }
 
-  async load_mqtt() {
+  async init_mqtt() {
     // check if mqtt brocker is available
     this.mqtt.init_devices();
 
     // wait for the check -> with timeout
     const time_start = new Date();
-    while(this.mqtt.has_check_mqtt_brocker() == false) {
-      const time_now    = new Date();
-      const time_spent  = Math.abs((time_now.getTime() - time_start.getTime()))
-
-      if(time_spent > MAX_SPENT_TIME_MS) {
+    while(this.mqtt.get_if_mqtt_is_already_checked() == false) {
+      if(this.time_out_error(time_start)) {
         break;
       } else {
         await new Promise((resolve) => setTimeout(() => { resolve('result') }, TIMEOUT_MS));
       }
     }
 
-    if(this.mqtt.has_check_mqtt_brocker() && this.mqtt.is_available()) {
-      while(this.mqtt.has_data_loaded() == false) {
-        await new Promise((resolve) => setTimeout(() => { resolve('result') }, TIMEOUT_MS));
+    // check if mqtt is available
+    if(this.mqtt.get_if_mqtt_is_already_checked() && this.mqtt.get_if_mqtt_is_available()) {
+      // mqtt is available
+
+      // wait for the loading of data -> with timeout
+      while(this.mqtt.get_if_data_loaded() == false) {
+        if(this.time_out_error(time_start)) {
+          break;
+        } else {
+          await new Promise((resolve) => setTimeout(() => { resolve('result') }, TIMEOUT_MS));
+        }
       }
     } else {
+      // mqtt is not available
+
+      // show message
       TOAST.notification(I18n.t("home.actions.error"));
     }
   }
 
+  time_out_error(time_start) {
+    const time_now    = new Date();
+    const time_spent  = Math.abs((time_now.getTime() - time_start.getTime()));
+
+    return time_spent > MAX_SPENT_TIME_MS;
+  }
+
   async UNSAFE_componentWillMount() {
     // load data
-    await this.load_data();
-
-    // set timeout
-    await new Promise((resolve) => setTimeout(() => { resolve('result') }, TIMEOUT_MS));
+    await this.init_data();
 
     // hide splash screen
     SplashScreen.hide();
 
     // load data from mqtt server
     if(this.feature.get_data()["is_smart_home_control_active"]) {
-      await this.load_mqtt();
+      await this.init_mqtt();
     }
 
     // go to home

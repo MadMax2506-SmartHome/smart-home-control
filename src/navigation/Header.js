@@ -29,7 +29,7 @@ export default class HeaderBack extends Component {
           >
             <FontAwesome
               name="arrow-left"
-              size={Font.size.normal_icon *1.6}
+              size={Font.size.normal_icon}
               color={Color.black}
             />
           </TouchableOpacity>
@@ -38,6 +38,29 @@ export default class HeaderBack extends Component {
     } else {
       return (
         <></>
+      );
+    }
+  }
+
+  getRefreshButtonElement() {
+    if(this.props.refresh == undefined) {
+      return (
+        <></>
+      );
+    } else {
+      return (
+        <View style={StyleButtonWrapper("100%")}>
+          <TouchableOpacity
+            style={StyleHeader.rightButton}
+            onPress={() => this.props.refresh()}
+          >
+            <FontAwesome
+              name="refresh"
+              size={Font.size.normal_icon}
+              color={Color.black}
+            />
+          </TouchableOpacity>
+        </View>
       );
     }
   }
@@ -58,7 +81,7 @@ export default class HeaderBack extends Component {
       case "HomeScreen":
         title       = this.getTitleElement(I18n.t("title"));
         leftButton  = this.getEmptyElement();
-        rightButton = this.getEmptyElement();
+        rightButton = this.getRefreshButtonElement();
         break;
       case "SmartDeviceScreen":
         title       = this.getTitleElement(I18n.t("title"));
