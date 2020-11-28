@@ -69,11 +69,11 @@ export class TemperatureClient extends DeviceClient {
 
 // getter
   get_humidity() {
-    return this.#humidity;
+    return this.#humidity == undefined ? "-" : this.#humidity;
   }
 
   get_temperature() {
-    return this.#temperature;
+    return this.#temperature == undefined ? "-" : this.#temperature;
   }
 }
 
