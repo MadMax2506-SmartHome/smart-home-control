@@ -60,7 +60,7 @@ export default class HeaderBack extends Component {
         leftButton  = this.getEmptyElement();
         rightButton = this.getEmptyElement();
         break;
-      case "SmartHomeScreen":
+      case "SmartDeviceScreen":
         title       = this.getTitleElement(I18n.t("title"));
         leftButton  = this.getBackButtonElement();
         rightButton = this.getEmptyElement();

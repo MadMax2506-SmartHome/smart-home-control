@@ -84,16 +84,16 @@ export default class HomeScreen extends Component  {
 
     this.tab_navigation.dynamic_tabs.smart_home_control = (
       <Tab.Screen
-        name="SmartHomeTab"
+        name="SmartDevicesTab"
         children={({navigation}) => null}
         options={() => ({
-          tabBarLabel: I18n.t('home.menu.mqtt'),
+          tabBarLabel: I18n.t('home.menu.smart_devices'),
           tabBarIcon: props => (<MaterialIcons name="settings-remote" size={30} color={props.color}/>)
         })}
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            this.props.navigation.navigate("SmartHomeScreen", {data: this.data})
+            this.props.navigation.navigate("SmartDeviceScreen", {data: this.data})
           }
         }}
       />

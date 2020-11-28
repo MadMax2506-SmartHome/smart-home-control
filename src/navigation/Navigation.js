@@ -10,7 +10,7 @@ const Stack = createStackNavigator();
 // Screens
 import FetchDataScreen from '../screens/FetchDataScreen.js'
 import HomeScreen from '../screens/home/HomeScreen.js'
-import SmartHomeScreen from '../screens/smarthome_control/SmartHomeScreen.js'
+import SmartDeviceScreen from '../screens/smart_devices/SmartDeviceScreen.js'
 
 export default class Navigation extends Component {
   constructor(props) {
@@ -40,8 +40,8 @@ export default class Navigation extends Component {
           />
 
           <Stack.Screen
-            name='SmartHomeScreen'
-            component={SmartHomeScreen}
+            name='SmartDeviceScreen'
+            component={SmartDeviceScreen}
           />
         </Stack.Navigator>
       </NavigationContainer>

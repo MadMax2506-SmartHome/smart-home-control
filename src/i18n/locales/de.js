@@ -12,7 +12,7 @@ export default {
 
     menu: {
       home: "Home",
-      mqtt: "Smart Home",
+      smart_devices: "Geräte",
       settings: "Einstellungen",
     },
 
