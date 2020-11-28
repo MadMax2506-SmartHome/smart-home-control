@@ -76,7 +76,13 @@ export default class HomeScreen extends Component  {
         }
         options={() => ({
           tabBarLabel: I18n.t('home.menu.home'),
-          tabBarIcon: props => (<Ionicons name="home" size={30} color={props.color}/>)
+          tabBarIcon: props => (
+            <Ionicons
+              name="home"
+              size={30}
+              color={props.color}
+            />
+          )
         })}
       />
     );
@@ -88,7 +94,11 @@ export default class HomeScreen extends Component  {
         options={() => ({
           tabBarLabel: I18n.t('home.menu.smart_devices'),
           tabBarIcon: props => (
-            <MaterialCommunityIcons name="devices" size={30} color={props.color}/>
+            <MaterialCommunityIcons
+              name="devices"
+              size={30}
+              color={props.color}
+            />
           )
         })}
         listeners={{
@@ -113,7 +123,13 @@ export default class HomeScreen extends Component  {
         }
         options={{
           tabBarLabel: I18n.t('home.menu.settings'),
-          tabBarIcon: props => (<Ionicons name="settings" size={30} color={props.color}/>)
+          tabBarIcon: props => (
+            <Ionicons
+              name="settings"
+              size={30}
+              color={props.color}
+            />
+          )
         }}
       />
     )

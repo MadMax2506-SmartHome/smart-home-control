@@ -76,7 +76,13 @@ export default class SmartHomeScreen extends Component  {
         }
         options={() => ({
           tabBarLabel: I18n.t("smart_home.menu.thermometer"),
-          tabBarIcon: props => (<FontAwesome5Icons name="temperature-high" size={30} color={props.color}/>)
+          tabBarIcon: props => (
+            <FontAwesome5Icons
+              name="temperature-high"
+              size={30}
+              color={props.color}
+            />
+          )
         })}
       />
     );
@@ -93,7 +99,13 @@ export default class SmartHomeScreen extends Component  {
         }
         options={() => ({
           tabBarLabel: I18n.t("smart_home.menu.light"),
-          tabBarIcon: props => (<FoundationIcons name="lightbulb" size={30} color={props.color}/>)
+          tabBarIcon: props => (
+            <FoundationIcons
+              name="lightbulb"
+              size={30}
+              color={props.color}
+            />
+          )
         })}
       />
     );
