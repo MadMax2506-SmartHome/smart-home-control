@@ -7,10 +7,15 @@ export default {
 
   home: {
     welcome: "Wilkommen in Ihrem Smart Home Client",
+
     menu: {
       home: "Home",
       mqtt: "Smart Home",
       settings: "Einstellungen",
+    },
+
+    actions: {
+      error: "Timeout! \nDer MQTT-Brocker wurde nicht erreicht",
     },
   },
 
@@ -19,6 +24,7 @@ export default {
       will_save: "Daten werden gespeichert...",
       has_save: "Daten wurden gespeichert!"
     },
+
     labels: {
       features: {
         smart_home: "Smart Home Steuerung"
@@ -32,6 +38,7 @@ export default {
         port: "Port",
       }
     },
+
     menu: {
       feature: "Features",
       user: "Benutzer",

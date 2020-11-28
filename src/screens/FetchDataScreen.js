@@ -4,10 +4,15 @@ import {View} from 'react-native';
 // SplashScreen
 import SplashScreen from 'react-native-splash-screen'
 
-import { Feature, User, Mqtt, Nas } from "../res/data/Data.js"
+// Other
+import { Feature, User, Mqtt } from "../res/data/Data.js"
 import Wait from "../components/Wait.js"
 import TOAST from '../components/Toast.js'
 
+//I18n
+import I18n from '../i18n/i18n.js';
+
+// define time
 const TIMEOUT_MS = 1000;
 const MAX_SPENT_TIME_MS = 5000;
 
@@ -56,7 +61,7 @@ export default class FetchDataScreen extends Component  {
         await new Promise((resolve) => setTimeout(() => { resolve('result') }, TIMEOUT_MS));
       }
     } else {
-      TOAST.notification("Timeout! \nDer MQTT-Brocker wurde nicht erreicht.");
+      TOAST.notification(I18n.t("home.actions.error"));
     }
   }
 
