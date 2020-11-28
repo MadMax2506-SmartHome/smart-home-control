@@ -11,7 +11,6 @@ const Tab = createMaterialTopTabNavigator();
 import FeatureTab from "./tabs/FeatureTab.js"
 import UserTab from "./tabs/UserTab.js"
 import MqttTab from "./tabs/MqttTab.js"
-import NasTab from "./tabs/NasTab.js"
 
 import TOAST from '../../components/Toast.js'
 
@@ -30,17 +29,15 @@ export default class SettingsTab extends Component  {
       },
       dynamic_tabs: {
         mqtt: null,
-        nas: null,
       }
     }
 
-    var {feature, user, mqtt, nas} = this.data
+    var {feature, user, mqtt} = this.data
     this.state = {
       values: {
         feature: feature.get_data(),
         user: user.get_data(),
         mqtt: mqtt.get_data(),
-        nas: nas.get_data(),
       },
     }
   }
@@ -63,7 +60,7 @@ export default class SettingsTab extends Component  {
 
   async save_data() {
     TOAST.notification("Daten werden gespeichert...", 200);
-    var {feature, user, mqtt, nas} = this.data;
+    var {feature, user, mqtt} = this.data;
 
     let is_valid = this.is_data_valid()
 
@@ -78,16 +75,6 @@ export default class SettingsTab extends Component  {
       await user.set_data( user_values.first_name,
                             user_values.surname);
     }
-
-    // nas
-    if(is_valid.nas) {
-      var nas_values = this.state.values.nas;
-      await nas.set_data( nas_values.ipaddress,
-                          nas_values.macaddress,
-                          nas_values.username,
-                          nas_values.password);
-    }
-
 
     // mqtt
     if(is_valid.mqtt) {
@@ -111,12 +98,11 @@ export default class SettingsTab extends Component  {
   }
 
   is_data_valid() {
-    var { user, mqtt, nas } = this.state.values
+    var { user, mqtt } = this.state.values
 
     var is_valid = {
       user: true,
       mqtt: true,
-      nas: true
     }
 
     // user
@@ -129,14 +115,6 @@ export default class SettingsTab extends Component  {
     if((mqtt.port == null || mqtt.port.length < 1 || mqtt.port.length > 4)
       || (mqtt.ipaddress == null || mqtt.ipaddress.length < 7 || mqtt.ipaddress.length > 15)) {
         is_valid.mqtt = false
-    }
-
-    // nas
-    if((nas.ipaddress == null || nas.ipaddress.length < 7 || nas.ipaddress.length > 15)
-      || (nas.macaddress == null || nas.macaddress.length != 12)
-      || (nas.username == null)
-      || (nas.password == null)) {
-        is_valid.nas = false
     }
 
     return is_valid;
@@ -200,23 +178,6 @@ export default class SettingsTab extends Component  {
       />
     );
 
-    this.tab_navigation.dynamic_tabs.nas = (
-      <Tab.Screen
-        name="NasTab"
-        children={({navigation}) =>
-          <NasTab
-            navigation={this.props.navigation}
-            navigation_tab={navigation}
-            values={this.state.values.nas}
-            onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}
-          />
-        }
-        options={{
-          tabBarLabel: (props) => (<Text style={this.get_style(props.color)}>NAS</Text>)
-        }}
-      />
-    );
-
     this.tab_navigation.static_tabs.save = (
       <Tab.Screen
         name="Save_tab"
@@ -247,7 +208,6 @@ export default class SettingsTab extends Component  {
         {this.tab_navigation.static_tabs.feature}
         {this.tab_navigation.static_tabs.user}
         {feature.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.mqtt : null}
-        {feature.is_nas_control_active ? this.tab_navigation.dynamic_tabs.nas : null}
         {this.tab_navigation.static_tabs.save}
       </Tab.Navigator>
     );

@@ -11,13 +11,11 @@ export class Feature {
   async load_data() {
     this.#data = {
       is_smart_home_control_active: await Storage.get_bool_entry("is_smart_home_control_active"),
-      is_nas_control_active: await Storage.get_bool_entry("is_nas_control_active"),
     }
   }
 
   async set_data(is_smart_home_control_active, is_nas_control_active) {
     await Storage.set_entry("is_smart_home_control_active", is_smart_home_control_active);
-    await Storage.set_entry("is_nas_control_active", is_nas_control_active);
 
     await this.load_data();
   }
@@ -191,32 +189,5 @@ export class Mqtt {
                                                   device_info["mac-address"],);
       this.#device_clients["room_thermometer"] = device_client;
     }
-  }
-}
-
-export class Nas {
-  #data;
-
-  async load_data() {
-    this.#data = {
-      ipaddress: await Storage.get_str_entry("ipaddress"),
-      macaddress: await Storage.get_str_entry("macaddress"),
-      username: await Storage.get_str_entry("username"),
-      password: await Storage.get_str_entry("password"),
-    }
-  }
-
-  async set_data(ipaddress, macaddress, username, password) {
-    await Storage.set_entry("ipaddress", ipaddress);
-    await Storage.set_entry("macaddress", macaddress);
-    await Storage.set_entry("username", username);
-    await Storage.set_entry("password", password);
-
-    await this.load_data();
-  }
-
-  get_data() {
-    var copy = Object.assign({}, this.#data)
-    return copy;
   }
 }

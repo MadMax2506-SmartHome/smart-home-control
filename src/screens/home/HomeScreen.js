@@ -33,7 +33,6 @@ export default class HomeScreen extends Component  {
       },
       dynamic_tabs: {
         smart_home_control: null,
-        nas_control: null,
       }
     }
 
@@ -99,23 +98,6 @@ export default class HomeScreen extends Component  {
       />
     )
 
-    this.tab_navigation.dynamic_tabs.nas_control = (
-      <Tab.Screen
-        name="NasTab"
-        children={({navigation}) => null}
-        options={{
-          tabBarLabel: I18n.t('home.menu.nas'),
-          tabBarIcon: props => (<MaterialCommunityIcons name="nas" size={30} color={props.color}/>)
-        }}
-        listeners={{
-          tabPress: (e) => {
-            e.preventDefault();
-            this.props.navigation.navigate("NasScreen", {data: this.data})
-          }
-        }}
-      />
-    )
-
     this.tab_navigation.static_tabs.setting = (
       <Tab.Screen
         name="SettingsTab"
@@ -138,8 +120,7 @@ export default class HomeScreen extends Component  {
   render() {
     var { feature, mqtt } = this.data;
 
-    var is_smart_home_tab_visible   = mqtt.is_available() && feature.get_data()["is_smart_home_control_active"];
-    var is_nas_control_tab_visible  = feature.get_data()["is_nas_control_active"];
+    var is_smart_home_tab_visible = mqtt.is_available() && feature.get_data()["is_smart_home_control_active"];
 
     return (
       <Tab.Navigator
@@ -148,7 +129,6 @@ export default class HomeScreen extends Component  {
       >
         {this.tab_navigation.static_tabs.home}
         {is_smart_home_tab_visible ? this.tab_navigation.dynamic_tabs.smart_home_control : null}
-        {is_nas_control_tab_visible ? this.tab_navigation.dynamic_tabs.nas_control : null}
         {this.tab_navigation.static_tabs.setting}
       </Tab.Navigator>
     );

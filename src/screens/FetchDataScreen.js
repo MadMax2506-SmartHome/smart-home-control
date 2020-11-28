@@ -18,14 +18,12 @@ export default class FetchDataScreen extends Component  {
     this.feature  = new Feature();
     this.user     = new User();
     this.mqtt     = new Mqtt();
-    this.nas      = new Nas();
   }
 
   async load_data() {
     await this.feature.load_data();
     await this.user.load_data();
     await this.mqtt.load_data();
-    await this.nas.load_data();
   }
 
   render() {
@@ -82,7 +80,6 @@ export default class FetchDataScreen extends Component  {
       feature: this.feature,
       user: this.user,
       mqtt: this.mqtt,
-      nas: this.nas
     };
     this.props.navigation.navigate("HomeScreen", { data: data })
   }
