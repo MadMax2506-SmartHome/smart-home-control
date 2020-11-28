@@ -109,7 +109,7 @@ export default class HomeScreen extends Component  {
         }}
       />
     )
-
+    
     this.tab_navigation.static_tabs.setting = (
       <Tab.Screen
         name="SettingsTab"
