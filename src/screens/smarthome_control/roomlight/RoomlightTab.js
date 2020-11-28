@@ -5,9 +5,13 @@ import { Text, View } from 'react-native';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 
+// LightControl
 import LightControl from "./LightControl.js"
 
-export default class Roomlight_tab extends Component {
+//I18n
+import I18n from '../../../i18n/i18n.js';
+
+export default class RoomlightTab extends Component {
   constructor(props) {
     super(props);
 
@@ -41,7 +45,7 @@ export default class Roomlight_tab extends Component {
           />
         }
         options={{
-          tabBarLabel: "Tastatur"
+          tabBarLabel: I18n.t("smart_home.light.typs.keyboard")
         }}
       />
     );
@@ -57,7 +61,7 @@ export default class Roomlight_tab extends Component {
           />
         }
         options={{
-          tabBarLabel: "Wand"
+          tabBarLabel: I18n.t("smart_home.light.typs.bed_wall")
         }}
       />
     );
@@ -73,7 +77,7 @@ export default class Roomlight_tab extends Component {
           />
         }
         options={{
-          tabBarLabel: "seitlich"
+          tabBarLabel: I18n.t("smart_home.light.typs.bed_side")
         }}
       />
     );

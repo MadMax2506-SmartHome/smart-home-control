@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { View, Text, Button } from 'react-native';
 
+// Style
 import { StyleText } from '../../../../res/style/style.js'
 import { StyleInput, StyleGroup } from '../../../../res/style/input.js'
 
+// Component
 import RgbColorSlider from '../../../../components/slider/RgbColorSlider.js';
+
+//I18n
+import I18n from '../../../../i18n/i18n.js';
 
 export default class ColorContent extends Component {
   constructor(props) {
@@ -39,7 +44,7 @@ export default class ColorContent extends Component {
       <View>
         <View style={StyleGroup.header}>
           <Text style={StyleText()}>
-            Streifenfarbe
+            {I18n.t("smart_home.light.control.color")}
           </Text>
         </View>
         <View style={StyleGroup.main}>
@@ -58,6 +63,7 @@ export default class ColorContent extends Component {
               onComplete={() => this.save_color()}
             />
           </View>
+
           <View style={StyleInput.elem}>
             <RgbColorSlider
               for="green"
@@ -67,6 +73,7 @@ export default class ColorContent extends Component {
               onComplete={() => this.save_color()}
             />
           </View>
+
           <View style={StyleInput.elem}>
             <RgbColorSlider
               for="blue"
@@ -75,6 +82,7 @@ export default class ColorContent extends Component {
               onComplete={() => this.save_color()}
             />
           </View>
+
         </View>
       </View>
     );

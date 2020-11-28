@@ -44,5 +44,46 @@ export default {
       user: "Benutzer",
       mqtt: "MQTT Brocker"
     }
-  }
+  },
+
+  smart_home: {
+    menu: {
+      thermometer: "Thermometer",
+      light: "Beleuchtung",
+    },
+
+    thermometer: {
+      room: "Raumthermometer",
+
+      labels: {
+        temperature: "Temperatur",
+        humidity: "Luftfeuchtigkeit",
+      },
+
+      units: {
+        temperature: "° Celsius",
+        humidity: "%",
+      }
+    },
+
+    light: {
+      typs: {
+        keyboard: "Tastatur",
+        bed_wall: "Wand",
+        bed_side: "seitlich",
+      },
+
+      control: {
+        status: "Zustand",
+        color: "Farbe",
+        orientation: "Animationsrichtung",
+        animationTyp: "Animationstyp",
+        animationTime: "Animationszeit",
+
+        restart_animation: "Animation neustarten",
+        reset_config: "Konfiguration zurücksetzen",
+        submit_config: "Konfiguration übernehmen",
+      }
+    },
+  },
 };

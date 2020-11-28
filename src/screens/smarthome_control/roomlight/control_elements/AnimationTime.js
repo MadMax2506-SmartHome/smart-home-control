@@ -1,10 +1,15 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, Button } from 'react-native';
+import { View, Text, Button } from 'react-native';
 
+// Style
 import { StyleText } from '../../../../res/style/style.js'
 import { StyleInput, StyleGroup, StyleGroupElem } from '../../../../res/style/input.js'
 
+// Component
 import ValueSlider from '../../../../components/slider/ValueSlider.js';
+
+//I18n
+import I18n from '../../../../i18n/i18n.js';
 
 export default class AnimationTime extends Component  {
   constructor(props) {
@@ -19,9 +24,10 @@ export default class AnimationTime extends Component  {
       <View>
         <View style={StyleGroup.header}>
           <Text style={StyleText()}>
-            Animationszeit (in ms)
+            {I18n.t("smart_home.light.control.animationTime")}
           </Text>
         </View>
+        
         <View style={StyleGroup.main}>
           <View style={StyleGroupElem.input_slider}>
             <ValueSlider

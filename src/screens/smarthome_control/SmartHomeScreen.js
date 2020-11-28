@@ -9,10 +9,15 @@ import FontAwesome5Icons from 'react-native-vector-icons/FontAwesome5';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
-import NavHeader from "../../navigation//Header.js"
-
+// Tabs
 import RoomlightTab from "./roomlight/RoomlightTab.js"
 import RoomThermometerTab from "./RoomThermometerTab.js"
+
+// Header
+import NavHeader from "../../navigation//Header.js"
+
+//I18n
+import I18n from '../../i18n/i18n.js';
 
 export default class SmartHomeScreen extends Component  {
   constructor(props) {
@@ -70,7 +75,7 @@ export default class SmartHomeScreen extends Component  {
           />
         }
         options={() => ({
-          tabBarLabel: "Thermometer",
+          tabBarLabel: I18n.t("smart_home.menu.thermometer"),
           tabBarIcon: props => (<FontAwesome5Icons name="temperature-high" size={30} color={props.color}/>)
         })}
       />
@@ -87,7 +92,7 @@ export default class SmartHomeScreen extends Component  {
           />
         }
         options={() => ({
-          tabBarLabel: "Beleuchtung",
+          tabBarLabel: I18n.t("smart_home.menu.light"),
           tabBarIcon: props => (<FoundationIcons name="lightbulb" size={30} color={props.color}/>)
         })}
       />
@@ -98,7 +103,9 @@ export default class SmartHomeScreen extends Component  {
     var {mqtt} = this.data;
 
     return (
-      <Tab.Navigator initialRouteName="Room_thermometer_tab" tabBarOptions={this.tab_navigation.options}>
+      <Tab.Navigator
+        tabBarOptions={this.tab_navigation.options}
+      >
         {mqtt.get_room_thermometer_device() == null ? null : this.tab_navigation.dynamic_tabs.room_thermometer}
         {mqtt.get_roomlight_device() == null ? null : this.tab_navigation.dynamic_tabs.roomlight}
       </Tab.Navigator>

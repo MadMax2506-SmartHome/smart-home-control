@@ -1,14 +1,19 @@
 import React, { Component } from 'react'
 import { TouchableOpacity, ScrollView, View, Text } from 'react-native';
 
+// Components
 import Status from './control_elements/Status.js';
 import ColorContent from './control_elements/ColorContent.js';
 import Orientation from './control_elements/Orientation.js'
 import AnimationType from './control_elements/AnimationType.js';
 import AnimationTime from './control_elements/AnimationTime.js';
 
+// Style
 import { StyleMain, Color, StyleButtonWrapper, StyleButton, StyleText } from '../../../res/style/style.js'
 import { StyleInput, StyleGroupElem } from '../../../res/style/input.js'
+
+//I18n
+import I18n from '../../../i18n/i18n.js';
 
 export default class LightControl extends Component {
   #light;
@@ -171,7 +176,7 @@ export default class LightControl extends Component {
                 onPress={() => this.#light.restart_animation()}
               >
                 <Text style={StyleText(Color.white)}>
-                  Animation neustarten
+                  {I18n.t("smart_home.light.control.restart_animation")}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -182,7 +187,7 @@ export default class LightControl extends Component {
                 onPress={() => this.#light.reload_conf()}
               >
                 <Text style={StyleText(Color.white)}>
-                  Konfiguration zurücksetzen
+                  {I18n.t("smart_home.light.control.reset_config")}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -193,10 +198,11 @@ export default class LightControl extends Component {
                 onPress={() => this.#light.save_conf()}
               >
                 <Text style={StyleText(Color.white)}>
-                  Konfiguration übernehmen
+                  {I18n.t("smart_home.light.control.submit_config")}
                 </Text>
               </TouchableOpacity>
             </View>
+
           </View>
         </View>
       </ScrollView>
