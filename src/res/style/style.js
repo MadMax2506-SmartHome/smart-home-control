@@ -71,6 +71,15 @@ export const StyleHeader = {
     flexDirection: "row",
     backgroundColor: Color.white,
     color: Color.black,
+
+    shadowColor: "#000",
+    shadowOffset: {
+    	width: 0,
+    	height: 2,
+    },
+    shadowOpacity: 0.2,
+    shadowRadius: 10.3,
+    elevation: 3,
   },
   left: {
     width: "10%",
