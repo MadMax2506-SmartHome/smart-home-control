@@ -35,10 +35,25 @@ export default class FetchDataScreen extends Component  {
     }
   }
 
-  async init_data() {
-    await this.feature.load_data();
-    await this.user.load_data();
-    await this.mqtt.load_data();
+  async UNSAFE_componentWillMount() {
+    // load data
+    await this.init_data();
+
+    // hide splash screen
+    SplashScreen.hide();
+
+    // load data from mqtt server
+    if(this.feature.get_data()["is_smart_home_control_active"]) {
+      await this.init_mqtt();
+    }
+
+    // go to home
+    var data = {
+      feature: this.feature,
+      user: this.user,
+      mqtt: this.mqtt,
+    };
+    this.props.navigation.navigate("HomeScreen", { data: data })
   }
 
   render() {
@@ -47,6 +62,12 @@ export default class FetchDataScreen extends Component  {
         <Wait/>
       </View>
     );
+  }
+
+  async init_data() {
+    await this.feature.load_data();
+    await this.user.load_data();
+    await this.mqtt.load_data();
   }
 
   async init_mqtt() {
@@ -88,26 +109,5 @@ export default class FetchDataScreen extends Component  {
     const time_spent  = Math.abs((time_now.getTime() - time_start.getTime()));
 
     return time_spent > MAX_SPENT_TIME_MS;
-  }
-
-  async UNSAFE_componentWillMount() {
-    // load data
-    await this.init_data();
-
-    // hide splash screen
-    SplashScreen.hide();
-
-    // load data from mqtt server
-    if(this.feature.get_data()["is_smart_home_control_active"]) {
-      await this.init_mqtt();
-    }
-
-    // go to home
-    var data = {
-      feature: this.feature,
-      user: this.user,
-      mqtt: this.mqtt,
-    };
-    this.props.navigation.navigate("HomeScreen", { data: data })
   }
 }
