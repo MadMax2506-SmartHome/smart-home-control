@@ -70,6 +70,7 @@ export default class HomeScreen extends Component  {
         name="HomeTab"
         children={({navigation})=>
           <HomeTab
+            data={this.data}
             navigation={this.props.navigation}
             navigation_tab={navigation}
           />

@@ -39,6 +39,22 @@ export const Font = {
   }
 }
 
+export const StyleLogo = StyleSheet.create({
+  size: {
+    width: "100%",
+    height: "100%",
+    resizeMode: 'contain',
+  },
+  container: {
+    width: "100%",
+    height: "40%",
+
+    padding: "5%",
+
+    alignItems: 'center',
+  },
+});
+
 export const StyleMain = StyleSheet.create({
   container: {
     width: "100%",

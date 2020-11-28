@@ -6,7 +6,9 @@ export default {
   },
 
   home: {
-    welcome: "Wilkommen in Ihrem Smart Home Client",
+    welcome: {
+      title: "Herzlich Wilkommen in deiner Smart Home Steuerung",
+    },
 
     menu: {
       home: "Home",

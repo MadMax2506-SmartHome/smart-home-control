@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import {View, ActivityIndicator} from 'react-native';
 
+// Style
 import { Color, StyleMain } from '../res/style/style.js';
+
+// Components
+import Logo from "./Logo.js"
 
 export default class Wait extends Component {
   constructor(props) {
@@ -11,7 +15,12 @@ export default class Wait extends Component {
   render() {
     return(
       <View style={StyleMain.containerCenter}>
-        <ActivityIndicator size={120} color={Color.black} />
+        <Logo/>
+
+        <ActivityIndicator
+          size={120}
+          color={Color.black}
+        />
       </View>
     );
   }
