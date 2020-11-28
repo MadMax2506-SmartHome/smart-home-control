@@ -91,5 +91,9 @@ export default {
         submit_config: "Konfiguration übernehmen",
       }
     },
+
+    actions: {
+      error: "Es sind keine Geräte verfügbar.",
+    },
   },
 };

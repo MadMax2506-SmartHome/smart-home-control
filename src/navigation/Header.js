@@ -83,20 +83,10 @@ export default class HeaderBack extends Component {
         leftButton  = this.getEmptyElement();
         rightButton = this.getRefreshButtonElement();
         break;
-      case "SmartDeviceScreen":
-        title       = this.getTitleElement(I18n.t("title"));
-        leftButton  = this.getBackButtonElement();
-        rightButton = this.getEmptyElement();
-        break;
-      case "NasScreen":
-        title       = this.getTitleElement(I18n.t("title"));
-        leftButton  = this.getBackButtonElement();
-        rightButton = this.getEmptyElement();
-        break;
       default:
-        title       = this.getTitleElement(name);
-        leftButton  = this.getEmptyElement();
-        rightButton = this.getEmptyElement();
+        title       = this.getTitleElement(I18n.t("title"));
+        leftButton  = this.getBackButtonElement();
+        rightButton = this.getRefreshButtonElement();
     }
 
     return (

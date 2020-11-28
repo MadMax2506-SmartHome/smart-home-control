@@ -190,7 +190,7 @@ export class Mqtt {
                                                                         device_info["topic"],
                                                                         device_info["mac-address"],);
     }
-    
+
     this.#is_data_loaded = this.#device_clients["roomlight"] != null && this.#device_clients["room_thermometer"] != null;
   }
 }

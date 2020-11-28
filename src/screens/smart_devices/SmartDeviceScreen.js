@@ -16,6 +16,9 @@ import RoomThermometerTab from "./RoomThermometerTab.js"
 // Header
 import NavHeader from "../../navigation//Header.js"
 
+// Other
+import TOAST from '../../components/Toast.js'
+
 //I18n
 import I18n from '../../i18n/i18n.js';
 
@@ -50,6 +53,12 @@ export default class SmartHomeScreen extends Component  {
           navigation={navigation}
           screenName={props.scene.route.name}
           back={() => this.props.navigation.navigate("HomeScreen")}
+          refresh={() => {
+            this.props.navigation.reset({
+              index: 0,
+              routes: [{ name: "FetchDataScreen", params: { data: this.data } }],
+            });
+          }}
         />
       ),
     });
@@ -114,13 +123,21 @@ export default class SmartHomeScreen extends Component  {
   render() {
     var {mqtt} = this.data;
 
-    return (
-      <Tab.Navigator
-        tabBarOptions={this.tab_navigation.options}
-      >
-        {mqtt.get_room_thermometer_device() == null ? null : this.tab_navigation.dynamic_tabs.room_thermometer}
-        {mqtt.get_roomlight_device() == null ? null : this.tab_navigation.dynamic_tabs.roomlight}
-      </Tab.Navigator>
-    );
+    if(mqtt.get_room_thermometer_device() == null && mqtt.get_roomlight_device() == null) {
+      TOAST.notification(I18n.t("smart_home.actions.error"));
+      this.props.navigation.navigate("HomeScreen");
+
+      return (<></>);
+
+    } else {
+      return (
+        <Tab.Navigator
+          tabBarOptions={this.tab_navigation.options}
+        >
+          {mqtt.get_room_thermometer_device() == null ? null : this.tab_navigation.dynamic_tabs.room_thermometer}
+          {mqtt.get_roomlight_device() == null ? null : this.tab_navigation.dynamic_tabs.roomlight}
+        </Tab.Navigator>
+      );
+    }
   }
 };
