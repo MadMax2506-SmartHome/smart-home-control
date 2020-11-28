@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text } from 'react-native';
+import { View, Text } from 'react-native';
 
-// Allgemein
+import { StyleText } from '../../../../res/style/style.js'
+import { StyleGroup } from '../../../../res/style/input.js'
+
 import ItemPicker from '../../../../components/ItemPicker.js'
 
 export default class AnimationType extends Component  {
@@ -18,24 +20,15 @@ export default class AnimationType extends Component  {
   render() {
     return (
       <View>
-        <View style={style.header}>
-          <Text>Animationstyp</Text>
+        <View style={StyleGroup.header}>
+          <Text style={StyleText()}>
+            Animationstyp
+          </Text>
         </View>
-        <View style={style.main}>
+        <View style={StyleGroup.main}>
           <ItemPicker labels={this.state.labels} values={this.state.values} selectedValue={this.state.selectedValue} onChange={(type) => this.props.onChange(type)}/>
         </View>
       </View>
     );
   }
 };
-
-const style = StyleSheet.create({
-  header: {
-    width: "100%",
-  },
-  main: {
-    width: "100%",
-    paddingLeft: "3%",
-    paddingRight: "3%",
-  },
-});

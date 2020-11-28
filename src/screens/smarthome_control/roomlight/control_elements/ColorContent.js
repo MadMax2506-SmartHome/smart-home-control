@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 
-// Allgemein
+import { StyleText } from '../../../../res/style/style.js'
+import { StyleInput, StyleGroup } from '../../../../res/style/input.js'
+
 import RgbColorSlider from '../../../../components/slider/RgbColorSlider.js';
 
 export default class ColorContent extends Component {
@@ -35,15 +37,19 @@ export default class ColorContent extends Component {
   render() {
     return (
       <View>
-        <View style={style.header}>
-          <Text>Streifenfarbe</Text>
+        <View style={StyleGroup.header}>
+          <Text style={StyleText()}>
+            Streifenfarbe
+          </Text>
         </View>
-        <View style={style.main}>
+        <View style={StyleGroup.main}>
           <View style={{backgroundColor: this.state.color_rgb}}>
-            <Text style={style.colorView}>{this.state.color_rgb}</Text>
+            <Text style={StyleInput.color_elem}>
+              {this.state.color_rgb}
+              </Text>
           </View>
 
-          <View style={style.elem}>
+          <View style={StyleInput.elem}>
             <RgbColorSlider
               for="red"
               value={this.state.color_array.red}
@@ -52,7 +58,7 @@ export default class ColorContent extends Component {
               onComplete={() => this.save_color()}
             />
           </View>
-          <View style={style.elem}>
+          <View style={StyleInput.elem}>
             <RgbColorSlider
               for="green"
               value={this.state.color_array.green}
@@ -61,7 +67,7 @@ export default class ColorContent extends Component {
               onComplete={() => this.save_color()}
             />
           </View>
-          <View style={style.elem}>
+          <View style={StyleInput.elem}>
             <RgbColorSlider
               for="blue"
               value={this.state.color_array.blue}
@@ -81,30 +87,3 @@ export default class ColorContent extends Component {
     }
   }
 }
-
-const style = StyleSheet.create({
-  header: {
-    width: "100%",
-    height: 40,
-  },
-  main: {
-    width: "100%",
-    paddingLeft: "3%",
-    paddingRight: "3%",
-  },
-  elem: {
-    marginTop: 15,
-  },
-  colorView: {
-    margin: 5,
-    textAlign: 'center'
-  },
-  controlPanel: {
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  saveBtn: {
-    width: 110,
-    marginTop: 20,
-  },
-})

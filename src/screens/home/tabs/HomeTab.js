@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import { View, Text } from 'react-native';
 
-// Allgemein
-import STYLE from '../../../res/style.js'
+import { StyleMain } from '../../../res/style/style.js'
 
 export default class HomeTab extends Component  {
   constructor(props) {
@@ -11,9 +10,9 @@ export default class HomeTab extends Component  {
 
   render() {
     return (
-      <View style={STYLE.SCREEN.main}>
-        <View style={STYLE.SCREEN.centerPanel}>
-          <View style={STYLE.SCREEN.panel}>
+      <View style={StyleMain.containerCenter}>
+        <View style={StyleMain.containerCenter}>
+          <View style={StyleMain.containerCenter}>
             <Text>Wilkommen in Ihrem Smart Home Client</Text>
           </View>
         </View>

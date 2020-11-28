@@ -28,18 +28,14 @@ export const Color = {
 export const Font = {
   size: {
     headline: {
-      one: 30,
-      two: 27,
-      three: 24,
-      four: 20,
+      one: 25,
+      two: 22,
+      three: 19,
+      four: 16,
     },
-    text: 20,
-    dialogText: 18,
-    normal_icon: 30,
-    table: {
-      head: 22,
-      body: 20,
-    }
+    text: 15,
+    dialogText: 23,
+    normal_icon: 20,
   }
 }
 
@@ -47,12 +43,14 @@ export const StyleMain = StyleSheet.create({
   container: {
     width: "100%",
     height: "100%",
+    paddingTop: "2%",
     alignItems: 'center',
     backgroundColor: Color.white,
   },
   containerCenter: {
     width: "100%",
     height: "100%",
+    paddingTop: "2%",
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: Color.white,
@@ -125,6 +123,16 @@ export function StyleHeadline(color=Color.black, padding=0, marginBottom=0, text
     fontWeight: 'bold',
   }
 }
+
+export function StyleText(color=Color.black, padding=0, textAlign='auto', fontSize=Font.size.text) {
+  return {
+    fontSize: fontSize,
+    color: color,
+    padding: padding,
+    textAlign: textAlign,
+  }
+}
+
 
 export function StyleWrapper(color=Color.black, size=5, flex=false) {
   if(flex) {

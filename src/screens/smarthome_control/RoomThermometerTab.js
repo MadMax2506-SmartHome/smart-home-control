@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import { Text, View } from 'react-native';
 
-// Global
-import STYLE from '../../res/style.js'
+import { StyleMain } from '../../res/style/style.js'
 
 export default class RoomThermometerTab extends Component {
   constructor(props) {

@@ -1,7 +1,9 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text, Button } from 'react-native';
 
-// Allgemein
+import { StyleText } from '../../../../res/style/style.js'
+import { StyleInput, StyleGroup, StyleGroupElem } from '../../../../res/style/input.js'
+
 import ValueSlider from '../../../../components/slider/ValueSlider.js';
 
 export default class AnimationTime extends Component  {
@@ -15,11 +17,13 @@ export default class AnimationTime extends Component  {
   render() {
     return (
       <View>
-        <View style={style.header}>
-          <Text>Animationszeit (in ms):</Text>
+        <View style={StyleGroup.header}>
+          <Text style={StyleText()}>
+            Animationszeit (in ms)
+          </Text>
         </View>
-        <View style={style.main}>
-          <View style={style.input}>
+        <View style={StyleGroup.main}>
+          <View style={StyleGroupElem.input_slider}>
             <ValueSlider
               value={this.state.time}
               sliderColor="black"
@@ -32,24 +36,3 @@ export default class AnimationTime extends Component  {
     );
   }
 };
-
-const style = StyleSheet.create({
-  header: {
-    width: "100%",
-  },
-  main: {
-    width: "100%",
-    paddingLeft: "3%",
-    paddingRight: "3%",
-    paddingTop: "4%"
-  },
-  controlPanel: {
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  saveBtn: {
-    width: 120,
-    height: 40,
-    alignItems: 'center'
-  }
-});

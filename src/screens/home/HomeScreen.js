@@ -14,9 +14,6 @@ import NavHeader from "../../navigation//Header.js"
 import HomeTab from "./tabs/HomeTab.js"
 import SettingsTab from "../settings/SettingsTab.js"
 
-// Allgemein
-import STYLE from '../../res/style.js'
-
 export default class HomeScreen extends Component  {
   constructor(props) {
     super(props);

@@ -1,8 +1,7 @@
 import React, {Component} from 'react';
 import { ScrollView, View, Text, Button } from 'react-native';
 
-// Allgemein
-import STYLE from '../../res/style.js'
+import { StyleMain } from '../../res/style/style.js'
 
 export default class Nas_control_tab extends Component  {
   constructor(props) {
@@ -26,14 +25,14 @@ export default class Nas_control_tab extends Component  {
 
   render() {
     return (
-      <ScrollView style={STYLE.SCREEN.main}>
-        <View style={STYLE.SCREEN.centerPanel}>
+      <ScrollView style={StyleMain.containerCenter}>
+        <View style={StyleMain.containerCenter}>
           <View>
             <Text>
               Demnächst verfügbar
             </Text>
           </View>
-          <View style={STYLE.SCREEN.btn}>
+          <View style={StyleMain.StyleButtonWrapper}>
             <Button
               title="Exit"
               onPress={() => {this.props.navigation.navigate("Home_control_screen");}}

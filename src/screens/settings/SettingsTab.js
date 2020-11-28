@@ -13,8 +13,6 @@ import UserTab from "./tabs/UserTab.js"
 import MqttTab from "./tabs/MqttTab.js"
 import NasTab from "./tabs/NasTab.js"
 
-// Allgemein
-import STYLE from '../../res/style.js'
 import TOAST from '../../components/Toast.js'
 
 export default class SettingsTab extends Component  {
@@ -176,7 +174,6 @@ export default class SettingsTab extends Component  {
             navigation={this.props.navigation}
             navigation_tab={navigation}
             values={this.state.values.user}
-            style={style_tab_input}
             onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}
           />
         }
@@ -194,7 +191,6 @@ export default class SettingsTab extends Component  {
             navigation={this.props.navigation}
             navigation_tab={navigation}
             values={this.state.values.mqtt}
-            style={style_tab_input}
             onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}
           />
         }
@@ -212,7 +208,6 @@ export default class SettingsTab extends Component  {
             navigation={this.props.navigation}
             navigation_tab={navigation}
             values={this.state.values.nas}
-            style={style_tab_input}
             onChangeText={(category, elem, value) => this.set_data_from_tab(category, elem, value)}
           />
         }
@@ -258,30 +253,3 @@ export default class SettingsTab extends Component  {
     );
   }
 };
-
-const style_tab_input = StyleSheet.create({
-  inputPanel: {
-    flexDirection: 'row',
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  label: {
-    justifyContent: 'center',
-    width: "30%",
-    marginLeft: "10%",
-  },
-  inputContent: {
-    justifyContent: 'center',
-    width: "50%",
-    marginRight: "10%",
-    padding: 5,
-  },
-  input: {
-    height: 25,
-    padding: 0,
-    paddingLeft: 5,
-
-    borderColor: '#000000',
-    borderBottomWidth: 1,
-  },
-});

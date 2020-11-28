@@ -1,5 +1,8 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, Switch } from 'react-native';
+import { View, Text, Switch } from 'react-native';
+
+import { StyleText } from '../../../../res/style/style.js'
+import { StyleGroup } from '../../../../res/style/input.js'
 
 export default class Status extends Component  {
   constructor(props) {
@@ -13,10 +16,12 @@ export default class Status extends Component  {
   render() {
     return (
         <View>
-          <View style={style.header}>
-            <Text>LED-Leiste (ON | OFF):</Text>
+          <View style={StyleGroup.header}>
+            <Text style={StyleText()}>
+              LED-Leiste (ON | OFF)
+            </Text>
           </View>
-          <View style={style.main}>
+          <View style={StyleGroup.main}>
             <Switch
               value={this.state.status}
               onValueChange={(status) => {
@@ -31,15 +36,3 @@ export default class Status extends Component  {
     );
   }
 };
-
-const style = StyleSheet.create({
-  header: {
-    width: "100%",
-  },
-  main: {
-    width: "100%",
-    alignItems: 'flex-start',
-    paddingLeft: "3%",
-    paddingRight: "3%",
-  },
-});

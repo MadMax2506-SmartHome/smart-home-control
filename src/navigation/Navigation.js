@@ -16,25 +16,12 @@ import SmartHomeScreen from '../screens/smarthome_control/SmartHomeScreen.js'
 
 import NasScreen from '../screens/nas_control/NasScreen.js'
 
-// Allgemein
-import STYLE from '../res/style.js'
-
 export default class Navigation extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    const header_smart_home = {
-      title: 'Smart Home',
-      headerLeft: () => (null),
-    }
-
-    const header_nas = {
-      title: 'NAS',
-      headerLeft: () => (null),
-    }
-
     return(
       <NavigationContainer
         initialRouteName="FetchDataScreen"
@@ -42,9 +29,7 @@ export default class Navigation extends Component {
         <StatusBar
           hidden={true} barStyle="light-content"
         />
-        <Stack.Navigator
-          screenOptions={STYLE.NAVIGATION_HEADER}
-        >
+        <Stack.Navigator>
           <Stack.Screen
             name='FetchDataScreen'
             component={FetchDataScreen}

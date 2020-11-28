@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { StyleSheet, ScrollView, View, Button } from 'react-native';
+import { TouchableOpacity, ScrollView, View, Text } from 'react-native';
 
 import Status from './control_elements/Status.js';
 import ColorContent from './control_elements/ColorContent.js';
@@ -7,7 +7,8 @@ import Orientation from './control_elements/Orientation.js'
 import AnimationType from './control_elements/AnimationType.js';
 import AnimationTime from './control_elements/AnimationTime.js';
 
-import STYLE from '../../../res/style.js'
+import { StyleMain, Color, StyleButtonWrapper, StyleButton, StyleText } from '../../../res/style/style.js'
+import { StyleInput, StyleGroupElem } from '../../../res/style/input.js'
 
 export default class LightControl extends Component {
   #light;
@@ -86,7 +87,7 @@ export default class LightControl extends Component {
     var status = null;
     if(data.status.visible) {
       status = (
-        <View style={style.control_elem}>
+        <View style={[StyleInput.elem, {alignItems: 'flex-start',}]}>
           <Status
             status={data.status.value}
             onChange={(status) => this.set_strip_status(status)}
@@ -99,7 +100,7 @@ export default class LightControl extends Component {
     var color = null;
     if(data.color.visible) {
       color = (
-        <View style={style.control_elem}>
+        <View style={StyleInput.elem}>
           <ColorContent
             colors={data.color.value}
             onChange={(color) => this.set_color(color)}
@@ -112,7 +113,7 @@ export default class LightControl extends Component {
     var orientation = null;
     if(data.orientation.visible) {
       orientation = (
-        <View style={style.control_elem}>
+        <View style={StyleInput.elem}>
           <Orientation
             labels={data.orientation.labels}
             values={data.orientation.values}
@@ -127,7 +128,7 @@ export default class LightControl extends Component {
     var typ = null;
     if(data.animationTyp.visible) {
       typ = (
-        <View style={style.control_elem}>
+        <View style={StyleInput.elem}>
           <AnimationType
             labels={data.animationTyp.labels}
             values={data.animationTyp.values}
@@ -142,7 +143,7 @@ export default class LightControl extends Component {
     var time = null;
     if(data.animationTime.visible) {
       time = (
-        <View style={style.control_elem}>
+        <View style={StyleInput.elem}>
           <AnimationTime
             time={data.animationTime.value}
             onChange={(time) => this.set_animation_time(time)}
@@ -152,36 +153,50 @@ export default class LightControl extends Component {
     }
 
     return(
-      <ScrollView style={STYLE.SCREEN.main}>
-        <View>
-          {status}
-          {color}
-          {orientation}
-          {typ}
-          {time}
-        </View>
+      <ScrollView style={{color: Color.white}}>
+        <View style={[StyleMain.container, { paddingBottom: "5%" }]}>
+          <View>
+            {status}
+            {color}
+            {orientation}
+            {typ}
+            {time}
+          </View>
 
-        <View style={style.controlPanel}>
-          <View style={style.btn}>
-            <Button
-              color="black"
-              title="Animation neustarten"
-              onPress={() => this.#light.restart_animation()}
-            />
-          </View>
-          <View style={style.btn}>
-            <Button
-              color="black"
-              title="Konfiguration zurücksetzen"
-              onPress={() => this.#light.reload_conf()}
-            />
-          </View>
-          <View style={style.btn}>
-            <Button
-              color="black"
-              title="Konfiguration übernehmen"
-              onPress={() => this.#light.save_conf()}
-            />
+          <View style={[StyleMain.container, {marginTop: 30}]}>
+
+            <View style={StyleGroupElem.btn}>
+              <TouchableOpacity
+                style={StyleButton()}
+                onPress={() => this.#light.restart_animation()}
+              >
+                <Text style={StyleText(Color.white)}>
+                  Animation neustarten
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={StyleGroupElem.btn}>
+              <TouchableOpacity
+                style={StyleButton()}
+                onPress={() => this.#light.reload_conf()}
+              >
+                <Text style={StyleText(Color.white)}>
+                  Konfiguration zurücksetzen
+                </Text>
+              </TouchableOpacity>
+            </View>
+
+            <View style={StyleGroupElem.btn}>
+              <TouchableOpacity
+                style={StyleButton()}
+                onPress={() => this.#light.save_conf()}
+              >
+                <Text style={StyleText(Color.white)}>
+                  Konfiguration übernehmen
+                </Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </View>
       </ScrollView>
@@ -228,18 +243,3 @@ export default class LightControl extends Component {
     });
   }
 }
-
-const style = StyleSheet.create({
-  control_elem: {
-    marginTop: 20,
-  },
-  controlPanel: {
-    alignItems: 'center',
-    height: 400,
-    marginTop: 30
-  },
-  btn: {
-    width: 150,
-    marginTop: 10,
-  },
-});

@@ -14,9 +14,6 @@ import NavHeader from "../../navigation//Header.js"
 import RoomlightTab from "./roomlight/RoomlightTab.js"
 import RoomThermometerTab from "./RoomThermometerTab.js"
 
-// Allgemein
-import STYLE from '../../res/style.js'
-
 export default class SmartHomeScreen extends Component  {
   constructor(props) {
     super(props);

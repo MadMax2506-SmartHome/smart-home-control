@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import { View, Text, TextInput } from 'react-native';
 
-// Allgemein
-import STYLE from '../../../res/style.js'
+import { StyleMain } from '../../../res/style/style.js'
+import { StyleInput, StyleGroupElem } from '../../../res/style/input.js'
 
 export default class MqttTab extends Component  {
   constructor(props) {
     super(props);
 
-    this.style = this.props.style
     this.state = {
       values: this.props.values
     }
@@ -16,14 +15,16 @@ export default class MqttTab extends Component  {
 
   render() {
     return (
-      <View style={STYLE.SCREEN.centerPanel}>
-        <View style={this.style.inputPanel}>
-          <View style={this.style.label}>
-            <Text>IP-Adresse</Text>
+      <View style={StyleMain.container}>
+        <View style={StyleInput.panel}>
+          <View style={StyleInput.label_wrapper}>
+            <Text style={StyleGroupElem.label}>
+              IP-Adresse
+            </Text>
           </View>
-          <View style={this.style.inputContent}>
+          <View style={StyleInput.wrapper}>
             <TextInput
-              style={this.style.input}
+              style={StyleGroupElem.input}
               placeholder="192.168.178.1"
               onChangeText={(value) => {
                 this.props.onChangeText("mqtt", "ipaddress", value)
@@ -32,13 +33,15 @@ export default class MqttTab extends Component  {
             />
             </View>
         </View>
-        <View style={this.style.inputPanel}>
-          <View style={this.style.label}>
-            <Text>Port</Text>
+        <View style={StyleInput.panel}>
+          <View style={StyleInput.label_wrapper}>
+            <Text style={StyleGroupElem.label}>
+              Port
+            </Text>
           </View>
-          <View style={this.style.inputContent}>
+          <View style={StyleInput.wrapper}>
             <TextInput
-              style={this.style.input}
+              style={StyleGroupElem.input}
               keyboardType="number-pad"
               placeholder="1883"
               onChangeText={(value) => {

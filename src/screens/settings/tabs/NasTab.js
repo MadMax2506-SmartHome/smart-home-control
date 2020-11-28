@@ -1,14 +1,13 @@
 import React, {Component} from 'react';
 import { View, Text, TextInput } from 'react-native';
 
-// Allgemein
-import STYLE from '../../../res/style.js'
+import { StyleMain } from '../../../res/style/style.js'
+import { StyleInput, StyleGroupElem } from '../../../res/style/input.js'
 
 export default class NasTab extends Component  {
   constructor(props) {
     super(props);
 
-    this.style = this.props.style
     this.state = {
       values: this.props.values
     }
@@ -16,14 +15,16 @@ export default class NasTab extends Component  {
 
   render() {
     return (
-      <View style={STYLE.SCREEN.centerPanel}>
-        <View style={this.style.inputPanel}>
-          <View style={this.style.label}>
-            <Text>IP-Adresse</Text>
+      <View style={StyleMain.container}>
+        <View style={StyleInput.panel}>
+          <View style={StyleInput.label_wrapper}>
+            <Text style={StyleGroupElem.label}>
+              IP-Adresse
+            </Text>
           </View>
-          <View style={this.style.inputContent}>
+          <View style={StyleInput.wrapper}>
             <TextInput
-              style={this.style.input}
+              style={StyleGroupElem.input}
               keyboardType="number-pad"
               placeholder="192.168.178.1"
               onChangeText={(value) => {
@@ -34,13 +35,15 @@ export default class NasTab extends Component  {
           </View>
         </View>
 
-        <View style={this.style.inputPanel}>
-          <View style={this.style.label}>
-            <Text>Mac-Adresse</Text>
+        <View style={StyleInput.panel}>
+          <View style={StyleInput.label_wrapper}>
+            <Text style={StyleGroupElem.label}>
+              Mac-Adresse
+            </Text>
           </View>
-          <View style={this.style.inputContent}>
+          <View style={StyleInput.wrapper}>
             <TextInput
-              style={this.style.input}
+              style={StyleGroupElem.input}
               placeholder="0123456789AB"
               onChangeText={(value) => {
                 this.props.onChangeText("nas", "macaddress", value)
@@ -50,13 +53,15 @@ export default class NasTab extends Component  {
           </View>
         </View>
 
-        <View style={this.style.inputPanel}>
-          <View style={this.style.label}>
-            <Text>Benutzername</Text>
+        <View style={StyleInput.panel}>
+          <View style={StyleInput.label_wrapper}>
+            <Text style={StyleGroupElem.label}>
+              Benutzername
+            </Text>
           </View>
-          <View style={this.style.inputContent}>
+          <View style={StyleInput.wrapper}>
             <TextInput
-              style={this.style.input}
+              style={StyleGroupElem.input}
               placeholder="Benutzername"
               onChangeText={(value) => {
                 this.props.onChangeText("nas", "username", value)
@@ -66,13 +71,15 @@ export default class NasTab extends Component  {
           </View>
         </View>
 
-        <View style={this.style.inputPanel}>
-          <View style={this.style.label}>
-            <Text>Passwort</Text>
+        <View style={StyleInput.panel}>
+          <View style={StyleInput.label_wrapper}>
+            <Text style={StyleGroupElem.label}>
+              Passwort
+            </Text>
           </View>
-          <View style={this.style.inputContent}>
+          <View style={StyleInput.wrapper}>
             <TextInput
-              style={this.style.input}
+              style={StyleGroupElem.input}
               placeholder="Passwort"
               secureTextEntry={true}
               onChangeText={(value) => {

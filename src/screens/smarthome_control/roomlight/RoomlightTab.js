@@ -7,9 +7,6 @@ const Tab = createMaterialTopTabNavigator();
 
 import LightControl from "./LightControl.js"
 
-// Global
-import STYLE from '../../../res/style.js'
-
 export default class Roomlight_tab extends Component {
   constructor(props) {
     super(props);

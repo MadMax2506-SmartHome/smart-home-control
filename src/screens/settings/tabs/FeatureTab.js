@@ -1,8 +1,8 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text, Switch } from 'react-native';
 
-// Allgemein
-import STYLE from '../../../res/style.js'
+import { StyleMain } from '../../../res/style/style.js'
+import { StyleInput, StyleGroupElem } from '../../../res/style/input.js'
 
 export default class FeatureTab extends Component  {
   constructor(props) {
@@ -15,14 +15,16 @@ export default class FeatureTab extends Component  {
 
   render() {
     return (
-      <View style={STYLE.SCREEN.centerPanel}>
-        <View style={style.inputPanel}>
-          <View style={style.label}>
-            <Text>Smart Home Steuerung</Text>
+      <View style={StyleMain.container}>
+        <View style={StyleInput.panel}>
+          <View style={StyleInput.label_wrapper}>
+            <Text style={StyleGroupElem.label}>
+              Smart Home Steuerung
+              </Text>
           </View>
-          <View style={style.inputContent}>
+          <View style={StyleInput.wrapper}>
             <Switch
-              style={style.input}
+              style={StyleGroupElem.input}
               value={this.state.values.is_smart_home_control_active}
               onValueChange={(value) => {
                 this.props.onValueChange("feature", "is_smart_home_control_active", value)
@@ -30,13 +32,15 @@ export default class FeatureTab extends Component  {
             />
           </View>
         </View>
-        <View style={style.inputPanel}>
-          <View style={style.label}>
-            <Text>NAS-Steuerung</Text>
+        <View style={StyleInput.panel}>
+          <View style={StyleInput.label_wrapper}>
+            <Text style={StyleGroupElem.label}>
+              NAS-Steuerung
+            </Text>
           </View>
-          <View style={style.inputContent}>
+          <View style={StyleInput.wrapper}>
             <Switch
-              style={style.input}
+              style={StyleGroupElem.input}
               value={this.state.values.is_nas_control_active}
               onValueChange={(value) => {
                 this.props.onValueChange("feature", "is_nas_control_active", value)
@@ -48,30 +52,3 @@ export default class FeatureTab extends Component  {
     );
   }
 };
-
-const style = StyleSheet.create({
-  inputPanel: {
-    flexDirection: 'row',
-    marginTop: 5,
-    marginBottom: 5,
-  },
-  label: {
-    justifyContent: 'center',
-    width: "55%",
-    marginLeft: "15%",
-  },
-  inputContent: {
-    justifyContent: 'center',
-    width: "15%",
-    marginRight: "15%",
-    padding: 5,
-  },
-  input: {
-    height: 25,
-    padding: 0,
-    paddingLeft: 5,
-
-    borderColor: '#000000',
-    borderBottomWidth: 1,
-  },
-});
