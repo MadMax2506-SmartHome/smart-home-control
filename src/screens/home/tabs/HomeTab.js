@@ -1,7 +1,11 @@
 import React, {Component} from 'react';
 import { View, Text } from 'react-native';
 
-import { StyleMain } from '../../../res/style/style.js'
+// Style
+import { StyleMain, StyleText } from '../../../res/style/style.js'
+
+//I18n
+import I18n from '../../../i18n/i18n.js';
 
 export default class HomeTab extends Component  {
   constructor(props) {
@@ -13,7 +17,9 @@ export default class HomeTab extends Component  {
       <View style={StyleMain.containerCenter}>
         <View style={StyleMain.containerCenter}>
           <View style={StyleMain.containerCenter}>
-            <Text>Wilkommen in Ihrem Smart Home Client</Text>
+            <Text style={StyleText()}>
+              {I18n.t("home.welcome")}
+            </Text>
           </View>
         </View>
       </View>

@@ -9,10 +9,14 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
-import NavHeader from "../../navigation//Header.js"
-
 import HomeTab from "./tabs/HomeTab.js"
 import SettingsTab from "../settings/SettingsTab.js"
+
+// Header
+import NavHeader from "../../navigation//Header.js"
+
+//I18n
+import I18n from '../../i18n/i18n.js';
 
 export default class HomeScreen extends Component  {
   constructor(props) {
@@ -72,7 +76,7 @@ export default class HomeScreen extends Component  {
           />
         }
         options={() => ({
-          tabBarLabel: "Home",
+          tabBarLabel: I18n.t('home.menu.home'),
           tabBarIcon: props => (<Ionicons name="home" size={30} color={props.color}/>)
         })}
       />
@@ -80,10 +84,10 @@ export default class HomeScreen extends Component  {
 
     this.tab_navigation.dynamic_tabs.smart_home_control = (
       <Tab.Screen
-        name="Smart_home_connect_tab"
+        name="SmartHomeTab"
         children={({navigation}) => null}
         options={() => ({
-          tabBarLabel: "Smart Home",
+          tabBarLabel: I18n.t('home.menu.mqtt'),
           tabBarIcon: props => (<MaterialIcons name="settings-remote" size={30} color={props.color}/>)
         })}
         listeners={{
@@ -97,16 +101,16 @@ export default class HomeScreen extends Component  {
 
     this.tab_navigation.dynamic_tabs.nas_control = (
       <Tab.Screen
-        name="Nas_control_tab"
+        name="NasTab"
         children={({navigation}) => null}
         options={{
-          tabBarLabel: "NAS",
+          tabBarLabel: I18n.t('home.menu.nas'),
           tabBarIcon: props => (<MaterialCommunityIcons name="nas" size={30} color={props.color}/>)
         }}
         listeners={{
           tabPress: (e) => {
             e.preventDefault();
-            this.props.navigation.navigate("Nas_control_screen", {data: this.data})
+            this.props.navigation.navigate("NasScreen", {data: this.data})
           }
         }}
       />
@@ -114,7 +118,7 @@ export default class HomeScreen extends Component  {
 
     this.tab_navigation.static_tabs.setting = (
       <Tab.Screen
-        name="Setting__tab"
+        name="SettingsTab"
         children={({navigation}) =>
           <SettingsTab
             data={this.data}
@@ -124,7 +128,7 @@ export default class HomeScreen extends Component  {
           />
         }
         options={{
-          tabBarLabel: "Einstellungen",
+          tabBarLabel: I18n.t('home.menu.settings'),
           tabBarIcon: props => (<Ionicons name="settings" size={30} color={props.color}/>)
         }}
       />
@@ -138,7 +142,10 @@ export default class HomeScreen extends Component  {
     var is_nas_control_tab_visible  = feature.get_data()["is_nas_control_active"];
 
     return (
-      <Tab.Navigator initialRouteName={"HomeTab"} tabBarOptions={this.tab_navigation.options}>
+      <Tab.Navigator
+        initialRouteName={"HomeTab"}
+        tabBarOptions={this.tab_navigation.options}
+      >
         {this.tab_navigation.static_tabs.home}
         {is_smart_home_tab_visible ? this.tab_navigation.dynamic_tabs.smart_home_control : null}
         {is_nas_control_tab_visible ? this.tab_navigation.dynamic_tabs.nas_control : null}
