@@ -1,8 +1,12 @@
 import React, {Component} from 'react';
-import { StyleSheet, View, Text, Switch } from 'react-native';
+import { View, Text, Switch } from 'react-native';
 
+// STyle
 import { StyleMain } from '../../../res/style/style.js'
 import { StyleInput, StyleGroupElem } from '../../../res/style/input.js'
+
+//I18n
+import I18n from '../../../i18n/i18n.js';
 
 export default class FeatureTab extends Component  {
   constructor(props) {
@@ -17,11 +21,11 @@ export default class FeatureTab extends Component  {
     return (
       <View style={StyleMain.container}>
         <View style={StyleInput.panel}>
-        
+
           <View style={StyleInput.label_wrapper}>
             <Text style={StyleGroupElem.label}>
-              Smart Home Steuerung
-              </Text>
+              {I18n.t("settings.labels.features.smart_home")}
+            </Text>
           </View>
 
           <View style={StyleInput.wrapper}>

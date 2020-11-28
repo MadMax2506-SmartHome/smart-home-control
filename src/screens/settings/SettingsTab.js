@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {StyleSheet, Text} from 'react-native';
+import {Text} from 'react-native';
 
 // Icons
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -8,11 +8,19 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 const Tab = createMaterialTopTabNavigator();
 
+// Tabs
 import FeatureTab from "./tabs/FeatureTab.js"
 import UserTab from "./tabs/UserTab.js"
 import MqttTab from "./tabs/MqttTab.js"
 
+// Weiteres
 import TOAST from '../../components/Toast.js'
+
+//STyle
+import { StyleText, Color } from '../../res/style/style.js'
+
+//I18n
+import I18n from '../../i18n/i18n.js';
 
 export default class SettingsTab extends Component  {
   constructor(props) {
@@ -42,13 +50,6 @@ export default class SettingsTab extends Component  {
     }
   }
 
-  get_style(color) {
-    return {
-        color: color,
-        textAlign: "center",
-    }
-  }
-
   set_data_from_tab(category, elem, value) {
     let values              = this.state.values
     values[category][elem]  = value
@@ -59,7 +60,7 @@ export default class SettingsTab extends Component  {
   }
 
   async save_data() {
-    TOAST.notification("Daten werden gespeichert...", 200);
+    TOAST.notification(I18n.t("settings.actions.will_save"), 200);
     var {feature, user, mqtt} = this.data;
 
     let is_valid = this.is_data_valid()
@@ -94,7 +95,7 @@ export default class SettingsTab extends Component  {
 
     this.setState({});
     this.props.update_root();
-    TOAST.notification("Daten wurden gespeichert!", 200);
+    TOAST.notification(I18n.t("settings.actions.has_save"), 200);
   }
 
   is_data_valid() {
@@ -139,7 +140,11 @@ export default class SettingsTab extends Component  {
           />
         }
         options={{
-          tabBarLabel: (props) => (<Text style={this.get_style(props.color)}>Features</Text>)
+          tabBarLabel: (props) => (
+            <Text style={StyleText(props.color, 0, "center")}>
+              {I18n.t("settings.menu.feature")}
+            </Text>
+          )
         }}
       />
     );
@@ -156,7 +161,11 @@ export default class SettingsTab extends Component  {
           />
         }
         options={{
-          tabBarLabel: (props) => (<Text style={this.get_style(props.color)}>Benutzer</Text>)
+          tabBarLabel: (props) => (
+            <Text style={StyleText(props.color, 0, "center")}>
+              {I18n.t("settings.menu.user")}
+            </Text>
+          )
         }}
       />
     );
@@ -173,7 +182,11 @@ export default class SettingsTab extends Component  {
           />
         }
         options={{
-          tabBarLabel: (props) => (<Text style={this.get_style(props.color)}>MQTT Brocker</Text>)
+          tabBarLabel: (props) => (
+            <Text style={StyleText(props.color, 0, "center")}>
+              {I18n.t("settings.menu.mqtt")}
+            </Text>
+          )
         }}
       />
     );
@@ -183,7 +196,7 @@ export default class SettingsTab extends Component  {
         name="Save_tab"
         children={({navigation}) => (null)}
         options={{
-          tabBarLabel: (props) => (<Ionicons style={this.get_style("black")} name="save" size={25}/>)
+          tabBarLabel: (props) => (<Ionicons color={Color.black} name="save" size={25}/>)
         }}
         listeners={{
           tabPress: (e) => {
