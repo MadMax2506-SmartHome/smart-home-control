@@ -1,9 +1,14 @@
 import React, { Component } from "react"
 import { TouchableOpacity, Text, View, Button } from 'react-native';
 
+// Icons
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
+// Style
 import { Color, Font, StyleHeader, StyleButtonWrapper } from '../res/style/style.js';
+
+//I18n
+import I18n from '../i18n/i18n.js';
 
 export default class HeaderBack extends Component {
   constructor(props) {
@@ -24,7 +29,7 @@ export default class HeaderBack extends Component {
           >
             <FontAwesome
               name="arrow-left"
-              size={Font.size.normal_icon}
+              size={Font.size.normal_icon *1.6}
               color={Color.black}
             />
           </TouchableOpacity>
@@ -51,17 +56,17 @@ export default class HeaderBack extends Component {
 
     switch (name) {
       case "HomeScreen":
-        title       = this.getTitleElement("Smart Home");
+        title       = this.getTitleElement(I18n.t("title"));
         leftButton  = this.getEmptyElement();
         rightButton = this.getEmptyElement();
         break;
       case "SmartHomeScreen":
-        title       = this.getTitleElement("Smart Home");
+        title       = this.getTitleElement(I18n.t("title"));
         leftButton  = this.getBackButtonElement();
         rightButton = this.getEmptyElement();
         break;
       case "NasScreen":
-        title       = this.getTitleElement("Smart Home");
+        title       = this.getTitleElement(I18n.t("title"));
         leftButton  = this.getBackButtonElement();
         rightButton = this.getEmptyElement();
         break;

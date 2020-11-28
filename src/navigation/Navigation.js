@@ -9,11 +9,8 @@ const Stack = createStackNavigator();
 
 // Screens
 import FetchDataScreen from '../screens/FetchDataScreen.js'
-
 import HomeScreen from '../screens/home/HomeScreen.js'
-
 import SmartHomeScreen from '../screens/smarthome_control/SmartHomeScreen.js'
-
 import NasScreen from '../screens/nas_control/NasScreen.js'
 
 export default class Navigation extends Component {

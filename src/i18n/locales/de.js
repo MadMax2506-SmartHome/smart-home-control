@@ -1,4 +1,5 @@
 export default {
+  title: "Smart Home",
   home: {
     welcome: "Wilkommen in Ihrem Smart Home Client",
     menu: {
