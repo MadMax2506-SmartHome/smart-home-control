@@ -1,7 +1,12 @@
 import React, {Component} from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 
+// Component
 import Slider from '@react-native-community/slider';
+
+//I18n
+import I18n from '../../i18n/i18n.js';
+import DESIGNATIONS from '../../res/Designations.js';
 
 export default class ValueSlider extends Component {
   constructor(props) {
@@ -16,6 +21,13 @@ export default class ValueSlider extends Component {
   }
 
   render() {
+    var value;
+    if(this.props.typ == "animationTime") {
+      value = DESIGNATIONS.roomlight.animationTime(this.state.currentValue);
+    } else {
+      value = this.state.currentValue;
+    }
+
     return(
       <View style={style.content}>
         <View style={style.sliderContent}>
@@ -41,7 +53,7 @@ export default class ValueSlider extends Component {
         </View>
         <View style={style.sliderValueContent}>
           <Text style={style.sliderValue}>
-            {this.state.currentValue}
+            {value}
           </Text>
         </View>
       </View>
@@ -54,13 +66,13 @@ const style = StyleSheet.create({
     flexDirection: 'row'
   },
   sliderContent: {
-    width: "85%",
+    width: "75%",
   },
   sliderValue: {
     textAlign: 'right',
   },
   sliderValueContent: {
     textAlign: 'right',
-    width: "10%",
+    width: "20%",
   },
 });

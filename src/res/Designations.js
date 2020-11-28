@@ -8,5 +8,11 @@ export default {
     humidity: (humidity) => {
       return humidity + I18n.t("smart_home.thermometer.units.humidity");
     },
-  }
+  },
+
+  roomlight: {
+    animationTime: (animationTime) => {
+      return animationTime + " " + I18n.t("smart_home.light.units.time");
+    }
+  },
 }

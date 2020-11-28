@@ -73,6 +73,10 @@ export default {
         bed_side: "seitlich",
       },
 
+      units: {
+        time: "ms",
+      },
+
       control: {
         status: "Zustand",
         color: "Farbe",

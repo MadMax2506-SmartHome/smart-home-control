@@ -34,7 +34,6 @@ export default class RoomThermometerTab extends Component {
     return (
       <View style={StyleMain.container}>
         <View>
-        
           <Text style={StyleHeadline(Color.black, 0, 0, 'auto', Font.size.headline.two)}>
             {I18n.t("smart_home.thermometer.room")}
           </Text>

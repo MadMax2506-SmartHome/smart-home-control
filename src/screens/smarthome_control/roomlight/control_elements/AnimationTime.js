@@ -27,12 +27,13 @@ export default class AnimationTime extends Component  {
             {I18n.t("smart_home.light.control.animationTime")}
           </Text>
         </View>
-        
+
         <View style={StyleGroup.main}>
           <View style={StyleGroupElem.input_slider}>
             <ValueSlider
               value={this.state.time}
               sliderColor="black"
+              typ="animationTime"
               onComplete={() => this.props.onChange(this.state.time)}
               onChange={(time) => this.setState({time: time})}
             />
