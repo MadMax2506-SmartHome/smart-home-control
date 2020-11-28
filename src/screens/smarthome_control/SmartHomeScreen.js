@@ -70,7 +70,7 @@ export default class SmartHomeScreen extends Component  {
           />
         }
         options={() => ({
-          tabBarLabel: "Temperatur",
+          tabBarLabel: "Thermometer",
           tabBarIcon: props => (<FontAwesome5Icons name="temperature-high" size={30} color={props.color}/>)
         })}
       />
