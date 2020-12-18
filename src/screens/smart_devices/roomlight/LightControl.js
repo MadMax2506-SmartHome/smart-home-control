@@ -158,7 +158,7 @@ export default class LightControl extends Component {
     }
 
     return(
-      <ScrollView style={{color: Color.white}}>
+      <ScrollView style={StyleMain.scroll_view}>
         <View style={[StyleMain.container, { paddingBottom: "5%" }]}>
           <View>
             {status}

@@ -56,6 +56,9 @@ export const StyleLogo = StyleSheet.create({
 });
 
 export const StyleMain = StyleSheet.create({
+  scroll_view: {
+    backgroundColor: Color.white,
+  },
   container: {
     width: "100%",
     height: "100%",
