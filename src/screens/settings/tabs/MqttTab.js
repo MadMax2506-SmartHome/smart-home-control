@@ -52,7 +52,7 @@ export default class MqttTab extends Component  {
               onChangeText={(value) => {
                 this.props.onChangeText("mqtt", "port", value)
               }}
-              value={this.state.values.port}
+              value={this.state.values.port == 0 ? '' : this.state.values.port}
             />
           </View>
         </View>
