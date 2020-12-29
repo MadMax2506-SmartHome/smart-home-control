@@ -198,12 +198,12 @@ export default class SettingsTab extends Component  {
         options={{
           tabBarLabel: (props) => (<Ionicons color={Color.black} name="save" size={25}/>)
         }}
-        listeners={{
-          tabPress: (e) => {
-            e.preventDefault();
+        listeners={({ navigation, route }) => ({
+          focus: () => {
+            navigation.goBack()
             this.save_data()
           }
-        }}
+        })}
       />
 
     );
@@ -217,7 +217,10 @@ export default class SettingsTab extends Component  {
     }
 
     return (
-      <Tab.Navigator initialRouteName="FeatureTab" tabBarOptions={this.tab_navigation.options}>
+      <Tab.Navigator
+        initialRouteName="FeatureTab"
+        tabBarOptions={this.tab_navigation.options}
+      >
         {this.tab_navigation.static_tabs.feature}
         {this.tab_navigation.static_tabs.user}
         {feature.is_smart_home_control_active ? this.tab_navigation.dynamic_tabs.mqtt : null}
