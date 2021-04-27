@@ -18,8 +18,6 @@ import NavHeader from '../../navigation//Header.js';
 //I18n
 import I18n from '../../i18n/i18n.js';
 
-// import RNImmediatePhoneCall from 'react-native-immediate-phone-call';
-
 export default class HomeScreen extends Component {
   constructor(props) {
     super(props);
@@ -40,9 +38,6 @@ export default class HomeScreen extends Component {
     };
 
     this.set_tab_navigation();
-    // RNImmediatePhoneCall.immediatePhoneCall('024068034049').catch(errors =>
-    //   console.log(errors),
-    // );
   }
 
   componentDidMount() {

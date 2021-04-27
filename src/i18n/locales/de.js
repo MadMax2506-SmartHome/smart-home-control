@@ -22,6 +22,12 @@ export default {
     },
   },
 
+  door_opener: {
+    actions: {
+      call: 'Anrufen',
+    },
+  },
+
   settings: {
     actions: {
       will_save: 'Daten werden gespeichert...',

@@ -64,7 +64,7 @@ export default class SettingsTab extends Component {
 
   async save_data() {
     TOAST.notification(I18n.t('settings.actions.will_save'), 200);
-    var {feature, user, mqtt} = this.data;
+    var {feature, user, mqtt, door_opener} = this.data;
 
     let is_valid = this.is_data_valid();
 
@@ -98,6 +98,14 @@ export default class SettingsTab extends Component {
         });
       }
     }
+
+    var door_opener_values = this.state.values.door_opener;
+    await door_opener.set_data(
+      door_opener_values.phone_number,
+      door_opener_values.phone_key,
+    );
+
+    // TODO validation
 
     this.setState({});
     this.props.update_root();

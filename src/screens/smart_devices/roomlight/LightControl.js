@@ -1,16 +1,21 @@
-import React, { Component } from 'react'
-import { TouchableOpacity, ScrollView, View, Text } from 'react-native';
+import React, {Component} from 'react';
+import {TouchableOpacity, ScrollView, View, Text} from 'react-native';
 
 // Components
 import Status from './control_elements/Status.js';
 import ColorContent from './control_elements/ColorContent.js';
-import Orientation from './control_elements/Orientation.js'
+import Orientation from './control_elements/Orientation.js';
 import AnimationType from './control_elements/AnimationType.js';
 import AnimationTime from './control_elements/AnimationTime.js';
 
 // Style
-import { StyleMain, Color, StyleButtonWrapper, StyleButton, StyleText } from '../../../res/style/style.js'
-import { StyleInput, StyleGroupElem } from '../../../res/style/input.js'
+import {
+  StyleMain,
+  Color,
+  StyleButton,
+  StyleText,
+} from '../../../res/style/style.js';
+import {StyleInput, StyleGroupElem} from '../../../res/style/input.js';
 
 //I18n
 import I18n from '../../../i18n/i18n.js';
@@ -29,29 +34,29 @@ export default class LightControl extends Component {
       orientation: this.#light.get_orientation(),
       animationTyp: this.#light.get_type(),
       animationTime: this.#light.get_time(),
-    }
+    };
 
     this.form_data = {
       orientation: {
-        labels: ["nach Links", "nach Rechts", "von der Mitte"],
-        values: ["l", "r", "c"],
+        labels: ['nach Links', 'nach Rechts', 'von der Mitte'],
+        values: ['l', 'r', 'c'],
       },
       animationTyp: {
-        labels: ["Fade", "Rainbow", "to Color"],
-        values: ["fade", "rainbow", "to_color"],
+        labels: ['Fade', 'Rainbow', 'to Color'],
+        values: ['fade', 'rainbow', 'to_color'],
       },
-    }
+    };
   }
 
   get_filtered_data() {
     var {form_data, state} = this;
-    var values = Object.assign({}, state)
+    var values = Object.assign({}, state);
 
     var orientation_labels = form_data.orientation.labels.slice(0);
     var orientation_values = form_data.orientation.values.slice(0);
-    if(values.animationTyp == "rainbow") {
-      orientation_labels.splice(2, 1)
-      orientation_values.splice(2, 1)
+    if (values.animationTyp === 'rainbow') {
+      orientation_labels.splice(2, 1);
+      orientation_values.splice(2, 1);
     }
 
     var data = {
@@ -60,7 +65,7 @@ export default class LightControl extends Component {
         value: values.status,
       },
       color: {
-        visible: ( values.animationTyp != "rainbow" ),
+        visible: values.animationTyp !== 'rainbow',
         value: values.color,
       },
       orientation: {
@@ -76,12 +81,12 @@ export default class LightControl extends Component {
         values: form_data.animationTyp.values,
       },
       animationTime: {
-        visible: ( values.animationTyp != "to_color" ),
+        visible: values.animationTyp !== 'to_color',
         value: values.animationTime,
       },
-    }
+    };
 
-    return data
+    return data;
   }
 
   render() {
@@ -90,40 +95,40 @@ export default class LightControl extends Component {
     // check the visibility of the elements
     // status
     var status = null;
-    if(data.status.visible) {
+    if (data.status.visible) {
       status = (
-        <View style={[StyleInput.elem, {alignItems: 'flex-start',}]}>
+        <View style={[StyleInput.elem, {alignItems: 'flex-start'}]}>
           <Status
             status={data.status.value}
-            onChange={(status) => this.set_strip_status(status)}
+            onChange={val => this.set_strip_status(val)}
           />
-          </View>
+        </View>
       );
     }
 
     // color
     var color = null;
-    if(data.color.visible) {
+    if (data.color.visible) {
       color = (
         <View style={StyleInput.elem}>
           <ColorContent
             colors={data.color.value}
-            onChange={(color) => this.set_color(color)}
+            onChange={val => this.set_color(val)}
           />
-          </View>
+        </View>
       );
     }
 
     // orientation
     var orientation = null;
-    if(data.orientation.visible) {
+    if (data.orientation.visible) {
       orientation = (
         <View style={StyleInput.elem}>
           <Orientation
             labels={data.orientation.labels}
             values={data.orientation.values}
             selectedValue={data.orientation.value}
-            onChange={(orientation) => this.set_orientation(orientation)}
+            onChange={val => this.set_orientation(val)}
           />
         </View>
       );
@@ -131,14 +136,14 @@ export default class LightControl extends Component {
 
     // animationTyp
     var typ = null;
-    if(data.animationTyp.visible) {
+    if (data.animationTyp.visible) {
       typ = (
         <View style={StyleInput.elem}>
           <AnimationType
             labels={data.animationTyp.labels}
             values={data.animationTyp.values}
             selectedValue={data.animationTyp.value}
-            onChange={(type) => this.set_animation_type(type)}
+            onChange={type => this.set_animation_type(type)}
           />
         </View>
       );
@@ -146,20 +151,20 @@ export default class LightControl extends Component {
 
     // animationTime
     var time = null;
-    if(data.animationTime.visible) {
+    if (data.animationTime.visible) {
       time = (
         <View style={StyleInput.elem}>
           <AnimationTime
             time={data.animationTime.value}
-            onChange={(time) => this.set_animation_time(time)}
+            onChange={val => this.set_animation_time(val)}
           />
         </View>
       );
     }
 
-    return(
+    return (
       <ScrollView style={StyleMain.scroll_view}>
-        <View style={[StyleMain.container, { paddingBottom: "5%" }]}>
+        <View style={[StyleMain.container, {paddingBottom: '5%'}]}>
           <View>
             {status}
             {color}
@@ -169,14 +174,12 @@ export default class LightControl extends Component {
           </View>
 
           <View style={[StyleMain.container, {marginTop: 30}]}>
-
             <View style={StyleGroupElem.btn}>
               <TouchableOpacity
                 style={StyleButton()}
-                onPress={() => this.#light.restart_animation()}
-              >
+                onPress={() => this.#light.restart_animation()}>
                 <Text style={StyleText(Color.white)}>
-                  {I18n.t("smart_home.light.control.restart_animation")}
+                  {I18n.t('smart_home.light.control.restart_animation')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -184,10 +187,9 @@ export default class LightControl extends Component {
             <View style={StyleGroupElem.btn}>
               <TouchableOpacity
                 style={StyleButton()}
-                onPress={() => this.#light.reload_conf()}
-              >
+                onPress={() => this.#light.reload_conf()}>
                 <Text style={StyleText(Color.white)}>
-                  {I18n.t("smart_home.light.control.reset_config")}
+                  {I18n.t('smart_home.light.control.reset_config')}
                 </Text>
               </TouchableOpacity>
             </View>
@@ -195,14 +197,12 @@ export default class LightControl extends Component {
             <View style={StyleGroupElem.btn}>
               <TouchableOpacity
                 style={StyleButton()}
-                onPress={() => this.#light.save_conf()}
-              >
+                onPress={() => this.#light.save_conf()}>
                 <Text style={StyleText(Color.white)}>
-                  {I18n.t("smart_home.light.control.submit_config")}
+                  {I18n.t('smart_home.light.control.submit_config')}
                 </Text>
               </TouchableOpacity>
             </View>
-
           </View>
         </View>
       </ScrollView>
