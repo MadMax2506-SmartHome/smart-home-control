@@ -1,99 +1,99 @@
 export default {
-  title: "Smart Home",
+  title: 'Smart Home',
 
   btn: {
-    exit: "Verlassen"
+    exit: 'Verlassen',
   },
 
   home: {
     welcome: {
-      title: "Herzlich Wilkommen in deiner Smart Home Steuerung",
+      title: 'Herzlich Wilkommen in deiner Smart Home Steuerung',
     },
 
     menu: {
-      home: "Home",
-      smart_devices: "Geräte",
-      settings: "Einstellungen",
+      home: 'Home',
+      smart_devices: 'Geräte',
+      settings: 'Einstellungen',
     },
 
     actions: {
-      error: "Timeout! \nDer MQTT-Brocker wurde nicht erreicht",
+      error: 'Timeout! \nDer MQTT-Brocker wurde nicht erreicht',
     },
   },
 
   settings: {
     actions: {
-      will_save: "Daten werden gespeichert...",
-      has_save: "Daten wurden gespeichert!"
+      will_save: 'Daten werden gespeichert...',
+      has_save: 'Daten wurden gespeichert!',
     },
 
     labels: {
       features: {
-        smart_home: "Smart Home Steuerung"
+        smart_home: 'Smart Home Steuerung',
       },
       user: {
-        first_name: "Vorname",
-        surname: "Nachname",
+        first_name: 'Vorname',
+        surname: 'Nachname',
       },
       mqtt: {
-        ipaddress: "IP-Adresse",
-        port: "Port",
-      }
+        ipaddress: 'IP-Adresse',
+        port: 'Port',
+      },
     },
 
     menu: {
-      feature: "Features",
-      user: "Benutzer",
-      mqtt: "MQTT Brocker"
-    }
+      feature: 'Features',
+      user: 'Benutzer',
+      mqtt: 'MQTT Brocker',
+    },
   },
 
   smart_home: {
     menu: {
-      thermometer: "Thermometer",
-      light: "Beleuchtung",
+      thermometer: 'Thermometer',
+      light: 'Beleuchtung',
     },
 
     thermometer: {
-      room: "Raumthermometer",
+      room: 'Raumthermometer',
 
       labels: {
-        temperature: "Temperatur",
-        humidity: "Luftfeuchtigkeit",
+        temperature: 'Temperatur',
+        humidity: 'Luftfeuchtigkeit',
       },
 
       units: {
-        temperature: "° Celsius",
-        humidity: "%",
-      }
+        temperature: '° Celsius',
+        humidity: '%',
+      },
     },
 
     light: {
       typs: {
-        keyboard: "Tastatur",
-        bed_wall: "Wand",
-        bed_side: "seitlich",
+        keyboard: 'Tastatur',
+        bed_wall: 'Wand',
+        bed_side: 'seitlich',
       },
 
       units: {
-        time: "ms",
+        time: 'ms',
       },
 
       control: {
-        status: "Zustand",
-        color: "Farbe",
-        orientation: "Animationsrichtung",
-        animationTyp: "Animationstyp",
-        animationTime: "Animationszeit",
+        status: 'Zustand',
+        color: 'Farbe',
+        orientation: 'Animationsrichtung',
+        animationTyp: 'Animationstyp',
+        animationTime: 'Animationszeit',
 
-        restart_animation: "Animation neustarten",
-        reset_config: "Konfiguration zurücksetzen",
-        submit_config: "Konfiguration übernehmen",
-      }
+        restart_animation: 'Animation neustarten',
+        reset_config: 'Konfiguration zurücksetzen',
+        submit_config: 'Konfiguration übernehmen',
+      },
     },
 
     actions: {
-      error: "Es sind keine Geräte verfügbar.",
+      error: 'Es sind keine Geräte verfügbar.',
     },
   },
 };

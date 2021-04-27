@@ -1,13 +1,13 @@
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {View} from 'react-native';
 
 // SplashScreen
-import SplashScreen from 'react-native-splash-screen'
+import SplashScreen from 'react-native-splash-screen';
 
 // Other
-import { Feature, User, Mqtt } from "../res/data/Data.js"
-import Wait from "../components/Wait.js"
-import TOAST from '../components/Toast.js'
+import {Feature, User, Mqtt} from '../res/data/Data.js';
+import Wait from '../components/Wait.js';
+import TOAST from '../components/Toast.js';
 
 //I18n
 import I18n from '../i18n/i18n.js';
@@ -16,22 +16,22 @@ import I18n from '../i18n/i18n.js';
 const TIMEOUT_MS = 1000;
 const MAX_SPENT_TIME_MS = 5000;
 
-export default class FetchDataScreen extends Component  {
+export default class FetchDataScreen extends Component {
   constructor(props) {
     super(props);
 
     const {params} = this.props.route;
 
-    if(params == undefined || params.data == undefined) {
-      this.feature  = new Feature();
-      this.user     = new User();
-      this.mqtt     = new Mqtt();
+    if (params === undefined || params.data === undefined) {
+      this.feature = new Feature();
+      this.user = new User();
+      this.mqtt = new Mqtt();
     } else {
-      var { data } = params;
+      var {data} = params;
 
-      this.feature  = data.feature;
-      this.user     = data.user;
-      this.mqtt     = data.mqtt;
+      this.feature = data.feature;
+      this.user = data.user;
+      this.mqtt = data.mqtt;
     }
   }
 
@@ -43,7 +43,7 @@ export default class FetchDataScreen extends Component  {
     SplashScreen.hide();
 
     // load data from mqtt server
-    if(this.feature.get_data()["is_smart_home_control_active"]) {
+    if (this.feature.get_data().is_smart_home_control_active) {
       await this.init_mqtt();
     }
 
@@ -53,13 +53,13 @@ export default class FetchDataScreen extends Component  {
       user: this.user,
       mqtt: this.mqtt,
     };
-    this.props.navigation.navigate("HomeScreen", { data: data })
+    this.props.navigation.navigate('HomeScreen', {data: data});
   }
 
   render() {
     return (
       <View>
-        <Wait/>
+        <Wait />
       </View>
     );
   }
@@ -76,37 +76,48 @@ export default class FetchDataScreen extends Component  {
 
     // wait for the check -> with timeout
     const time_start = new Date();
-    while(this.mqtt.get_if_mqtt_is_already_checked() == false) {
-      if(this.time_out_error(time_start)) {
+    while (this.mqtt.get_if_mqtt_is_already_checked() === false) {
+      if (this.time_out_error(time_start)) {
         break;
       } else {
-        await new Promise((resolve) => setTimeout(() => { resolve('result') }, TIMEOUT_MS));
+        await new Promise(resolve =>
+          setTimeout(() => {
+            resolve('result');
+          }, TIMEOUT_MS),
+        );
       }
     }
 
     // check if mqtt is available
-    if(this.mqtt.get_if_mqtt_is_already_checked() && this.mqtt.get_if_mqtt_is_available()) {
+    if (
+      this.mqtt.get_if_mqtt_is_already_checked() &&
+      this.mqtt.get_if_mqtt_is_available()
+    ) {
       // mqtt is available
 
       // wait for the loading of data -> with timeout
-      while(this.mqtt.get_if_data_loaded() == false) {
-        if(this.time_out_error(time_start)) {
+      while (this.mqtt.get_if_data_loaded() === false) {
+        if (this.time_out_error(time_start)) {
           break;
         } else {
-          await new Promise((resolve) => setTimeout(() => { resolve('result') }, TIMEOUT_MS));
+          await new Promise(resolve =>
+            setTimeout(() => {
+              resolve('result');
+            }, TIMEOUT_MS),
+          );
         }
       }
     } else {
       // mqtt is not available
 
       // show message
-      TOAST.notification(I18n.t("home.actions.error"));
+      TOAST.notification(I18n.t('home.actions.error'));
     }
   }
 
   time_out_error(time_start) {
-    const time_now    = new Date();
-    const time_spent  = Math.abs((time_now.getTime() - time_start.getTime()));
+    const time_now = new Date();
+    const time_spent = Math.abs(time_now.getTime() - time_start.getTime());
 
     return time_spent > MAX_SPENT_TIME_MS;
   }
