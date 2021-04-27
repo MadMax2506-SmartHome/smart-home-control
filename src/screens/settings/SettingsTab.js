@@ -63,8 +63,12 @@ export default class SettingsTab extends Component {
   }
 
   async save_data() {
-    TOAST.notification(I18n.t('settings.actions.will_save'), 200);
     var {feature, user, mqtt, door_opener} = this.data;
+
+    this.setState({});
+    this.props.update_root();
+
+    TOAST.notification(I18n.t('settings.actions.will_save'), 50);
 
     let is_valid = this.is_data_valid();
 
@@ -82,7 +86,7 @@ export default class SettingsTab extends Component {
     }
 
     // mqtt
-    if (is_valid.mqtt) {
+    if (is_valid.mqtt && feature_values.is_smart_home_control_active) {
       var new_mqtt_values = this.state.values.mqtt;
       var old_mqtt_values = mqtt.get_data();
 
@@ -97,44 +101,60 @@ export default class SettingsTab extends Component {
           routes: [{name: 'FetchDataScreen', params: {data: this.data}}],
         });
       }
+    } else if (feature_values.is_smart_home_control_active) {
+      // hide mqtt feature
+      this.set_data_from_tab('feature', 'is_smart_home_control_active', false);
+      await feature.set_data(false, feature_values.is_door_opener_active);
     }
 
-    var door_opener_values = this.state.values.door_opener;
-    await door_opener.set_data(
-      door_opener_values.phone_number,
-      door_opener_values.phone_key,
-    );
+    if (is_valid.door_opener && feature_values.is_door_opener_active) {
+      var door_opener_values = this.state.values.door_opener;
+      await door_opener.set_data(
+        door_opener_values.phone_number,
+        door_opener_values.phone_key,
+      );
+    } else if (feature_values.is_door_opener_active) {
+      // hide door opener feature
+      this.set_data_from_tab('feature', 'is_door_opener_active', false);
+      await feature.set_data(feature.is_smart_home_control_active, false);
+    }
 
-    // TODO validation
-
-    this.setState({});
-    this.props.update_root();
-    TOAST.notification(I18n.t('settings.actions.has_save'), 200);
+    TOAST.notification(I18n.t('settings.actions.has_save'), 50);
   }
 
   is_data_valid() {
-    var {user, mqtt, feature} = this.state.values;
+    var {user, mqtt, door_opener} = this.state.values;
 
     var is_valid = {
       user: true,
       mqtt: true,
+      door_opener: true,
     };
 
     // user
-    if (user.first_name == null || user.surname == null) {
+    if (user && (user.first_name == null || user.surname == null)) {
       is_valid.user = false;
     }
 
     // mqtt
     if (
-      feature.is_smart_home_control_active &&
-      (mqtt.port == null || mqtt.port.length < 1 || mqtt.port.length > 4)(
+      mqtt &&
+      (mqtt.port == null ||
+        mqtt.port.length < 1 ||
+        mqtt.port.length > 4 ||
         mqtt.ipaddress == null ||
-          mqtt.ipaddress.length < 7 ||
-          mqtt.ipaddress.length > 15,
-      )
+        mqtt.ipaddress.length < 7 ||
+        mqtt.ipaddress.length > 15)
     ) {
       is_valid.mqtt = false;
+    }
+
+    // door opener
+    if (
+      door_opener &&
+      (door_opener.phone_number == null || door_opener.phone_number.length < 1)
+    ) {
+      is_valid.door_opener = false;
     }
 
     return is_valid;

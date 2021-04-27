@@ -14,7 +14,6 @@ export default class DoorOpenerTab extends Component {
     this.state = {
       values: this.props.values,
     };
-    console.log(this.state.values);
   }
 
   render() {
@@ -30,6 +29,8 @@ export default class DoorOpenerTab extends Component {
           <View style={StyleInput.wrapper}>
             <TextInput
               style={StyleGroupElem.input}
+              dataDetectorTypes="phoneNumber"
+              keyboardType="phone-pad"
               placeholder={I18n.t('settings.labels.door_opener.phone_number')}
               onChangeText={value => {
                 this.props.onChangeText('door_opener', 'phone_number', value);
