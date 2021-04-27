@@ -9,6 +9,7 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator();
 
 import HomeTab from './tabs/HomeTab.js';
+import DoorOpenerTab from '../door_opener/DoorOpenerTab.js';
 import SettingsTab from '../settings/SettingsTab.js';
 
 // Header
@@ -123,7 +124,13 @@ export default class HomeScreen extends Component {
     this.tab_navigation.dynamic_tabs.door_opener = (
       <Tab.Screen
         name="DoorOpenerTab"
-        children={({navigation}) => null}
+        children={({navigation}) => (
+          <DoorOpenerTab
+            data={this.data.door_opener}
+            navigation={this.props.navigation}
+            navigation_tab={navigation}
+          />
+        )}
         options={() => ({
           tabBarLabel: I18n.t('home.menu.door_opener'),
           tabBarIcon: props => (
@@ -134,14 +141,6 @@ export default class HomeScreen extends Component {
             />
           ),
         })}
-        listeners={{
-          tabPress: e => {
-            e.preventDefault();
-            this.props.navigation.navigate('SmartDeviceScreen', {
-              data: this.data,
-            });
-          },
-        }}
       />
     );
 
