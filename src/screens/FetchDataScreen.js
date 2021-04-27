@@ -5,7 +5,7 @@ import {View} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
 
 // Other
-import {Feature, User, Mqtt} from '../res/data/Data.js';
+import {Feature, User, Mqtt, DoorOpener} from '../res/data/Data.js';
 import Wait from '../components/Wait.js';
 import TOAST from '../components/Toast.js';
 
@@ -26,12 +26,14 @@ export default class FetchDataScreen extends Component {
       this.feature = new Feature();
       this.user = new User();
       this.mqtt = new Mqtt();
+      this.door_opener = new DoorOpener();
     } else {
       var {data} = params;
 
       this.feature = data.feature;
       this.user = data.user;
       this.mqtt = data.mqtt;
+      this.door_opener = data.door_opener;
     }
   }
 
@@ -52,6 +54,7 @@ export default class FetchDataScreen extends Component {
       feature: this.feature,
       user: this.user,
       mqtt: this.mqtt,
+      door_opener: this.door_opener,
     };
     this.props.navigation.navigate('HomeScreen', {data: data});
   }
@@ -68,6 +71,7 @@ export default class FetchDataScreen extends Component {
     await this.feature.load_data();
     await this.user.load_data();
     await this.mqtt.load_data();
+    await this.door_opener.load_data();
   }
 
   async init_mqtt() {

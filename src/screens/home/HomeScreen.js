@@ -34,6 +34,7 @@ export default class HomeScreen extends Component {
       },
       dynamic_tabs: {
         smart_home_control: null,
+        door_opener: null,
       },
     };
 
@@ -119,6 +120,31 @@ export default class HomeScreen extends Component {
       />
     );
 
+    this.tab_navigation.dynamic_tabs.door_opener = (
+      <Tab.Screen
+        name="DoorOpenerTab"
+        children={({navigation}) => null}
+        options={() => ({
+          tabBarLabel: I18n.t('home.menu.door_opener'),
+          tabBarIcon: props => (
+            <MaterialCommunityIcons
+              name="door-open"
+              size={30}
+              color={props.color}
+            />
+          ),
+        })}
+        listeners={{
+          tabPress: e => {
+            e.preventDefault();
+            this.props.navigation.navigate('SmartDeviceScreen', {
+              data: this.data,
+            });
+          },
+        }}
+      />
+    );
+
     this.tab_navigation.static_tabs.setting = (
       <Tab.Screen
         name="SettingsTab"
@@ -143,9 +169,10 @@ export default class HomeScreen extends Component {
   render() {
     var {feature, mqtt} = this.data;
 
-    var is_smart_home_tab_visible =
+    const is_smart_home_tab_visible =
       mqtt.get_if_mqtt_is_available() &&
       feature.get_data().is_smart_home_control_active;
+    const is_door_opener_tab_visible = feature.get_data().is_door_opener_active;
 
     return (
       <Tab.Navigator
@@ -154,6 +181,9 @@ export default class HomeScreen extends Component {
         {this.tab_navigation.static_tabs.home}
         {is_smart_home_tab_visible
           ? this.tab_navigation.dynamic_tabs.smart_home_control
+          : null}
+        {is_door_opener_tab_visible
+          ? this.tab_navigation.dynamic_tabs.door_opener
           : null}
         {this.tab_navigation.static_tabs.setting}
       </Tab.Navigator>

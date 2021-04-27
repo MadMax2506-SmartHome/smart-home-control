@@ -13,14 +13,18 @@ export class Feature {
       is_smart_home_control_active: await Storage.get_bool_entry(
         'is_smart_home_control_active',
       ),
+      is_door_opener_active: await Storage.get_bool_entry(
+        'is_door_opener_active',
+      ),
     };
   }
 
-  async set_data(is_smart_home_control_active, is_nas_control_active) {
+  async set_data(is_smart_home_control_active, is_door_opener_active) {
     await Storage.set_entry(
       'is_smart_home_control_active',
       is_smart_home_control_active,
     );
+    await Storage.set_entry('is_door_opener_active', is_door_opener_active);
 
     await this.load_data();
   }
@@ -44,6 +48,29 @@ export class User {
   async set_data(first_name, surname) {
     await Storage.set_entry('first_name', first_name);
     await Storage.set_entry('surname', surname);
+
+    await this.load_data();
+  }
+
+  get_data() {
+    var copy = Object.assign({}, this.#data);
+    return copy;
+  }
+}
+
+export class DoorOpener {
+  #data;
+
+  async load_data() {
+    this.#data = {
+      phone_number: await Storage.get_str_entry('phone_number'),
+      phone_key: await Storage.get_str_entry('phone_key'),
+    };
+  }
+
+  async set_data(phone_number, phone_key) {
+    await Storage.set_entry('phone_number', phone_number);
+    await Storage.set_entry('phone_key', phone_key);
 
     await this.load_data();
   }

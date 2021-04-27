@@ -13,6 +13,7 @@ export default {
     menu: {
       home: 'Home',
       smart_devices: 'Geräte',
+      door_opener: 'Türöffner',
       settings: 'Einstellungen',
     },
 
@@ -30,6 +31,7 @@ export default {
     labels: {
       features: {
         smart_home: 'Smart Home Steuerung',
+        door_opener: 'Türöffner',
       },
       user: {
         first_name: 'Vorname',
@@ -39,12 +41,17 @@ export default {
         ipaddress: 'IP-Adresse',
         port: 'Port',
       },
+      door_opener: {
+        phone_number: 'Telefonnr.',
+        phone_key: 'Key',
+      },
     },
 
     menu: {
       feature: 'Features',
       user: 'Benutzer',
       mqtt: 'MQTT Brocker',
+      door_opener: 'Türöffner',
     },
   },
 
