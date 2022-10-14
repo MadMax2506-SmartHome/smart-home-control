@@ -21,7 +21,7 @@
     "buffer": "^5.5.0",
     "i18n-js": "^3.8.0",
     "react": "16.9.0",
-    "react-native": "^0.62.2",
+    "react-native": "^0.70.3",
     "react-native-config": "^1.0.0",
     "react-native-dropdown-menu": "^2.0.0",
     "react-native-gesture-handler": "^1.6.1",
